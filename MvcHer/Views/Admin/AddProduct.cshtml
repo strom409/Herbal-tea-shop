@@ -1,0 +1,182 @@
+@model MvcHer.Models.Product
+
+@{
+    ViewData["Title"] = "Add New Product";
+    Layout = "_AdminLayout";
+}
+
+<!-- Add Product Header -->
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"><i class="fas fa-plus me-2"></i>Add New Product</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="@Url.Action("Products")" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Back to Products
+        </a>
+    </div>
+</div>
+
+<!-- Success/Error Messages -->
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<!-- Add Product Form -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Product Information</h6>
+    </div>
+    <div class="card-body">
+        <form asp-action="CreateProduct" method="post" enctype="multipart/form-data" id="addProductForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">Product Name *</label>
+                        <input asp-for="Name" class="form-control" placeholder="Enter product name" required>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="SKU" class="form-label">SKU *</label>
+                        <input asp-for="SKU" class="form-control" placeholder="Enter product SKU" required>
+                        <span asp-validation-for="SKU" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Category" class="form-label">Category *</label>
+                        <select asp-for="Category" class="form-select" required>
+                            <option value="">Select Category</option>
+                            <option value="Green Tea">Green Tea</option>
+                            <option value="Black Tea">Black Tea</option>
+                            <option value="Herbal Tea">Herbal Tea</option>
+                            <option value="Organic Tea">Organic Tea</option>
+                            <option value="White Tea">White Tea</option>
+                            <option value="Oolong Tea">Oolong Tea</option>
+                        </select>
+                        <span asp-validation-for="Category" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Price" class="form-label">Price ($) *</label>
+                        <input asp-for="Price" type="number" class="form-control" step="0.01" min="0" placeholder="0.00" required>
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="StockQuantity" class="form-label">Stock Quantity *</label>
+                        <input asp-for="StockQuantity" type="number" class="form-control" min="0" placeholder="0" required>
+                        <span asp-validation-for="StockQuantity" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="productStatus" class="form-label">Status</label>
+                        <select class="form-select" id="productStatus">
+                            <option value="active" selected>Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter product description..."></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label for="productImage" class="form-label">Product Image</label>
+                <input type="file" class="form-control" id="productImage" name="productImage" accept="image/*">
+                <div class="form-text">Supported formats: JPG, PNG, GIF. Max size: 5MB</div>
+            </div>
+
+            <!-- Image Preview -->
+            <div class="mb-3" id="imagePreview" style="display: none;">
+                <label class="form-label">Image Preview</label>
+                <div>
+                    <img id="previewImg" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid #ddd;">
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-end">
+                <a href="@Url.Action("Products")" class="btn btn-secondary me-2">
+                    <i class="fas fa-times me-1"></i>Cancel
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i>Save Product
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Image preview functionality
+        document.getElementById('productImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImg').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                document.getElementById('imagePreview').style.display = 'none';
+            }
+        });
+
+        // Form validation
+        document.getElementById('addProductForm').addEventListener('submit', function(e) {
+            const requiredFields = ['Name', 'SKU', 'Category', 'Price', 'StockQuantity'];
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                const input = document.querySelector(`[name="${field}"]`);
+                if (!input.value.trim()) {
+                    isValid = false;
+                    input.classList.add('is-invalid');
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+                alert('Please fill in all required fields.');
+            }
+        });
+
+        // Auto-generate SKU based on product name
+        document.querySelector('[name="Name"]').addEventListener('input', function(e) {
+            const name = e.target.value;
+            const sku = name.toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 10);
+            if (sku && !document.querySelector('[name="SKU"]').value) {
+                document.querySelector('[name="SKU"]').value = sku + '-' + Math.floor(Math.random() * 1000);
+            }
+        });
+    </script>
+}

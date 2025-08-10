@@ -1,0 +1,151 @@
+@model MvcHer.Models.Banner
+@{
+    ViewData["Title"] = "Edit Banner";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-edit me-2"></i>Edit Banner
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-1"></i>@TempData["ErrorMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form method="post" enctype="multipart/form-data" asp-action="EditBanner">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="Id" value="@Model.Id" />
+                        <input type="hidden" name="ImageUrl" value="@Model.ImageUrl" />
+                        <input type="hidden" name="CreatedAt" value="@Model.CreatedAt" />
+                        
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label for="Title" class="form-label">Title <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="Title" name="Title" value="@Model.Title" required maxlength="100">
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="Subtitle" class="form-label">Subtitle <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="Subtitle" name="Subtitle" value="@Model.Subtitle" required maxlength="200">
+                                    <span asp-validation-for="Subtitle" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="Description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="Description" name="Description" rows="3" maxlength="500">@Model.Description</textarea>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                    <div class="form-text">Optional description for the banner</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="ButtonText" class="form-label">Button Text</label>
+                                            <input type="text" class="form-control" id="ButtonText" name="ButtonText" value="@Model.ButtonText" maxlength="200">
+                                            <span asp-validation-for="ButtonText" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="ButtonUrl" class="form-label">Button URL</label>
+                                            <input type="url" class="form-control" id="ButtonUrl" name="ButtonUrl" value="@Model.ButtonUrl" maxlength="500">
+                                            <span asp-validation-for="ButtonUrl" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="DisplayOrder" class="form-label">Display Order</label>
+                                            <input type="number" class="form-control" id="DisplayOrder" name="DisplayOrder" value="@Model.DisplayOrder" min="1" max="100">
+                                            <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+                                            <div class="form-text">Lower numbers appear first</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch mt-4">
+                                                <input class="form-check-input" type="checkbox" id="IsActive" name="IsActive" value="true" @(Model.IsActive ? "checked" : "")>
+                                                <label class="form-check-label" for="IsActive">
+                                                    Active Banner
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="imageFile" class="form-label">Banner Image</label>
+                                    <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*">
+                                    <div class="form-text">Leave empty to keep current image. Recommended size: 1920x800px</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Current Image</label>
+                                    <div id="currentImage" class="border rounded p-3 text-center">
+                                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                                        {
+                                            <img src="@Model.ImageUrl" alt="@Model.Title" class="img-fluid rounded" style="max-height: 180px;">
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-image fa-3x text-muted mb-2"></i>
+                                            <p class="text-muted mb-0">No image uploaded</p>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div id="imagePreview" class="border rounded p-3 text-center" style="min-height: 200px; display: none;">
+                                        <label class="form-label">New Image Preview</label>
+                                        <img id="previewImg" src="" alt="Preview" class="img-fluid rounded" style="max-height: 180px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="@Url.Action("Banners")" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Back to Banners
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Update Banner
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('imageFile').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('previewImg').src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            document.getElementById('imagePreview').style.display = 'none';
+        }
+    });
+</script>

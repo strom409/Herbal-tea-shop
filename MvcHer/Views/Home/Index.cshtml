@@ -1,0 +1,2487 @@
+@{
+    ViewData["Title"] = "Home";
+    var banners = ViewBag.Banners as List<MvcHer.Models.Banner>;
+}
+
+<style>
+    .banner-slider {
+        position: relative;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .banner-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #8BC34A 0%, #689F38 50%, #558B2F 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+    }
+
+    .banner-slide.active {
+        opacity: 1;
+    }
+
+    .banner-slide.has-image {
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .banner-slide.has-image::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.3);
+        z-index: 1;
+    }
+
+    .banner-content {
+        text-align: center;
+        z-index: 2;
+        position: relative;
+        color: white;
+        max-width: 800px;
+        padding: 0 20px;
+        animation: fadeInUp 1s ease-out;
+    }
+
+    .banner-welcome {
+        font-size: 1.3rem;
+        font-weight: 400;
+        margin-bottom: 20px;
+        opacity: 1;
+        color: #ffffff !important;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        letter-spacing: 1px;
+    }
+
+    .banner-title {
+        font-size: 5.5rem;
+        font-weight: 700;
+        line-height: 1.1;
+        margin-bottom: 10px;
+        color: #000000;
+        text-shadow: 2px 2px 4px rgba(255,255,255,0.3);
+        font-family: 'Playfair Display', serif;
+        letter-spacing: -2px;
+    }
+
+    .banner-subtitle {
+        font-size: 5.5rem;
+        font-weight: 700;
+        line-height: 1.1;
+        margin-bottom: 40px;
+        color: #000000;
+        text-shadow: 2px 2px 4px rgba(255,255,255,0.3);
+        font-family: 'Playfair Display', serif;
+        letter-spacing: -2px;
+    }
+
+    .banner-description {
+        font-size: 1.2rem;
+        margin-bottom: 40px;
+        opacity: 0.9;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    }
+
+    .banner-btn {
+        background: #ffffff;
+        color: #000000;
+        padding: 8px 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .banner-btn:hover {
+        background: #f8f9fa;
+        color: #000000;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .slider-controls {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        z-index: 3;
+    }
+
+    .slider-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .slider-dot.active {
+        background: white;
+        transform: scale(1.2);
+    }
+
+    .slider-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        font-size: 24px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 3;
+    }
+
+    .slider-nav:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .slider-nav.prev {
+        left: 30px;
+    }
+
+    .slider-nav.next {
+        right: 30px;
+    }
+
+    .floating-leaves {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 1;
+        background: rgba(136, 180, 78, .7);
+        
+    }
+
+    .leaf {
+        position: absolute;
+        opacity: 0.1;
+        animation: float 15s infinite linear;
+    }
+
+    .leaf:nth-child(1) { left: 10%; animation-delay: 0s; }
+    .leaf:nth-child(2) { left: 20%; animation-delay: 2s; }
+    .leaf:nth-child(3) { left: 30%; animation-delay: 4s; }
+    .leaf:nth-child(4) { left: 40%; animation-delay: 6s; }
+    .leaf:nth-child(5) { left: 50%; animation-delay: 8s; }
+    .leaf:nth-child(6) { left: 60%; animation-delay: 10s; }
+    .leaf:nth-child(7) { left: 70%; animation-delay: 12s; }
+    .leaf:nth-child(8) { left: 80%; animation-delay: 14s; }
+
+    @@keyframes float {
+        0% { transform: translateY(100vh) rotate(0deg); }
+        100% { transform: translateY(-100px) rotate(360deg); }
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .banner-slider {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .banner-slide {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+        }
+        
+        .banner-content {
+            padding: 0 30px;
+            max-width: 100%;
+        }
+        
+        .banner-welcome { 
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        
+        .banner-title { 
+            font-size: 3rem;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+        
+        .banner-subtitle { 
+            font-size: 3rem;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            margin-bottom: 30px;
+        }
+        
+        .banner-btn {
+            padding: 6px 18px;
+            font-size: 0.8rem;
+        }
+        
+        .slider-nav { display: none; }
+        
+        .slider-controls {
+            bottom: 20px;
+        }
+    }
+    
+    @@media (max-width: 480px) {
+        .banner-content {
+            padding: 0 20px;
+        }
+        
+        .banner-welcome { 
+            font-size: 1rem;
+            margin-bottom: 12px;
+        }
+        
+        .banner-title { 
+            font-size: 2.2rem;
+            line-height: 1.1;
+        }
+        
+        .banner-subtitle { 
+            font-size: 2.2rem;
+            line-height: 1.1;
+            margin-bottom: 25px;
+        }
+        
+        .banner-btn {
+            padding: 5px 15px;
+            font-size: 0.75rem;
+        }
+        
+        .slider-controls {
+            bottom: 15px;
+        }
+        
+        .slider-dot {
+            width: 10px;
+            height: 10px;
+        }
+    }
+
+    /* Section Title Styling */
+    .section-title p {
+        font-weight: 300 !important;
+        color: #8BC34A !important;
+        opacity: 0.8;
+        font-size: 1.1rem !important;
+    }
+
+    /* Store Product Hover Effects */
+    .store-product-card {
+        position: relative;
+        display: block;
+        overflow: hidden;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .store-product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .store-product-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(139, 195, 74, 0.85);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 5;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .store-product-card:hover .store-product-overlay {
+        opacity: 1;
+    }
+
+
+
+    .store-overlay-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .store-product-info {
+        text-align: center;
+        color: #2c3e50;
+    }
+
+    .store-product-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #2c3e50;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .store-product-price {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #8BC34A;
+        margin: 0;
+    }
+
+    .store-btn-more-detail {
+        background: #8BC34A;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-width: 130px;
+        white-space: nowrap;
+    }
+
+    .store-btn-more-detail:hover {
+        background: #689F38;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        color: white;
+    }
+
+    .store-btn-add-cart {
+        background: #34495e;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-width: 130px;
+        white-space: nowrap;
+    }
+
+    .store-btn-add-cart:hover {
+        background: #2c3e50;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        color: white;
+    }
+
+    /* Tea Product Card - Exact Screenshot 2 Design */
+    .tea-product-card {
+        background: #d4e5c7;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+    }
+
+    .tea-product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            background: #e8f5e9;
+        }
+
+            .tea-product-card:hover .tea-info-section {
+                background: #e8f5e9 !important; /* Light green on hover */
+            }
+
+    .tea-info-section :hover {
+                background: #e8f5e9 !important; /* Light green on hover */
+            }
+              .tea-info-section :hover {
+                background: #e8f5e9 !important; /* Light green on hover */
+            }
+
+    .tea-image-section {
+        position: relative;
+        height: 300px;
+        background: #d4e5c7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .tea-product-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .tea-product-card:hover .tea-product-image {
+        transform: scale(1.05);
+    }
+
+    .tea-hover-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .tea-product-card:hover .tea-hover-overlay {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .tea-btn {
+        padding: 12px 20px;
+        border-radius: 25px;
+        border: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 140px;
+        justify-content: center;
+    }
+
+    .tea-btn-detail {
+        background: #8BC34A;
+        color: white;
+    }
+
+    .tea-btn-detail:hover {
+        background: #7CB342;
+        transform: translateY(-2px);
+    }
+
+    .tea-btn-cart {
+        background: #2c3e50;
+        color: white;
+    }
+
+    .tea-btn-cart:hover {
+        background: #34495e;
+        transform: translateY(-2px);
+    }
+
+    .tea-info-section {
+        padding: 25px 20px;
+        text-align: center;
+        background: white;
+       /*  background: #d4e5c7; */
+    }
+
+
+
+    .tea-stars {
+        margin-bottom: 15px;
+    }
+
+    .tea-stars i {
+        color: #ffc107;
+        font-size: 1rem;
+        margin: 0 2px;
+    }
+
+    .tea-title {
+        color: #2c3e50;
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        line-height: 1.3;
+    }
+
+    .tea-description {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
+    .tea-price {
+        color: #8BC34A;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .overlay-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .btn-more-detail-overlay {
+        background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+    }
+
+    .btn-more-detail-overlay:hover {
+        background: linear-gradient(135deg, #689F38 0%, #558B2F 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        color: white;
+    }
+
+    .btn-add-cart-overlay {
+        background: #2E3B4E;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+    }
+
+    .btn-add-cart-overlay:hover {
+        background: #1a252f;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        color: white;
+    }
+
+    .product-content {
+        padding: 25px;
+        text-align: center;
+    }
+
+    .product-rating {
+        margin-bottom: 15px;
+    }
+
+    .product-rating i {
+        color: #8BC34A;
+        font-size: 16px;
+        margin: 0 2px;
+    }
+
+    .product-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2E3B4E;
+        margin-bottom: 15px;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .product-description {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        min-height: 48px;
+    }
+
+    .product-price {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #8BC34A;
+        margin-bottom: 25px;
+    }
+
+    /* Exact Product Card Styling - Matching Screenshot */
+    .product-card-clean {
+        background: #e8f0d4;
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin: 15px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+
+    .product-card-clean:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Product Image */
+    .product-image-wrapper {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        position: relative;
+        background: #e8f0d4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 30px 20px 20px;
+    }
+
+    .product-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: transform 0.3s ease;
+    }
+
+    .product-card-clean:hover .product-img {
+        transform: scale(1.03);
+    }
+
+    /* Product Action Buttons */
+    .product-actions {
+        padding: 20px 25px;
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 10px;
+        background: #e8f0d4;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .btn-more-detail {
+        background: #8BC34A;
+        color: white;
+        border: none;
+        padding: 10px 12px;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: none;
+        letter-spacing: 0.2px;
+        flex: 1;
+        box-sizing: border-box;
+        gap: 4px;
+        white-space: nowrap;
+        min-width: 0;
+    }
+
+    .btn-more-detail:hover {
+        background: #689F38;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(139, 195, 74, 0.3);
+        color: white;
+    }
+
+    .btn-add-cart {
+        background: #34495e;
+        color: white;
+        border: none;
+        padding: 10px 12px;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: none;
+        letter-spacing: 0.2px;
+        flex: 1;
+        box-sizing: border-box;
+        gap: 4px;
+        white-space: nowrap;
+        min-width: 0;
+    }
+
+    .btn-add-cart:hover {
+        background: #1a252f;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
+        color: white;
+    }
+
+    /* Product Info */
+    .product-info {
+        padding: 20px 25px 25px;
+        text-align: center;
+        background: #e8f0d4;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .product-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #5a6c57;
+        margin-bottom: 12px;
+        font-family: 'Playfair Display', serif;
+        line-height: 1.2;
+    }
+
+    .product-desc {
+        color: #6b7c68;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 15px;
+        flex-grow: 1;
+    }
+
+    .product-price-tag {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #8BC34A;
+        font-family: 'Playfair Display', serif;
+    }
+
+    /* Modern Testimonials Section */
+    .testimonial-section {
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Floating Background Elements */
+    .testimonial-bg-elements {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .floating-leaf {
+        position: absolute;
+        font-size: 2rem;
+        opacity: 0.1;
+        animation: floatLeaf 15s infinite ease-in-out;
+    }
+
+    .leaf-1 { top: 10%; left: 10%; animation-delay: 0s; }
+    .leaf-2 { top: 20%; right: 15%; animation-delay: 2s; }
+    .leaf-3 { top: 60%; left: 5%; animation-delay: 4s; }
+    .leaf-4 { top: 80%; right: 10%; animation-delay: 6s; }
+    .leaf-5 { top: 40%; left: 80%; animation-delay: 8s; }
+    .leaf-6 { top: 70%; right: 70%; animation-delay: 10s; }
+
+    @@keyframes floatLeaf {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        33% { transform: translateY(-20px) rotate(5deg); }
+        66% { transform: translateY(10px) rotate(-3deg); }
+    }
+
+    /* Section Header Styling */
+    .testimonial-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
+        border-radius: 50px;
+        padding: 12px 30px;
+        box-shadow: 0 8px 25px rgba(139, 195, 74, 0.3);
+    }
+
+    .badge-text {
+        color: white;
+        font-weight: 600;
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+    }
+
+    .testimonial-main-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: white;
+        font-family: 'Playfair Display', serif;
+        line-height: 1.2;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .highlight-text {
+        background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+    }
+
+    .testimonial-subtitle {
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 300;
+        line-height: 1.6;
+    }
+
+    /* Modern Testimonial Cards */
+    .testimonial-grid {
+        position: relative;
+        z-index: 2;
+    }
+
+    .testimonial-card-modern {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 25px;
+        padding: 35px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(139, 195, 74, 0.2);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .testimonial-card-modern:hover {
+        transform: translateY(-15px) scale(1.02);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        border-color: rgba(139, 195, 74, 0.5);
+    }
+
+    .card-glow {
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(139, 195, 74, 0.1) 0%, transparent 70%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .testimonial-card-modern:hover .card-glow {
+        opacity: 1;
+    }
+
+    /* Featured Card Special Styling */
+    .featured-card {
+        background: linear-gradient(135deg, rgba(139, 195, 74, 0.1) 0%, rgba(255, 255, 255, 0.95) 100%);
+        border: 2px solid #8BC34A;
+        transform: scale(1.05);
+    }
+
+    .featured-badge {
+        position: absolute;
+        top: -10px;
+        right: 20px;
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    /* Testimonial Header */
+    .testimonial-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 25px;
+        position: relative;
+        z-index: 3;
+    }
+
+    .author-avatar {
+        position: relative;
+        width: 70px;
+        height: 70px;
+        flex-shrink: 0;
+    }
+
+    .author-avatar img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #8BC34A;
+    }
+
+    .avatar-ring {
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        width: calc(100% + 10px);
+        height: calc(100% + 10px);
+        border: 2px solid transparent;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #8BC34A, #689F38) border-box;
+        mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        animation: ringPulse 3s infinite;
+    }
+
+    @@keyframes ringPulse {
+        0%, 100% { transform: scale(1); opacity: 0.7; }
+        50% { transform: scale(1.1); opacity: 1; }
+    }
+
+    .author-details {
+        flex-grow: 1;
+    }
+
+    .author-name {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 5px;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .author-role {
+        font-size: 0.95rem;
+        color: #8BC34A;
+        font-weight: 500;
+        margin-bottom: 10px;
+    }
+
+    .rating-stars {
+        display: flex;
+        gap: 3px;
+    }
+
+    .rating-stars i {
+        color: #FFD700;
+        font-size: 1.1rem;
+        text-shadow: 0 1px 3px rgba(255, 215, 0, 0.3);
+    }
+
+    /* Testimonial Body */
+    .testimonial-body {
+        flex-grow: 1;
+        position: relative;
+        z-index: 3;
+    }
+
+    .quote-icon {
+        position: absolute;
+        top: -10px;
+        right: 15px;
+        font-size: 2.5rem;
+        color: rgba(139, 195, 74, 0.2);
+    }
+
+    .testimonial-message {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: #555;
+        font-style: italic;
+        margin-bottom: 25px;
+        position: relative;
+        padding: 20px 0;
+    }
+
+    .testimonial-footer {
+        margin-top: auto;
+        padding-top: 20px;
+        border-top: 1px solid rgba(139, 195, 74, 0.2);
+    }
+
+    .verified-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #8BC34A;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .verified-badge i {
+        font-size: 1rem;
+    }
+
+    /* Trust Indicators */
+    .trust-indicators {
+        margin-top: 60px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .trust-item {
+        text-align: center;
+        padding: 25px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .trust-item:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .trust-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 15px;
+        background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        box-shadow: 0 8px 25px rgba(139, 195, 74, 0.3);
+    }
+
+    .trust-number {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 8px;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .trust-label {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1rem;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    /* Contact Us Section Styling */
+    .contact-section {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .contact-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
+        border-radius: 50px;
+        padding: 12px 30px;
+        box-shadow: 0 8px 25px rgba(139, 195, 74, 0.3);
+    }
+
+    .contact-badge .badge-text {
+        color: white;
+        font-weight: 600;
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+    }
+
+    .contact-main-title {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: #2c3e50;
+        font-family: 'Playfair Display', serif;
+        line-height: 1.2;
+        margin-bottom: 1.8rem !important;
+    }
+
+    .highlight-text-green {
+        background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .contact-subtitle {
+        font-size: 1.6rem;
+        color: #555;
+        font-weight: 400;
+        line-height: 1.8;
+        margin-bottom: 3rem !important;
+    }
+
+    /* Contact Info Card */
+    .contact-info-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        height: 100%;
+    }
+
+    .contact-info-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #2c3e50;
+        font-family: 'Playfair Display', serif;
+        margin-bottom: 2.5rem !important;
+    }
+
+    .contact-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 25px;
+        margin-bottom: 35px;
+        padding: 25px;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        background: #fff;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+
+    .contact-item:hover {
+        background: #f8f9fa;
+        transform: translateX(5px);
+    }
+    .contact-item:hover .contact-icon {
+        transform: scale(1.1);
+        box-shadow: 0 10px 25px rgba(139, 195, 74, 0.4);
+    }
+
+    .contact-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 8px 20px rgba(139, 195, 74, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .contact-icon i {
+        font-size: 2.5rem;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .contact-details h5 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 12px;
+        letter-spacing: 0.3px;
+    }
+
+    .contact-details p {
+        font-size: 1.3rem;
+        color: #555;
+        margin: 0;
+        line-height: 1.8;
+    }
+
+    /* Contact Form Card */
+    .contact-form-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        height: 100%;
+    }
+
+    .contact-form-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #2c3e50;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .contact-input,
+    .contact-textarea {
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 15px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .contact-input:focus,
+    .contact-textarea:focus {
+        border-color: #8BC34A;
+        box-shadow: 0 0 0 0.2rem rgba(139, 195, 74, 0.25);
+    }
+
+    .contact-submit-btn {
+        background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        text-transform: none;
+        letter-spacing: 0.5px;
+    }
+
+    .contact-submit-btn:hover {
+        background: linear-gradient(135deg, #689F38 0%, #558B2F 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(139, 195, 74, 0.4);
+        color: white;
+    }
+
+    /* Quick Actions */
+    .contact-quick-actions {
+        margin-top: 60px;
+    }
+
+    .quick-action-item {
+        background: white;
+        border-radius: 15px;
+        padding: 30px 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        height: 100%;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .quick-action-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    .quick-action-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        box-shadow: 0 8px 25px rgba(139, 195, 74, 0.3);
+    }
+
+    .quick-action-icon i {
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .quick-action-item h5 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+    .quick-action-item p {
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .quick-action-item .btn {
+        border-radius: 25px;
+        padding: 10px 25px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .quick-action-item .btn:hover {
+        background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
+        color: white;
+        border-color: transparent;
+        transform: translateY(-2px);
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .product-card-clean {
+            margin: 10px 0;
+        }
+        
+        .product-image-wrapper {
+            height: 220px;
+            padding: 15px;
+        }
+        
+        .product-actions {
+            padding: 15px;
+            gap: 10px;
+        }
+        
+        .btn-more-detail,
+        .btn-add-cart {
+            padding: 12px 20px;
+            font-size: 0.9rem;
+        }
+        
+        .product-info {
+            padding: 20px;
+        }
+        
+        .product-title {
+            font-size: 1.3rem;
+        }
+        
+        .product-desc {
+            font-size: 0.9rem;
+        }
+        
+        .product-price-tag {
+            font-size: 1.6rem;
+        }
+
+        /* Mobile Testimonials Styling */
+        .testimonial-main-title {
+            font-size: 2.5rem;
+        }
+
+        .testimonial-subtitle {
+            font-size: 1.1rem;
+        }
+
+        .testimonial-card-modern {
+            padding: 25px 20px;
+            margin-bottom: 30px;
+        }
+
+        .featured-card {
+            transform: scale(1);
+        }
+
+        .testimonial-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto;
+        }
+
+        .author-details {
+            text-align: center;
+        }
+
+        .author-name {
+            font-size: 1.2rem;
+        }
+
+        .testimonial-message {
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .trust-item {
+            padding: 20px 15px;
+        }
+
+        .trust-number {
+            font-size: 1.8rem;
+        }
+
+        .trust-label {
+            font-size: 0.9rem;
+        }
+
+        .floating-leaf {
+            font-size: 1.5rem;
+        }
+
+        /* Mobile Contact Section Styling */
+        .contact-main-title {
+            font-size: 2.2rem;
+        }
+
+        .contact-subtitle {
+            font-size: 1.1rem;
+        }
+
+        .contact-info-card,
+        .contact-form-card {
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .contact-info-title,
+        .contact-form-title {
+            font-size: 1.5rem;
+        }
+
+        .contact-item {
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+        }
+
+        .contact-icon i {
+            font-size: 1.1rem;
+        }
+
+        .contact-details h5 {
+            font-size: 1.1rem;
+        }
+
+        .contact-input,
+        .contact-textarea {
+            padding: 12px;
+        }
+
+        .quick-action-item {
+            padding: 25px 15px;
+            margin-bottom: 20px;
+        }
+
+        .quick-action-icon {
+            width: 60px;
+            height: 60px;
+        }
+
+        .quick-action-icon i {
+            font-size: 1.3rem;
+        }
+    }
+</style>
+
+<!-- Banner Slider Section -->
+<section class="banner-slider">
+    @if (banners != null && banners.Any())
+    {
+        @for (int i = 0; i < banners.Count; i++)
+        {
+            var banner = banners[i];
+            <div class="banner-slide @(i == 0 ? "active" : "") @(!string.IsNullOrEmpty(banner.ImageUrl) ? "has-image" : "")" 
+                 @(!string.IsNullOrEmpty(banner.ImageUrl) ? $"style=background-image:url({banner.ImageUrl})" : "")>
+                
+                <div class="floating-leaves">
+                    <div class="leaf">🍃</div>
+                    <div class="leaf">🍃</div>
+                    <div class="leaf">🍃</div>
+                    <div class="leaf">🍃</div>
+                    <div class="leaf">🍃</div>
+                    <div class="leaf">🍃</div>
+                    <div class="leaf">🍃</div>
+                    <div class="leaf">🍃</div>
+                </div>
+                
+                <div class="banner-content">
+                    @if (!string.IsNullOrEmpty(banner.Description))
+                    {
+                        <p class="banner-welcome">@banner.Description</p>
+                    }
+                    else
+                    {
+                        <p class="banner-welcome">Welcome to TEA House</p>
+                    }
+                    <h1 class="banner-title">@banner.Title</h1>
+                    <h2 class="banner-subtitle">@banner.Subtitle</h2>
+                    @if (!string.IsNullOrEmpty(banner.ButtonText))
+                    {
+                        <a href="@banner.ButtonUrl" class="banner-btn">@banner.ButtonText</a>
+                    }
+                </div>
+            </div>
+        }
+        
+        @if (banners.Count > 1)
+        {
+            <button class="slider-nav prev" onclick="changeSlide(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="slider-nav next" onclick="changeSlide(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            
+            <div class="slider-controls">
+                @for (int i = 0; i < banners.Count; i++)
+                {
+                    <div class="slider-dot @(i == 0 ? "active" : "")" onclick="goToSlide(@i)"></div>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <!-- Default banner when no banners are configured -->
+        <div class="banner-slide active">
+            <div class="floating-leaves">
+                <div class="leaf">🍃</div>
+                <div class="leaf">🍃</div>
+                <div class="leaf">🍃</div>
+                <div class="leaf">🍃</div>
+                <div class="leaf">🍃</div>
+                <div class="leaf">🍃</div>
+                <div class="leaf">🍃</div>
+                <div class="leaf">🍃</div>
+            </div>
+            
+            <div class="banner-content">
+                <p class="banner-welcome">Welcome to TEA House</p>
+                <h1 class="banner-title">Organic &</h1>
+                <h2 class="banner-subtitle">Quality Tea Production</h2>
+                <a href="/Home/Products" class="banner-btn">Explore More</a>
+            </div>
+        </div>
+    }
+</section>
+
+<!-- Products Start -->
+<div class="container-fluid product py-5 my-5">
+    <div class="container py-5">
+        <div class="section-title text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+            <p class="fs-5 text-primary">Our Products</p>
+            <h1 class="display-6">Tea has a complex positive effect on the body</h1>
+        </div>
+        <div class="owl-carousel product-carousel wow fadeInUp" data-wow-delay="0.5s">
+            @if (ViewBag.FeaturedProducts != null)
+            {
+                @foreach (var product in (List<MvcHer.Models.Product>)ViewBag.FeaturedProducts)
+                {
+                    <div class="product-card-clean">
+                        <!-- Product Image -->
+                        <div class="product-image-wrapper">
+                            <img src="@(string.IsNullOrEmpty(product.ImageUrl) ? "/img/product-1.jpg" : product.ImageUrl)" alt="@product.Name" class="product-img">
+                        </div>
+                        
+                        <!-- Product Action Buttons -->
+                        <div class="product-actions">
+                            <button class="btn-more-detail more-detail-btn"
+                                    data-product-id="@product.Id"
+                                    data-product-name="@product.Name"
+                                    data-product-price="@product.Price.ToString("F2")"
+                                    data-product-image="@(string.IsNullOrEmpty(product.ImageUrl) ? "/img/product-1.jpg" : product.ImageUrl)"
+                                    data-product-description="@product.Description"
+                                    data-product-rating="5">
+                                More Detail <i class="fas fa-arrow-right ms-2"></i>
+                            </button>
+                            <button class="btn-add-cart add-to-cart"
+                                    data-product-id="@product.Id"
+                                    data-product-name="@product.Name"
+                                    data-product-price="@product.Price.ToString("F2")"
+                                    data-product-image="@(string.IsNullOrEmpty(product.ImageUrl) ? "/img/product-1.jpg" : product.ImageUrl)">
+                                Add to Cart <i class="fas fa-shopping-cart ms-2"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Product Info -->
+                        <div class="product-info">
+                            <h4 class="product-title">@product.Name</h4>
+                            <p class="product-desc">@(string.IsNullOrEmpty(product.Description) ? "Aliqu diam amet diam et eos. Clita erat ipsum lorem erat ipsum lorem sit sed" : (product.Description.Length > 60 ? product.Description.Substring(0, 60) + "..." : product.Description))</p>
+                            <div class="product-price-tag">$@product.Price.ToString("F2")</div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+<!-- Products End -->
+
+<!-- Product Detail Modal -->
+<div class="modal fade" id="productDetailModal" tabindex="-1" aria-labelledby="productDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productDetailModalLabel">
+                    <i class="fa fa-info-circle me-2"></i>Product Details
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img id="product-detail-image" src="" alt="" class="img-fluid rounded">
+                    </div>
+                    <div class="col-md-6">
+                        <h4 id="product-detail-name" class="mb-3"></h4>
+                        <div class="mb-3">
+                            <div id="product-detail-rating" class="text-primary mb-2">
+                                <!-- Stars will be populated by JavaScript -->
+                            </div>
+                            <span class="text-muted">(<span id="product-detail-review-count">5</span> reviews)</span>
+                        </div>
+                        <h3 id="product-detail-price" class="text-primary mb-3"></h3>
+                        <p id="product-detail-description" class="mb-4"></p>
+                        
+                        <!-- Product Features -->
+                        <div class="mb-4">
+                            <h6 class="text-primary mb-2">Product Features:</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fa fa-check text-success me-2"></i>100% Natural Ingredients</li>
+                                <li><i class="fa fa-check text-success me-2"></i>Premium Quality</li>
+                                <li><i class="fa fa-check text-success me-2"></i>Health Benefits</li>
+                                <li><i class="fa fa-check text-success me-2"></i>Organic Certified</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Quantity Selector -->
+                        <div class="mb-4">
+                            <label for="product-detail-quantity" class="form-label">Quantity:</label>
+                            <div class="d-flex align-items-center">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="quantity-decrease">-</button>
+                                <input type="number" class="form-control mx-2" id="product-detail-quantity" value="1" min="1" max="99" style="width: 80px;">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="quantity-increase">+</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Add to Cart Button -->
+                        <button type="button" class="btn btn-primary btn-lg w-100" id="product-detail-add-to-cart">
+                            <i class="fa fa-cart-plus me-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cart Modal -->
+<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartModalLabel">
+                    <i class="fa fa-shopping-cart me-2"></i>Shopping Cart
+                </h5>
+                <button type="button" class="btn-close close-cart" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="cart-items">
+                    <!-- Cart items will be dynamically loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <div>
+                        <strong>Total: <span id="cart-total" class="text-primary">$0.00</span></strong>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-outline-secondary clear-cart me-2">Clear Cart</button>
+                        <button type="button" class="btn btn-primary checkout-btn">Checkout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Cart Modal End -->
+
+<!-- About Section Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-5 wow fadeIn" data-wow-delay="0.1s">
+                <img class="img-fluid" src="~/img/article.jpg" alt="">
+            </div>
+            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                <div class="section-title">
+                    <p class="fs-5 fw-medium text-primary">Featured Article</p>
+                    <h1 class="display-6">The story of our company is a story of passion</h1>
+                </div>
+                <p class="mb-4">Our journey began with a simple love for tea and a commitment to bringing you the finest quality leaves from around the world. Every cup tells a story of tradition, craftsmanship, and dedication to excellence.</p>
+                <p class="mb-4">From the rolling hills of Darjeeling to the misty mountains of Ceylon, we source our teas directly from the gardens where they grow, ensuring that every sip delivers the authentic taste and aroma that tea lovers cherish.</p>
+                <a class="btn btn-primary rounded-pill py-3 px-5" href="#">Read More</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- About Section End -->
+
+<!-- Tea Taste Selection Start -->
+<div class="container-fluid py-5" style="background: linear-gradient(135deg, #f0f4e8 0%, #e8f5e8 50%, #f5f8f0 100%);">
+    <div class="container py-5">
+        <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
+            <p class="fs-5 fw-medium text-success mb-2">Online Store</p>
+            <h1 class="display-6 mb-4">Want to stay healthy?<br>Choose tea taste</h1>
+            <div class="d-flex justify-content-center align-items-center mb-5">
+                <div style="height: 2px; width: 100px; background-color: #28a745;"></div>
+                <div style="width: 12px; height: 12px; background-color: #28a745; border-radius: 50%; margin: 0 15px;"></div>
+                <div style="height: 2px; width: 100px; background-color: #28a745;"></div>
+            </div>
+        </div>
+        
+        <div class="row g-4 justify-content-center">
+            @if (ViewBag.FeaturedProducts != null)
+            {
+                var featuredProducts = ViewBag.FeaturedProducts as List<MvcHer.Models.Product>;
+                var productsToShow = featuredProducts?.Take(3).ToList() ?? new List<MvcHer.Models.Product>();
+                
+                @for (int i = 0; i < productsToShow.Count; i++)
+                {
+                    var product = productsToShow[i];
+                    var delay = (i + 1) * 0.2;
+                    
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="@(delay)s">
+                        <div class="tea-product-card">
+                            <div class="tea-image-section">
+                                <img src="@(!string.IsNullOrEmpty(product.ImageUrl) ? product.ImageUrl : "/img/product-1.jpg")" 
+                                     alt="@product.Name" class="tea-product-image">
+                                <div class="tea-hover-overlay">
+                                    <button class="tea-btn tea-btn-detail" onclick="viewProductDetails(@product.Id)">
+                                        More Detail <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                    <button class="tea-btn tea-btn-cart" onclick="addToCartFromStore(@product.Id, '@product.Name')">
+                                        Add to Cart <i class="fas fa-shopping-cart"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="tea-info-section">
+                                <div class="tea-stars">
+                                    @for (int star = 1; star <= 5; star++)
+                                    {
+                                        <i class="fa fa-star"></i>
+                                    }
+                                </div>
+                                <h4 class="tea-title">@product.Name</h4>
+                                <p class="tea-description">@(!string.IsNullOrEmpty(product.Description) ? (product.Description.Length > 70 ? product.Description.Substring(0, 70) + "..." : product.Description) : "Aliqu diam amet diam et eos. Clita erat ipsum lorem erat ipsum lorem sit sed")</p>
+                                <p class="tea-price">$@product.Price.ToString("F2")</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+                
+                @* Fill remaining slots if less than 3 products *@
+                @for (int i = productsToShow.Count; i < 3; i++)
+                {
+                    var delay = (i + 1) * 0.2;
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="@(delay)s">
+                        <div class="tea-product-card">
+                            <div class="tea-image-section">
+                                <img src="~/img/store-product-@(i + 1).jpg" alt="Coming Soon" class="tea-product-image" style="opacity: 0.7;">
+                                <div class="tea-hover-overlay">
+                                    <button class="tea-btn tea-btn-detail" disabled>
+                                        Coming Soon <i class="fas fa-clock"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="tea-info-section">
+                                <div class="tea-stars">
+                                    @for (int star = 1; star <= 5; star++)
+                                    {
+                                        <i class="fa fa-star text-muted"></i>
+                                    }
+                                </div>
+                                <h4 class="tea-title">New Product Coming</h4>
+                                <p class="tea-description">Exciting new tea varieties are being added to our collection. Stay tuned for updates!</p>
+                                <p class="tea-price">Coming Soon</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                @* Fallback if no products available *@
+                <div class="col-12 text-center">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No products available at the moment. Please check back soon!
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <!-- Call to Action -->
+        <div class="text-center mt-5 wow fadeInUp" data-wow-delay="0.7s">
+            <button class="btn btn-success btn-lg rounded-pill px-5 py-3" onclick="window.location.href='/Store'" style="border: none;">
+                <i class="fa fa-shopping-bag me-2"></i>Explore Collection
+            </button>
+        </div>
+    </div>
+</div>
+<!-- Tea Taste Selection End -->
+
+<!-- Testimonials Section Start -->
+<div class="container-fluid testimonial-section py-5 position-relative overflow-hidden" style="background: linear-gradient(135deg, #1a2530 0%, #2d3e50 50%, #34495e 100%);">
+    <!-- Animated Background Elements -->
+    <div class="testimonial-bg-elements">
+        <div class="floating-leaf leaf-1">🍃</div>
+        <div class="floating-leaf leaf-2">🍃</div>
+        <div class="floating-leaf leaf-3">🍃</div>
+        <div class="floating-leaf leaf-4">🍃</div>
+        <div class="floating-leaf leaf-5">🍃</div>
+        <div class="floating-leaf leaf-6">🍃</div>
+    </div>
+    
+    <div class="container py-5 position-relative">
+        <!-- Section Header -->
+        <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 700px;">
+            <div class="testimonial-badge mb-4">
+                <span class="badge-text"> Customer Stories</span>
+            </div>
+            <h1 class="testimonial-main-title mb-4">
+                What Our <span class="highlight-text">Tea Lovers</span> Say
+            </h1>
+            <p class="testimonial-subtitle mb-5">
+                Discover why thousands of customers choose TEA HOUSE for their daily tea ritual
+            </p>
+        </div>
+        
+        <!-- Testimonials Grid -->
+        <div class="row g-4 testimonial-grid wow fadeInUp" data-wow-delay="0.3s">
+            <!-- Testimonial 1 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="testimonial-card-modern">
+                    <div class="card-glow"></div>
+                    <div class="testimonial-header">
+                        <div class="author-avatar">
+                            <img src="~/img/testimonial-1.jpg" alt="Sarah Johnson">
+                            <div class="avatar-ring"></div>
+                        </div>
+                        <div class="author-details">
+                            <h5 class="author-name">Sarah Johnson</h5>
+                            <p class="author-role">Tea Connoisseur</p>
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-body">
+                        <div class="quote-icon">
+                            <i class="fas fa-quote-right"></i>
+                        </div>
+                        <p class="testimonial-message">
+                            "TEA HOUSE has completely transformed my morning routine. The Earl Grey blend is absolutely divine, and the packaging makes every unboxing feel like a luxury experience!"
+                        </p>
+                        <div class="testimonial-footer">
+                            <div class="verified-badge">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Verified Purchase</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testimonial 2 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="testimonial-card-modern featured-card">
+                    <div class="card-glow"></div>
+                    <div class="featured-badge">
+                        <i class="fas fa-crown"></i>
+                        <span>Featured Review</span>
+                    </div>
+                    <div class="testimonial-header">
+                        <div class="author-avatar">
+                            <img src="~/img/testimonial-2.jpg" alt="Michael Chen">
+                            <div class="avatar-ring"></div>
+                        </div>
+                        <div class="author-details">
+                            <h5 class="author-name">Michael Chen</h5>
+                            <p class="author-role">Wellness Coach</p>
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-body">
+                        <div class="quote-icon">
+                            <i class="fas fa-quote-right"></i>
+                        </div>
+                        <p class="testimonial-message">
+                            "As a wellness coach, I recommend TEA HOUSE to all my clients. The organic herbal blends are pure perfection - you can taste the quality and care in every sip!"
+                        </p>
+                        <div class="testimonial-footer">
+                            <div class="verified-badge">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Verified Purchase</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testimonial 3 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="testimonial-card-modern">
+                    <div class="card-glow"></div>
+                    <div class="testimonial-header">
+                        <div class="author-avatar">
+                            <img src="~/img/testimonial-3.jpg" alt="Emma Davis">
+                            <div class="avatar-ring"></div>
+                        </div>
+                        <div class="author-details">
+                            <h5 class="author-name">Emma Davis</h5>
+                            <p class="author-role">Yoga Instructor</p>
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-body">
+                        <div class="quote-icon">
+                            <i class="fas fa-quote-right"></i>
+                        </div>
+                        <p class="testimonial-message">
+                            "The chamomile blend has become essential for my evening meditation practice. TEA HOUSE delivers not just tea, but a complete mindfulness experience!"
+                        </p>
+                        <div class="testimonial-footer">
+                            <div class="verified-badge">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Verified Purchase</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Trust Indicators -->
+        <div class="trust-indicators text-center mt-5 wow fadeInUp" data-wow-delay="0.5s">
+            <div class="row g-4">
+                <div class="col-md-3 col-6">
+                    <div class="trust-item">
+                        <div class="trust-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4 class="trust-number">10,000+</h4>
+                        <p class="trust-label">Happy Customers</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="trust-item">
+                        <div class="trust-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4 class="trust-number">4.9/5</h4>
+                        <p class="trust-label">Average Rating</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="trust-item">
+                        <div class="trust-icon">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <h4 class="trust-number">24h</h4>
+                        <p class="trust-label">Fast Delivery</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="trust-item">
+                        <div class="trust-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h4 class="trust-number">100%</h4>
+                        <p class="trust-label">Organic</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Testimonials Section End -->
+
+<!-- Contact Us Section Start -->
+<div class="container-fluid contact-section py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);">
+    <div class="container py-5">
+        <!-- Section Header -->
+        <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 700px;">
+            <div class="contact-badge mb-4">
+                <span class="badge-text">📞 Get In Touch</span>
+            </div>
+            <h1 class="contact-main-title mb-4">
+                Contact <span class="highlight-text-green">TEA HOUSE</span>
+            </h1>
+            <p class="contact-subtitle mb-5">
+                Have questions about our premium teas? We're here to help you find the perfect blend for your taste.
+            </p>
+        </div>
+        
+        <div class="row g-5">
+            <!-- Contact Information -->
+            <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.3s">
+                <div class="contact-info-card">
+                    <h3 class="contact-info-title mb-4">Let's Connect</h3>
+                    
+                    <!-- Contact Items -->
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h5>Visit Our Store</h5>
+                            <p>123 Tea Garden Street<br>Green Valley, CA 90210</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h5>Call Us</h5>
+                            <p>+1 (555) 123-4567<br>Mon-Fri: 9AM-6PM</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h5>Email Us</h5>
+                            <p>info@teahouse.com<br>support@teahouse.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h5>Business Hours</h5>
+                            <p>Monday - Friday: 9:00 AM - 6:00 PM<br>Saturday - Sunday: 10:00 AM - 4:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Form -->
+            <div class="col-lg-6 wow fadeInRight" data-wow-delay="0.5s">
+                <div class="contact-form-card">
+                    <h3 class="contact-form-title mb-4">Send Us a Message</h3>
+                    
+                    <form id="contactForm" action="@Url.Action("Contact", "Home")" method="post">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control contact-input" id="name" name="Name" placeholder="Your Name" required>
+                                    <label for="name">Your Name</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="email" class="form-control contact-input" id="email" name="Email" placeholder="Your Email" required>
+                                    <label for="email">Your Email</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control contact-input" id="subject" name="Subject" placeholder="Subject" required>
+                                    <label for="subject">Subject</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <textarea class="form-control contact-textarea" id="message" name="Message" placeholder="Your Message" style="height: 120px" required></textarea>
+                                    <label for="message">Your Message</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn contact-submit-btn w-100" type="submit">
+                                    <i class="fas fa-paper-plane me-2"></i>Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="contact-quick-actions text-center mt-5 wow fadeInUp" data-wow-delay="0.7s">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="quick-action-item">
+                        <div class="quick-action-icon">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <h5>Shop Now</h5>
+                        <p>Browse our premium tea collection</p>
+                        <a href="@Url.Action("Index", "Store")" class="btn btn-outline-success">Explore Teas</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="quick-action-item">
+                        <div class="quick-action-icon">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <h5>Track Order</h5>
+                        <p>Check your order status</p>
+                        <a href="@Url.Action("Track", "OrderTracking")" class="btn btn-outline-success">Track Now</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="quick-action-item">
+                        <div class="quick-action-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <h5>FAQ</h5>
+                        <p>Find answers to common questions</p>
+                        <a href="#" class="btn btn-outline-success">View FAQ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Contact Us Section End -->
+
+@section Scripts {
+<script>
+$(document).ready(function() {
+    // Add to Cart functionality
+    $('.add-to-cart').click(function(e) {
+        e.preventDefault();
+        
+        var productId = $(this).data('product-id');
+        var productName = $(this).data('product-name');
+        
+        // Disable button temporarily
+        var $button = $(this);
+        var originalText = $button.html();
+        $button.prop('disabled', true).html('<i class="fa fa-spinner fa-spin me-1"></i>Adding...');
+        
+        $.ajax({
+            url: '@Url.Action("AddToCart", "Cart")',
+            type: 'POST',
+            data: {
+                productId: productId,
+                quantity: 1
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Update cart count in navigation
+                    updateCartCount();
+                    
+                    // Show success message
+                    showNotification('success', productName + ' added to cart successfully!');
+                } else {
+                    showNotification('error', 'Error: ' + response.message);
+                }
+            },
+            error: function() {
+                showNotification('error', 'Error adding product to cart');
+            },
+            complete: function() {
+                // Re-enable button
+                $button.prop('disabled', false).html(originalText);
+            }
+        });
+    });
+    
+    // More Detail functionality
+    $('.more-detail-btn').click(function(e) {
+        e.preventDefault();
+        
+        var productId = $(this).data('product-id');
+        var productName = $(this).data('product-name');
+        var productPrice = $(this).data('product-price');
+        var productImage = $(this).data('product-image');
+        var productDescription = $(this).data('product-description');
+        var productRating = $(this).data('product-rating');
+        
+        // Populate modal with product details
+        $('#product-detail-name').text(productName);
+        $('#product-detail-price').text('$' + productPrice);
+        $('#product-detail-image').attr('src', productImage).attr('alt', productName);
+        $('#product-detail-description').text(productDescription || 'Premium quality tea with exceptional taste and aroma.');
+        
+        // Generate star rating
+        var stars = '';
+        for (var i = 1; i <= 5; i++) {
+            if (i <= productRating) {
+                stars += '<i class="fa fa-star"></i>';
+            } else {
+                stars += '<i class="fa fa-star-o"></i>';
+            }
+        }
+        $('#product-detail-rating').html(stars);
+        
+        // Set up add to cart button
+        $('#product-detail-add-to-cart').off('click').on('click', function() {
+            var quantity = parseInt($('#product-detail-quantity').val()) || 1;
+            addToCartFromModal(productId, productName, quantity);
+        });
+        
+        // Show modal
+        $('#productDetailModal').modal('show');
+    });
+    
+    // Quantity controls
+    $('#quantity-decrease').click(function() {
+        var quantity = parseInt($('#product-detail-quantity').val());
+        if (quantity > 1) {
+            $('#product-detail-quantity').val(quantity - 1);
+        }
+    });
+    
+    $('#quantity-increase').click(function() {
+        var quantity = parseInt($('#product-detail-quantity').val());
+        if (quantity < 99) {
+            $('#product-detail-quantity').val(quantity + 1);
+        }
+    });
+});
+
+function updateCartCount() {
+    $.ajax({
+        url: '@Url.Action("GetCartCount", "Cart")',
+        type: 'GET',
+        success: function(response) {
+            // Update cart count display if it exists
+            $('.cart-count').text(response.count);
+            $('#cart-count').text(response.count);
+        }
+    });
+}
+
+function showNotification(type, message) {
+    // Create notification element
+    var alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+    var iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+    
+    var notification = $('<div class="alert ' + alertClass + ' alert-dismissible fade show position-fixed" style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;" role="alert">' +
+        '<i class="fa ' + iconClass + ' me-2"></i>' + message +
+        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+        '</div>');
+    
+    // Add to body and auto-remove after 3 seconds
+    $('body').append(notification);
+    setTimeout(function() {
+        notification.alert('close');
+    }, 3000);
+}
+
+function addToCartFromModal(productId, productName, quantity) {
+    $.ajax({
+        url: '@Url.Action("AddToCart", "Cart")',
+        type: 'POST',
+        data: {
+            productId: productId,
+            quantity: quantity
+        },
+        success: function(response) {
+            if (response.success) {
+                $('#productDetailModal').modal('hide');
+                updateCartCount();
+                showNotification('success', quantity + ' x ' + productName + ' added to cart successfully!');
+            } else {
+                showNotification('error', 'Error: ' + response.message);
+            }
+        },
+        error: function() {
+            showNotification('error', 'Error adding product to cart');
+        }
+    });
+}
+
+// Store Section Functions
+function addToCartFromStore(productId, productName) {
+    $.ajax({
+        url: '@Url.Action("AddToCart", "Cart")',
+        type: 'POST',
+        data: {
+            productId: productId,
+            quantity: 1
+        },
+        headers: {
+            'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+        },
+        success: function(response) {
+            if (response.success) {
+                updateCartCount();
+                showNotification('success', productName + ' added to cart successfully!');
+            } else {
+                showNotification('error', 'Error: ' + response.message);
+            }
+        },
+        error: function() {
+            showNotification('error', 'Error adding product to cart');
+        }
+    });
+}
+
+function viewProductDetails(productId) {
+    // Redirect to product details page or store page with product highlighted
+    window.location.href = '@Url.Action("Index", "Store")' + '?productId=' + productId;
+}
+
+// Explore Collection Button Function
+function exploreCollection() {
+    try {
+        window.location.href = '/Store';
+    } catch (error) {
+        console.log('Navigation error:', error);
+        // Fallback method
+        window.location = '/Store';
+    }
+}
+
+// Banner Slider Functionality
+let currentSlide = 0;
+let slideInterval;
+let slides, dots;
+
+function showSlide(index) {
+    // Re-query elements if not set
+    if (!slides) slides = document.querySelectorAll('.banner-slide');
+    if (!dots) dots = document.querySelectorAll('.slider-dot');
+    
+    // Hide all slides
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+    
+    // Show current slide
+    if (slides[index]) {
+        slides[index].classList.add('active');
+    }
+    if (dots[index]) {
+        dots[index].classList.add('active');
+    }
+    
+    currentSlide = index;
+}
+
+function nextSlide() {
+    if (!slides) slides = document.querySelectorAll('.banner-slide');
+    const nextIndex = (currentSlide + 1) % slides.length;
+    showSlide(nextIndex);
+}
+
+function prevSlide() {
+    if (!slides) slides = document.querySelectorAll('.banner-slide');
+    const prevIndex = (currentSlide - 1 + slides.length) % slides.length;
+    showSlide(prevIndex);
+}
+
+function changeSlide(direction) {
+    clearInterval(slideInterval);
+    if (direction === 1) {
+        nextSlide();
+    } else {
+        prevSlide();
+    }
+    startAutoSlide();
+}
+
+function goToSlide(index) {
+    clearInterval(slideInterval);
+    showSlide(index);
+    startAutoSlide();
+}
+
+function startAutoSlide() {
+    if (slides.length > 1) {
+        slideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+    }
+}
+
+// Initialize slider when page loads
+$(document).ready(function() {
+    // Re-query slides and dots after DOM is ready
+    const slides = document.querySelectorAll('.banner-slide');
+    const dots = document.querySelectorAll('.slider-dot');
+    
+    if (slides.length > 0) {
+        showSlide(0);
+        startAutoSlide();
+        
+        // Pause auto-slide on hover
+        $('.banner-slider').hover(
+            function() { clearInterval(slideInterval); },
+            function() { startAutoSlide(); }
+        );
+    }
+
+    // Initialize Testimonials Carousel
+    $('.testimonial-carousel').owlCarousel({
+        items: 1,
+        loop: true,
+        margin: 30,
+        nav: true,
+        dots: true,
+        autoplay: true,
+        autoplayTimeout: 5000,
+        autoplayHoverPause: true,
+        navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+        responsive: {
+            0: {
+                items: 1,
+                margin: 15
+            },
+            768: {
+                items: 2,
+                margin: 20
+            },
+            992: {
+                items: 3,
+                margin: 30
+            }
+        }
+    });
+});
+</script>
+}

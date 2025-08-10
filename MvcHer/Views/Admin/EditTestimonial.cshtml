@@ -1,0 +1,253 @@
+@model MvcHer.Models.Testimonial
+
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Add New Testimonial" : "Edit Testimonial";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">
+                    <i class="fas fa-@(Model.Id == 0 ? "plus" : "edit") me-2"></i>
+                    @ViewData["Title"]
+                </h2>
+                <a href="@Url.Action("Testimonials")" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Testimonials
+                </a>
+            </div>
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Testimonial Information</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="EditTestimonial" method="post" enctype="multipart/form-data" id="testimonialForm">
+                        @Html.AntiForgeryToken()
+                        <input asp-for="Id" type="hidden" />
+                        <input asp-for="CreatedAt" type="hidden" />
+                        <input asp-for="UpdatedAt" type="hidden" />
+                        <input asp-for="IsActive" type="hidden" />
+                        @* Don't include ClientImageUrl as hidden - let controller handle it *@
+
+                        <div class="row">
+                            <!-- Client Information -->
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Client Information</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label asp-for="ClientName" class="form-label">
+                                                <i class="fas fa-user me-1"></i>Client Name *
+                                            </label>
+                                            <input asp-for="ClientName" class="form-control" placeholder="Enter client name" required />
+                                            <span asp-validation-for="ClientName" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="ClientProfession" class="form-label">
+                                                <i class="fas fa-briefcase me-1"></i>Client Profession
+                                            </label>
+                                            <input asp-for="ClientProfession" class="form-control" placeholder="e.g., CEO, Customer, Tea Enthusiast" />
+                                            <span asp-validation-for="ClientProfession" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="ClientCompany" class="form-label">
+                                                <i class="fas fa-building me-1"></i>Company/Organization
+                                            </label>
+                                            <input asp-for="ClientCompany" class="form-control" placeholder="Enter company name (optional)" />
+                                            <span asp-validation-for="ClientCompany" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="ClientLocation" class="form-label">
+                                                <i class="fas fa-map-marker-alt me-1"></i>Location
+                                            </label>
+                                            <input asp-for="ClientLocation" class="form-control" placeholder="e.g., New York, USA" />
+                                            <span asp-validation-for="ClientLocation" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="clientImageFile" class="form-label">
+                                                <i class="fas fa-image me-1"></i>Client Photo
+                                            </label>
+                                            <input type="file" class="form-control" id="clientImageFile" name="clientImageFile" 
+                                                   accept="image/*" onchange="previewImage(this, 'clientImagePreview')" />
+                                            <small class="form-text text-muted">Upload a photo of the client (optional)</small>
+                                            
+                                            @if (!string.IsNullOrEmpty(Model.ClientImageUrl))
+                                            {
+                                                <div class="mt-2">
+                                                    <img src="@Model.ClientImageUrl" alt="Current Image" 
+                                                         class="img-thumbnail" style="max-width: 150px; max-height: 150px;" id="clientImagePreview" />
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="mt-2">
+                                                    <img id="clientImagePreview" class="img-thumbnail" style="max-width: 150px; max-height: 150px; display: none;" />
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Testimonial Content -->
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Testimonial Content</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label asp-for="TestimonialText" class="form-label">
+                                                <i class="fas fa-quote-left me-1"></i>Testimonial Text *
+                                            </label>
+                                            <textarea asp-for="TestimonialText" class="form-control" rows="6" 
+                                                      placeholder="Enter the testimonial content..." required></textarea>
+                                            <span asp-validation-for="TestimonialText" class="text-danger"></span>
+                                            <small class="form-text text-muted">Maximum 1000 characters</small>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="Rating" class="form-label">
+                                                <i class="fas fa-star me-1"></i>Rating *
+                                            </label>
+                                            <select asp-for="Rating" class="form-select" required>
+                                                <option value="">Select Rating</option>
+                                                <option value="1">⭐ 1 Star</option>
+                                                <option value="2">⭐⭐ 2 Stars</option>
+                                                <option value="3">⭐⭐⭐ 3 Stars</option>
+                                                <option value="4">⭐⭐⭐⭐ 4 Stars</option>
+                                                <option value="5">⭐⭐⭐⭐⭐ 5 Stars</option>
+                                            </select>
+                                            <span asp-validation-for="Rating" class="text-danger"></span>
+                                        </div>
+
+
+
+                                        <div class="mb-3">
+                                            <label asp-for="AdminNotes" class="form-label">
+                                                <i class="fas fa-sticky-note me-1"></i>Admin Notes
+                                            </label>
+                                            <textarea asp-for="AdminNotes" class="form-control" rows="3" 
+                                                      placeholder="Internal notes for admin use only..."></textarea>
+                                            <span asp-validation-for="AdminNotes" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status Settings -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h6 class="mb-0">Status Settings</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-check form-switch">
+                                            <input asp-for="IsApproved" class="form-check-input" type="checkbox" />
+                                            <label asp-for="IsApproved" class="form-check-label">
+                                                <i class="fas fa-check-circle me-1"></i>Approved for Display
+                                            </label>
+                                        </div>
+                                        <small class="form-text text-muted">Show this testimonial on the website</small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check form-switch">
+                                            <input asp-for="IsFeatured" class="form-check-input" type="checkbox" />
+                                            <label asp-for="IsFeatured" class="form-check-label">
+                                                <i class="fas fa-star me-1"></i>Featured Testimonial
+                                            </label>
+                                        </div>
+                                        <small class="form-text text-muted">Highlight in featured section</small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check form-switch">
+                                            <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                                            <label asp-for="IsActive" class="form-check-label">
+                                                <i class="fas fa-toggle-on me-1"></i>Active
+                                            </label>
+                                        </div>
+                                        <small class="form-text text-muted">Enable/disable this testimonial</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <a href="@Url.Action("Testimonials")" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-success" id="submitBtn">
+                                <i class="fas fa-save me-2"></i>
+                                <span id="submitText">@(Model.Id == 0 ? "Create Testimonial" : "Update Testimonial")</span>
+                                <span id="submitSpinner" class="spinner-border spinner-border-sm ms-2" style="display: none;"></span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function previewImage(input, previewId) {
+    const preview = document.getElementById(previewId);
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// Form submission handling
+document.getElementById('testimonialForm').addEventListener('submit', function() {
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = document.getElementById('submitText');
+    const submitSpinner = document.getElementById('submitSpinner');
+    
+    submitBtn.disabled = true;
+    submitText.textContent = 'Saving...';
+    submitSpinner.style.display = 'inline-block';
+});
+
+// Auto-dismiss alerts
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        });
+    }, 5000);
+});
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

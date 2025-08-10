@@ -1,0 +1,255 @@
+@model IEnumerable<MvcHer.Models.SocialLink>
+
+@{
+    ViewData["Title"] = "Manage Social Links";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">
+                    <i class="fas fa-share-alt me-2"></i>
+                    Manage Social Links
+                </h2>
+                <a href="@Url.Action("EditSocialLink")" class="btn btn-success">
+                    <i class="fas fa-plus me-2"></i>Add New Social Link
+                </a>
+            </div>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">@Model.Count()</h4>
+                                    <p class="mb-0">Total Links</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-share-alt fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">@Model.Count(s => s.IsActive)</h4>
+                                    <p class="mb-0">Active Links</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-check-circle fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">@Model.Count(s => !s.IsActive)</h4>
+                                    <p class="mb-0">Inactive Links</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-eye-slash fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">@Model.Where(s => s.IsActive).Count()</h4>
+                                    <p class="mb-0">Visible on Site</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-eye fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Links Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">All Social Links</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Platform</th>
+                                        <th>Display Name</th>
+                                        <th>URL</th>
+                                        <th>Icon</th>
+                                        <th>Status</th>
+                                        <th>Order</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var link in Model.OrderBy(s => s.DisplayOrder).ThenBy(s => s.Platform))
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    @if (!string.IsNullOrEmpty(link.IconClass))
+                                                    {
+                                                        <i class="@link.IconClass me-2" style="color: @link.Color; font-size: 1.2em;"></i>
+                                                    }
+                                                    <strong>@link.Platform</strong>
+                                                </div>
+                                            </td>
+                                            <td>@link.DisplayName</td>
+                                            <td>
+                                                <a href="@link.Url" target="_blank" class="text-decoration-none">
+                                                    @(link.Url.Length > 40 ? link.Url.Substring(0, 40) + "..." : link.Url)
+                                                    <i class="fas fa-external-link-alt ms-1 small"></i>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(link.IconClass))
+                                                {
+                                                    <span class="badge bg-light text-dark">@link.IconClass</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">No icon</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (link.IsActive)
+                                                {
+                                                    <span class="badge bg-success">Active</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">Inactive</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-info">@link.DisplayOrder</span>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <a href="@Url.Action("EditSocialLink", new { id = link.Id })" 
+                                                       class="btn btn-sm btn-outline-primary" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <button type="button" class="btn btn-sm btn-outline-success" 
+                                                            onclick="toggleStatus(@link.Id, @link.IsActive.ToString().ToLower())" 
+                                                            title="Toggle Status">
+                                                        <i class="fas fa-toggle-@(link.IsActive ? "on" : "off")"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                            onclick="deleteSocialLink(@link.Id)" title="Delete">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-share-alt fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No social links found</h5>
+                            <p class="text-muted">Start by adding your first social media link.</p>
+                            <a href="@Url.Action("EditSocialLink")" class="btn btn-success">
+                                <i class="fas fa-plus me-2"></i>Add New Social Link
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleStatus(id, currentStatus) {
+    if (confirm('Are you sure you want to toggle the status of this social link?')) {
+        fetch('@Url.Action("ToggleSocialLinkStatus")', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+            },
+            body: JSON.stringify({ id: id })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            alert('Error: ' + error);
+        });
+    }
+}
+
+function deleteSocialLink(id) {
+    if (confirm('Are you sure you want to delete this social link? This action cannot be undone.')) {
+        fetch('@Url.Action("DeleteSocialLink")', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+            },
+            body: JSON.stringify({ id: id })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            alert('Error: ' + error);
+        });
+    }
+}
+</script>

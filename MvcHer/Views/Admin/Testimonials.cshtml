@@ -1,0 +1,325 @@
+@model IEnumerable<MvcHer.Models.Testimonial>
+
+@{
+    ViewData["Title"] = "Manage Testimonials";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@Html.AntiForgeryToken()
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">
+                    <i class="fas fa-comments me-2"></i>
+                    Manage Testimonials
+                </h2>
+                <a href="@Url.Action("EditTestimonial")" class="btn btn-success">
+                    <i class="fas fa-plus me-2"></i>Add New Testimonial
+                </a>
+            </div>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">@Model.Count()</h4>
+                                    <p class="mb-0">Total Testimonials</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-comments fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">@Model.Count(t => t.IsApproved)</h4>
+                                    <p class="mb-0">Approved</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-check-circle fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">@Model.Count(t => !t.IsApproved)</h4>
+                                    <p class="mb-0">Pending</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-clock fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">@Model.Count(t => t.IsFeatured)</h4>
+                                    <p class="mb-0">Featured</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-star fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonials Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">All Testimonials</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Client</th>
+                                        <th>Testimonial</th>
+                                        <th>Rating</th>
+                                        <th>Status</th>
+                                        <th>Featured</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var testimonial in Model.OrderByDescending(t => t.CreatedAt))
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    @if (!string.IsNullOrEmpty(testimonial.ClientImageUrl))
+                                                    {
+                                                        <img src="@testimonial.ClientImageUrl" alt="@testimonial.ClientName" 
+                                                             class="rounded-circle me-2" width="40" height="40">
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="bg-secondary rounded-circle me-2 d-flex align-items-center justify-content-center" 
+                                                             style="width: 40px; height: 40px;">
+                                                            <i class="fas fa-user text-white"></i>
+                                                        </div>
+                                                    }
+                                                    <div>
+                                                        <strong>@testimonial.ClientName</strong><br>
+                                                        <small class="text-muted">@testimonial.ClientProfession</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="max-width: 300px;">
+                                                    @if (testimonial.TestimonialText.Length > 100)
+                                                    {
+                                                        @(testimonial.TestimonialText.Substring(0, 100) + "...")
+                                                    }
+                                                    else
+                                                    {
+                                                        @testimonial.TestimonialText
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="text-warning">
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i <= testimonial.Rating)
+                                                        {
+                                                            <i class="fas fa-star"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="far fa-star"></i>
+                                                        }
+                                                    }
+                                                </div>
+                                                <small class="text-muted">(@testimonial.Rating/5)</small>
+                                            </td>
+                                            <td>
+                                                @if (testimonial.IsApproved)
+                                                {
+                                                    <span class="badge bg-success">Approved</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-warning">Pending</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (testimonial.IsFeatured)
+                                                {
+                                                    <span class="badge bg-info">Featured</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">Regular</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <small>@testimonial.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <a href="@Url.Action("EditTestimonial", new { id = testimonial.Id })" 
+                                                       class="btn btn-sm btn-outline-primary" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <button type="button" class="btn btn-sm btn-outline-info" 
+                                                            onclick="toggleFeatured(@testimonial.Id, @testimonial.IsFeatured.ToString().ToLower())" 
+                                                            title="Toggle Featured">
+                                                        <i class="fas fa-star"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-outline-success" 
+                                                            onclick="toggleApproval(@testimonial.Id, @testimonial.IsApproved.ToString().ToLower())" 
+                                                            title="Toggle Approval">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                            onclick="deleteTestimonial(@testimonial.Id)" title="Delete">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No testimonials found</h5>
+                            <p class="text-muted">Start by adding your first testimonial.</p>
+                            <a href="@Url.Action("EditTestimonial")" class="btn btn-success">
+                                <i class="fas fa-plus me-2"></i>Add New Testimonial
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleFeatured(id, currentStatus) {
+    if (confirm('Are you sure you want to toggle the featured status?')) {
+        fetch('@Url.Action("ToggleTestimonialFeatured")', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+            },
+            body: JSON.stringify({ id: id })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            alert('Error: ' + error);
+        });
+    }
+}
+
+function toggleApproval(id, currentStatus) {
+    if (confirm('Are you sure you want to toggle the approval status?')) {
+        fetch('@Url.Action("ToggleTestimonialApproval")', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+            },
+            body: JSON.stringify({ id: id })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            alert('Error: ' + error);
+        });
+    }
+}
+
+function deleteTestimonial(id) {
+    if (confirm('Are you sure you want to delete this testimonial? This action cannot be undone.')) {
+        // Get the anti-forgery token
+        var token = $('input[name="__RequestVerificationToken"]').val();
+        
+        // Create form data
+        var formData = new FormData();
+        formData.append('id', id);
+        formData.append('__RequestVerificationToken', token);
+        
+        fetch('@Url.Action("DeleteTestimonial")', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show success message
+                alert('Testimonial deleted successfully!');
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Delete error:', error);
+            alert('Error deleting testimonial. Please try again.');
+        });
+    }
+}
+</script>

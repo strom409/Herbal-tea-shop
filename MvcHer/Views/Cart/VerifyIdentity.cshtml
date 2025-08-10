@@ -1,0 +1,151 @@
+@model MvcHer.Models.OtpVerificationModel
+@{
+    ViewData["Title"] = "Verify Identity - Secure Checkout";
+}
+
+<!-- Hero Section -->
+<div class="container-fluid py-5" style="background: linear-gradient(135deg, #81c784 0%, #4caf50 100%);">
+    <div class="container">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bold mb-3">🔐 Secure Checkout</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center bg-transparent">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")" class="text-white">Home</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Cart")" class="text-white">Cart</a></li>
+                    <li class="breadcrumb-item active text-white" aria-current="page">Verify Identity</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
+                    <h3 class="mb-0">
+                        <i class="fas fa-shield-alt me-2"></i>
+                        Identity Verification
+                    </h3>
+                    <p class="mb-0 mt-2 opacity-75">Secure your checkout with OTP verification</p>
+                </div>
+                
+                <div class="card-body p-5">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            @TempData["Error"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            @TempData["Success"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <div class="text-center mb-4">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-user-check text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <h4 class="mt-3 mb-2">Verify Your Identity</h4>
+                        <p class="text-muted">Please provide your details to receive OTP for secure checkout</p>
+                    </div>
+
+                    <form asp-action="VerifyIdentity" method="post" id="verifyForm">
+                        <div class="mb-4">
+                            <label asp-for="FullName" class="form-label fw-bold">
+                                <i class="fas fa-user me-2 text-primary"></i>Full Name
+                            </label>
+                            <input asp-for="FullName" class="form-control form-control-lg rounded-3" placeholder="Enter your full name">
+                            <span asp-validation-for="FullName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="PhoneNumber" class="form-label fw-bold">
+                                <i class="fas fa-phone me-2 text-primary"></i>Phone Number
+                            </label>
+                            <input asp-for="PhoneNumber" class="form-control form-control-lg rounded-3" placeholder="Enter your phone number">
+                            <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>OTP will be sent to this number
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Email" class="form-label fw-bold">
+                                <i class="fas fa-envelope me-2 text-primary"></i>Email Address
+                            </label>
+                            <input asp-for="Email" class="form-control form-control-lg rounded-3" placeholder="Enter your email address">
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>OTP will also be sent to this email
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-3" id="sendOtpBtn">
+                                <span class="btn-text">
+                                    <i class="fas fa-paper-plane me-2"></i>Send OTP
+                                </span>
+                                <span class="btn-loading d-none">
+                                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                                    Sending OTP...
+                                </span>
+                            </button>
+                            
+                            <a href="@Url.Action("Index", "Cart")" class="btn btn-outline-secondary btn-lg rounded-3">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Cart
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Security Info -->
+            <div class="card mt-4 border-0 bg-light">
+                <div class="card-body text-center py-4">
+                    <h6 class="text-muted mb-3">
+                        <i class="fas fa-shield-alt me-2"></i>Your Security is Our Priority
+                    </h6>
+                    <div class="row g-3">
+                        <div class="col-4">
+                            <i class="fas fa-lock text-success mb-2" style="font-size: 1.5rem;"></i>
+                            <div class="small text-muted">SSL Encrypted</div>
+                        </div>
+                        <div class="col-4">
+                            <i class="fas fa-user-shield text-success mb-2" style="font-size: 1.5rem;"></i>
+                            <div class="small text-muted">OTP Verified</div>
+                        </div>
+                        <div class="col-4">
+                            <i class="fas fa-check-circle text-success mb-2" style="font-size: 1.5rem;"></i>
+                            <div class="small text-muted">Secure Payment</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('verifyForm').addEventListener('submit', function() {
+    const btn = document.getElementById('sendOtpBtn');
+    const btnText = btn.querySelector('.btn-text');
+    const btnLoading = btn.querySelector('.btn-loading');
+    
+    btn.disabled = true;
+    btnText.classList.add('d-none');
+    btnLoading.classList.remove('d-none');
+});
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

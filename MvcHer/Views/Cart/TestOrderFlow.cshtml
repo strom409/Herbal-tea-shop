@@ -1,0 +1,70 @@
+@{
+    ViewData["Title"] = "Test Order Flow";
+}
+
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <h1 class="display-4 mb-3">Test Order Tracking Flow</h1>
+                    <p class="lead text-muted">Test the complete order placement and tracking experience</p>
+                </div>
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fa fa-test me-2"></i>Order Flow Test</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Step 1: Add Products to Cart</h6>
+                                <p>Add some products to your cart to test the checkout process.</p>
+                                <a asp-controller="Store" asp-action="Index" class="btn btn-primary mb-3">
+                                    <i class="fa fa-shopping-bag me-2"></i>Go to Store
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Step 2: Test Order Placement</h6>
+                                <p>Place a test order with sample data.</p>
+                                <a asp-controller="Cart" asp-action="TestPlaceOrderSimple" class="btn btn-success mb-3">
+                                    <i class="fa fa-test me-2"></i>Place Test Order
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Step 3: Track Your Order</h6>
+                                <p>Use the order tracking feature to check order status.</p>
+                                <a asp-controller="Order" asp-action="Track" class="btn btn-info mb-3">
+                                    <i class="fa fa-search me-2"></i>Track Order
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Step 4: Admin Order Management</h6>
+                                <p>View and manage orders from the admin panel.</p>
+                                <a asp-controller="Admin" asp-action="Login" class="btn btn-warning mb-3">
+                                    <i class="fa fa-user-shield me-2"></i>Admin Panel
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <h6><i class="fa fa-info-circle me-2"></i>Test Instructions</h6>
+                    <ol class="mb-0">
+                        <li>Go to the store and add some products to your cart</li>
+                        <li>Proceed to checkout and place an order</li>
+                        <li>Note the order number from the confirmation page</li>
+                        <li>Use the "Track This Order Now" button or manually track using the order number</li>
+                        <li>Optionally, login to admin (admin/admin123) to manage orders</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+@{
+    ViewData["Title"] = "Test Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <h1>Test Form</h1>
+    
+    <form action="/Cart/PlaceOrder" method="post">
+        <div class="mb-3">
+            <label>Customer Name:</label>
+            <input type="text" name="customerName" value="Test User" class="form-control" required>
+        </div>
+        
+        <div class="mb-3">
+            <label>Email:</label>
+            <input type="email" name="customerEmail" value="test@example.com" class="form-control" required>
+        </div>
+        
+        <div class="mb-3">
+            <label>Phone:</label>
+            <input type="tel" name="customerPhone" value="1234567890" class="form-control" required>
+        </div>
+        
+        <div class="mb-3">
+            <label>Address:</label>
+            <input type="text" name="shippingAddress" value="123 Test St" class="form-control" required>
+        </div>
+        
+        <div class="mb-3">
+            <label>City:</label>
+            <input type="text" name="city" value="Test City" class="form-control" required>
+        </div>
+        
+        <div class="mb-3">
+            <label>State:</label>
+            <input type="text" name="state" value="TS" class="form-control" required>
+        </div>
+        
+        <div class="mb-3">
+            <label>Zip Code:</label>
+            <input type="text" name="zipCode" value="12345" class="form-control" required>
+        </div>
+        
+        <div class="mb-3">
+            <label>Payment Method:</label>
+            <input type="radio" name="paymentMethod" value="Bank Transfer" checked> Bank Transfer
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Test Place Order</button>
+    </form>
+</div>
+
+<script>
+$(document).ready(function() {
+    console.log('Test form loaded');
+    
+    $('form').on('submit', function(e) {
+        console.log('Test form submitted');
+        console.log('Form action:', this.action);
+        console.log('Form method:', this.method);
+        
+        // Log form data
+        var formData = new FormData(this);
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+    });
+});
+</script>

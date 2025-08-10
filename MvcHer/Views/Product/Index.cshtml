@@ -1,0 +1,104 @@
+@model IEnumerable<MvcHer.Models.Product>
+@{
+    ViewData["Title"] = "Products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Page Header Start -->
+<div class="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container text-center py-5">
+        <h1 class="display-2 text-dark mb-4 animated slideInDown">Our Products</h1>
+        <nav aria-label="breadcrumb animated slideInDown">
+            <ol class="breadcrumb justify-content-center mb-0">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item text-dark" aria-current="page">Products</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!-- Page Header End -->
+
+<!-- Products Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="section-title text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+            <p class="fs-5 fw-medium fst-italic text-primary">Our Products</p>
+            <h1 class="display-6">Premium Quality Tea Collection</h1>
+        </div>
+        <div class="row g-4">
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var product in Model)
+                {
+                    <div class="col-lg-6 col-xl-4">
+                        <div class="p-4 rounded bg-light">
+                            <div class="row align-items-center">
+                                <div class="col-6">
+                                    <img src="@product.ImageUrl" class="img-fluid rounded-circle w-100" alt="@product.Name">
+                                </div>
+                                <div class="col-6">
+                                    <a href="@Url.Action("Details", "Product", new { id = product.Id })" class="h5">@product.Name</a>
+                                    <div class="d-flex my-3">
+                                        <i class="fas fa-star text-primary"></i>
+                                        <i class="fas fa-star text-primary"></i>
+                                        <i class="fas fa-star text-primary"></i>
+                                        <i class="fas fa-star text-primary"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <h4 class="mb-3">$@product.Price.ToString("F2")</h4>
+                                    <button onclick="addToCart(@product.Id)" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12">
+                    <div class="text-center py-5">
+                        <h4>No products found</h4>
+                        <p>Please check back later for new products.</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Products End -->
+
+<script>
+function addToCart(productId) {
+    $.ajax({
+        url: '@Url.Action("AddToCart", "Cart")',
+        type: 'POST',
+        data: { productId: productId, quantity: 1 },
+        success: function(response) {
+            if (response.success) {
+                // Update cart count in navigation
+                updateCartCount();
+                // Show success message
+                alert('Product added to cart successfully!');
+            } else {
+                alert('Error: ' + response.message);
+            }
+        },
+        error: function() {
+            alert('Error adding product to cart');
+        }
+    });
+}
+
+function updateCartCount() {
+    $.ajax({
+        url: '@Url.Action("GetCartCount", "Cart")',
+        type: 'GET',
+        success: function(response) {
+            // Update cart count display if it exists
+            $('.cart-count').text(response.count);
+        }
+    });
+}
+</script>

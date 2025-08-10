@@ -1,0 +1,183 @@
+@model MvcHer.Models.Banner
+@{
+    ViewData["Title"] = "View Banner";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-eye me-2"></i>Banner Details
+                    </h3>
+                    <div>
+                        <a href="@Url.Action("EditBanner", new { id = Model.Id })" class="btn btn-primary me-2">
+                            <i class="fas fa-edit me-1"></i>Edit
+                        </a>
+                        <a href="@Url.Action("Banners")" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Back
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="fw-bold" style="width: 150px;">Title:</td>
+                                    <td>@Model.Title</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Subtitle:</td>
+                                    <td>@Model.Subtitle</td>
+                                </tr>
+                                @if (!string.IsNullOrEmpty(Model.Description))
+                                {
+                                    <tr>
+                                        <td class="fw-bold">Description:</td>
+                                        <td>@Model.Description</td>
+                                    </tr>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.ButtonText))
+                                {
+                                    <tr>
+                                        <td class="fw-bold">Button Text:</td>
+                                        <td>@Model.ButtonText</td>
+                                    </tr>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.ButtonUrl))
+                                {
+                                    <tr>
+                                        <td class="fw-bold">Button URL:</td>
+                                        <td><a href="@Model.ButtonUrl" target="_blank" class="text-decoration-none">@Model.ButtonUrl <i class="fas fa-external-link-alt ms-1"></i></a></td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td class="fw-bold">Display Order:</td>
+                                    <td><span class="badge bg-secondary">@Model.DisplayOrder</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Status:</td>
+                                    <td>
+                                        @if (Model.IsActive)
+                                        {
+                                            <span class="badge bg-success">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">Inactive</span>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Created:</td>
+                                    <td>@Model.CreatedAt.ToString("MMMM dd, yyyy 'at' hh:mm tt")</td>
+                                </tr>
+                                @if (Model.UpdatedAt.HasValue)
+                                {
+                                    <tr>
+                                        <td class="fw-bold">Last Updated:</td>
+                                        <td>@Model.UpdatedAt.Value.ToString("MMMM dd, yyyy 'at' hh:mm tt")</td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Banner Image</label>
+                                <div class="border rounded p-3 text-center">
+                                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                                    {
+                                        <img src="@Model.ImageUrl" alt="@Model.Title" class="img-fluid rounded shadow-sm" style="max-height: 300px;">
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-image fa-3x text-muted mb-2"></i>
+                                        <p class="text-muted mb-0">No image uploaded</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Banner Preview -->
+                    <div class="mt-4">
+                        <h5 class="mb-3">
+                            <i class="fas fa-desktop me-2"></i>Banner Preview
+                        </h5>
+                        <div class="border rounded p-4 bg-light">
+                            <div class="position-relative" style="height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; overflow: hidden;">
+                                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                                {
+                                    <img src="@Model.ImageUrl" alt="@Model.Title" class="position-absolute w-100 h-100" style="object-fit: cover; opacity: 0.8;">
+                                }
+                                <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
+                                    <h2 class="display-4 fw-bold mb-3" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">@Model.Title</h2>
+                                    <p class="lead mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">@Model.Subtitle</p>
+                                    @if (!string.IsNullOrEmpty(Model.ButtonText) && !string.IsNullOrEmpty(Model.ButtonUrl))
+                                    {
+                                        <a href="@Model.ButtonUrl" class="btn btn-primary btn-lg px-4 py-2" target="_blank">
+                                            @Model.ButtonText
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="mt-4 d-flex justify-content-between">
+                        <div>
+                            <form method="post" action="@Url.Action("ToggleBannerStatus")" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@Model.Id" />
+                                <button type="submit" class="btn btn-outline-warning">
+                                    <i class="fas fa-toggle-@(Model.IsActive ? "on" : "off") me-1"></i>
+                                    @(Model.IsActive ? "Deactivate" : "Activate") Banner
+                                </button>
+                            </form>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-outline-danger" onclick="deleteBanner(@Model.Id, '@Model.Title')">
+                                <i class="fas fa-trash me-1"></i>Delete Banner
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the banner "<span id="bannerTitle"></span>"?</p>
+                <p class="text-danger"><small>This action cannot be undone.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function deleteBanner(id, title) {
+        document.getElementById('bannerTitle').textContent = title;
+        document.getElementById('deleteForm').action = '@Url.Action("DeleteBanner")/' + id;
+        new bootstrap.Modal(document.getElementById('deleteModal')).show();
+    }
+</script>

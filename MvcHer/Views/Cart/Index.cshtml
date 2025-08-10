@@ -1,0 +1,249 @@
+@model List<MvcHer.Models.CartItem>
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<link rel="stylesheet" href="~/css/cart.css" />
+
+<!-- Hero Section -->
+@* <div class="cart-hero">
+    <div class="container text-center">
+        <h1><i class="fas fa-shopping-cart me-3"></i>Shopping Cart</h1>
+        <p>Review your selected premium tea collection</p>
+    </div>
+</div> *@
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="cartModalLabel">
+            <i class="fa fa-shopping-cart me-2"></i>Shopping Cart
+        </h5>
+        <button type="button" class="btn-close close-cart" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <div id="cart-items">
+           
+            <!-- Cart items will be dynamically loaded here -->
+            <div class="cart-container">
+                @if (Model == null || !Model.Any())
+                {
+                    <!-- Empty Cart Section -->
+                    <div class="empty-cart-section">
+                        <div class="empty-cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <h2 class="empty-cart-title">Your Cart is Empty</h2>
+                        <p class="empty-cart-text">
+                            Discover our premium collection of organic teas<br>
+                            and start your wellness journey today!
+                        </p>
+                        <a asp-controller="Store" asp-action="Index" class="start-shopping-btn">
+                            <i class="fas fa-leaf me-3"></i>Start Shopping
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        <!-- Cart Items -->
+                        <div class="col-lg-8">
+                            <div class="cart-items-section">
+                                @foreach (var item in Model)
+                                {
+                                    <div class="cart-item-card" data-product-id="@item.ProductId">
+                                        <div class="cart-item-content">
+                                            <img src="@item.Product.ImageUrl" alt="@item.Product.Name" class="product-image">
+
+                                            <div class="product-details">
+                                                <h3 class="product-name">@item.Product.Name</h3>
+                                                <p class="product-description">@item.Product.Description</p>
+
+                                                <div class="product-price">
+                                                    ₹@item.Product.Price.ToString("N2")
+                                                </div>
+
+                                                <div class="quantity-section">
+                                                    <span class="quantity-label">Quantity:</span>
+                                                    <div class="quantity-controls">
+                                                        <button class="quantity-btn" onclick="updateQuantity(@item.ProductId, @(item.Quantity - 1))">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                        <input type="number" class="quantity-input" value="@item.Quantity"
+                                                               onchange="updateQuantity(@item.ProductId, this.value)" min="1">
+                                                        <button class="quantity-btn" onclick="updateQuantity(@item.ProductId, @(item.Quantity + 1))">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <button class="remove-btn" onclick="removeFromCart(@item.ProductId)">
+                                                    <i class="fas fa-trash me-2"></i>Remove Item
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Order Summary -->
+                        <div class="col-lg-4">
+                            <div class="order-summary">
+                                <div class="summary-header">
+                                    <h3 class="summary-title">
+                                        <i class="fas fa-receipt me-2"></i>Order Summary
+                                    </h3>
+                                </div>
+
+                                <div class="summary-content">
+                                    <div class="summary-row">
+                                        <span>Items (@Model.Sum(c => c.Quantity))</span>
+                                        <span>₹@Model.Sum(c => c.Product.Price * c.Quantity).ToString("N2")</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Shipping</span>
+                                        <span style="color: #8BC34A; font-weight: 600;">Free</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Tax (18% GST)</span>
+                                        <span>₹@((Model.Sum(c => c.Product.Price * c.Quantity) * 0.18m).ToString("N2"))</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span><strong>Total Amount</strong></span>
+                                        <span><strong>₹@((Model.Sum(c => c.Product.Price * c.Quantity) * 1.18m).ToString("N2"))</strong></span>
+                                    </div>
+
+                                    <button class="checkout-btn" onclick="proceedToCheckout()">
+                                        <i class="fas fa-lock me-2"></i>Secure Checkout
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        </div>
+    </div>
+    @* <div class="modal-footer">
+        <div class="d-flex justify-content-between align-items-center w-100">
+            <div>
+                <strong>Total: <span id="cart-total" class="text-primary">$0.00</span></strong>
+            </div>
+            <div class="d-flex justify-content-between align-items-baseline">
+                <button type="button" class="btn btn-outline-secondary clear-cart me-2" style="width: 100%;height: 60px;border-radius: 50px;">
+                    Clear Cart
+                </button>
+                <button type="button" class="btn btn-primary checkout-btn">Checkout</button>
+            </div>
+        </div>
+    </div> *@
+</div>
+
+
+<!-- Success/Error Messages -->
+<div id="cart-messages" class="position-fixed" style="top: 100px; right: 20px; z-index: 1050;"></div>
+
+<script>
+// Cart functionality with smooth animations
+function updateQuantity(productId, newQuantity) {
+    if (newQuantity < 1) {
+        removeFromCart(productId);
+        return;
+    }
+    
+    const card = document.querySelector(`[data-product-id="${productId}"]`);
+    card.style.opacity = '0.7';
+    
+    fetch('/Cart/UpdateCartItem', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+        },
+        body: JSON.stringify({
+            productId: productId,
+            quantity: newQuantity
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showMessage('Cart updated successfully!', 'success');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showMessage('Error updating cart: ' + data.message, 'error');
+            card.style.opacity = '1';
+        }
+    })
+    .catch(error => {
+        showMessage('Error updating cart', 'error');
+        card.style.opacity = '1';
+    });
+}
+
+function removeFromCart(productId) {
+    if (!confirm('Are you sure you want to remove this item from your cart?')) {
+        return;
+    }
+    
+    const card = document.querySelector(`[data-product-id="${productId}"]`);
+    card.style.transform = 'translateX(-100%)';
+    card.style.opacity = '0';
+    
+    setTimeout(() => {
+        fetch('/Cart/RemoveFromCart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+            },
+            body: JSON.stringify({ productId: productId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showMessage('Item removed from cart!', 'success');
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                showMessage('Error removing item: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showMessage('Error removing item', 'error');
+        });
+    }, 400);
+}
+
+function proceedToCheckout() {
+    window.location.href = '/Cart/Checkout';
+}
+
+function showMessage(message, type) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `alert alert-${type === 'error' ? 'danger' : type === 'success' ? 'success' : 'info'} alert-dismissible fade show`;
+    messageDiv.style.minWidth = '350px';
+    messageDiv.style.borderRadius = '15px';
+    messageDiv.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
+    messageDiv.innerHTML = `
+        <strong>${type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ'}</strong> ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.getElementById('cart-messages').appendChild(messageDiv);
+    
+    setTimeout(() => {
+        messageDiv.remove();
+    }, 5000);
+}
+
+// Smooth page loading effects
+document.addEventListener('DOMContentLoaded', function() {
+    document.documentElement.style.scrollBehavior = 'smooth';
+    
+    // Add entrance animations to elements
+    const cards = document.querySelectorAll('.cart-item-card');
+    cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.2}s`;
+    });
+});
+</script>

@@ -1,0 +1,238 @@
+@model MvcHer.Models.AboutUs?
+
+@{
+    ViewData["Title"] = Model?.Id > 0 ? "Edit About Us" : "Create About Us";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var aboutUs = Model ?? new MvcHer.Models.AboutUs();
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>@ViewData["Title"]
+                    </h4>
+                    <a asp-action="AboutUs" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to About Us
+                    </a>
+                </div>
+                <div class="card-body">
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>@TempData["ErrorMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form asp-action="EditAboutUs" method="post" enctype="multipart/form-data" novalidate>
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="CreatedAt" />
+                        <input type="hidden" asp-for="IsActive" />
+                        <input type="hidden" asp-for="ImageUrl" />
+                        <input type="hidden" asp-for="FounderImageUrl" />
+
+                        <div class="row">
+                            <!-- Main Information -->
+                            <div class="col-lg-8">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Basic Information</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label asp-for="Title" class="form-label">Title *</label>
+                                            <input asp-for="Title" class="form-control" placeholder="Welcome to Herbal Tea - Your Premium Tea Destination" />
+                                            <span asp-validation-for="Title" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="Subtitle" class="form-label">Subtitle *</label>
+                                            <input asp-for="Subtitle" class="form-control" placeholder="Crafting exceptional tea experiences since 2010..." />
+                                            <span asp-validation-for="Subtitle" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="Description" class="form-label">Description *</label>
+                                            <textarea asp-for="Description" class="form-control" rows="4" placeholder="At Herbal Tea, we believe that every cup tells a story..."></textarea>
+                                            <span asp-validation-for="Description" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Hero Image</label>
+                                            <input type="file" name="imageFile" class="form-control" accept="image/*" />
+                                            <small class="text-muted">Upload a new hero image (optional). Current: @(aboutUs.ImageUrl ?? "Default")</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Mission, Vision, Values -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5 class="mb-0"><i class="fas fa-bullseye me-2"></i>Mission, Vision & Values</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label asp-for="Mission" class="form-label">Mission Statement *</label>
+                                            <textarea asp-for="Mission" class="form-control" rows="3" placeholder="To deliver the world's finest teas while supporting sustainable farming practices..."></textarea>
+                                            <span asp-validation-for="Mission" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="Vision" class="form-label">Vision Statement *</label>
+                                            <textarea asp-for="Vision" class="form-control" rows="3" placeholder="To become the global leader in premium tea retail..."></textarea>
+                                            <span asp-validation-for="Vision" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="Values" class="form-label">Core Values *</label>
+                                            <textarea asp-for="Values" class="form-control" rows="3" placeholder="Quality First: We never compromise on the quality of our teas..."></textarea>
+                                            <span asp-validation-for="Values" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Founder Information -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5 class="mb-0"><i class="fas fa-user me-2"></i>Founder Information</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label asp-for="FounderName" class="form-label">Founder Name *</label>
+                                                    <input asp-for="FounderName" class="form-control" placeholder="Rajesh Kumar" />
+                                                    <span asp-validation-for="FounderName" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label asp-for="FounderTitle" class="form-label">Founder Title *</label>
+                                                    <input asp-for="FounderTitle" class="form-control" placeholder="Founder & Master Tea Curator" />
+                                                    <span asp-validation-for="FounderTitle" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="FounderMessage" class="form-label">Founder Message *</label>
+                                            <textarea asp-for="FounderMessage" class="form-control" rows="4" placeholder="My passion for tea began during my travels across the tea gardens..."></textarea>
+                                            <span asp-validation-for="FounderMessage" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Founder Image</label>
+                                            <input type="file" name="founderImageFile" class="form-control" accept="image/*" />
+                                            <small class="text-muted">Upload founder image (optional). Current: @(aboutUs.FounderImageUrl ?? "Default")</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Statistics & Recognition -->
+                            <div class="col-lg-4">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Statistics</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label asp-for="YearsOfExperience" class="form-label">Years of Experience</label>
+                                            <input asp-for="YearsOfExperience" type="number" class="form-control" min="0" />
+                                            <span asp-validation-for="YearsOfExperience" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="HappyCustomers" class="form-label">Happy Customers</label>
+                                            <input asp-for="HappyCustomers" type="number" class="form-control" min="0" />
+                                            <span asp-validation-for="HappyCustomers" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="TeaVarieties" class="form-label">Tea Varieties</label>
+                                            <input asp-for="TeaVarieties" type="number" class="form-control" min="0" />
+                                            <span asp-validation-for="TeaVarieties" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="CountriesServed" class="form-label">Countries Served</label>
+                                            <input asp-for="CountriesServed" type="number" class="form-control" min="0" />
+                                            <span asp-validation-for="CountriesServed" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5 class="mb-0"><i class="fas fa-award me-2"></i>Recognition</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label asp-for="Awards" class="form-label">Awards</label>
+                                            <textarea asp-for="Awards" class="form-control" rows="3" placeholder="Best Tea Retailer 2023, Organic Certification Excellence Award 2022, Customer Choice Award 2021"></textarea>
+                                            <small class="text-muted">Separate multiple awards with commas</small>
+                                            <span asp-validation-for="Awards" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label asp-for="Certifications" class="form-label">Certifications</label>
+                                            <textarea asp-for="Certifications" class="form-control" rows="3" placeholder="Organic Certified, Fair Trade Certified, ISO 22000 Food Safety, HACCP Certified"></textarea>
+                                            <small class="text-muted">Separate multiple certifications with commas</small>
+                                            <span asp-validation-for="Certifications" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-save me-2"></i>Save Changes
+                                    </button>
+                                    <a asp-action="AboutUs" class="btn btn-secondary">
+                                        <i class="fas fa-times me-2"></i>Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Auto-resize textareas
+        document.addEventListener('DOMContentLoaded', function() {
+            const textareas = document.querySelectorAll('textarea');
+            textareas.forEach(textarea => {
+                textarea.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = this.scrollHeight + 'px';
+                });
+            });
+
+            // Image preview functionality
+            const imageInputs = document.querySelectorAll('input[type="file"]');
+            imageInputs.forEach(input => {
+                input.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            // You can add image preview functionality here if needed
+                            console.log('Image selected:', file.name);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            });
+        });
+    </script>
+}

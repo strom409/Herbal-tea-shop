@@ -1,0 +1,124 @@
+@{
+    ViewData["Title"] = "Verify OTP";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white text-center">
+                    <h4><i class="fas fa-shield-alt"></i> Verify OTP</h4>
+                </div>
+                <div class="card-body">
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i> @TempData["Success"]
+                        </div>
+                    }
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle"></i> @TempData["Error"]
+                        </div>
+                    }
+
+                    <div class="mb-4 text-center">
+                        <p class="text-muted">
+                            We've sent a 6-digit OTP to<br>
+                            <strong>@ViewBag.PhoneNumber</strong>
+                        </p>
+                        <p class="text-muted">
+                            Order: <strong>@ViewBag.OrderNumber</strong>
+                        </p>
+                    </div>
+
+                    <form asp-action="VerifyOtp" method="post">
+                        @Html.AntiForgeryToken()
+                        
+                        <div class="mb-3">
+                            <label for="otp" class="form-label text-center d-block">
+                                <i class="fas fa-key"></i> Enter 6-Digit OTP
+                            </label>
+                            <input type="text" class="form-control text-center otp-input" id="otp" name="otp" 
+                                   placeholder="000000" maxlength="6" pattern="[0-9]{6}" required>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-check"></i> Verify OTP
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="mt-4 text-center">
+                        <a href="@Url.Action("Track")" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to Tracking
+                        </a>
+                    </div>
+
+                    <div class="mt-3 text-center">
+                        <small class="text-muted">
+                            <i class="fas fa-clock"></i> 
+                            OTP is valid for 5 minutes
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 15px;
+        border: none;
+    }
+    .card-header {
+        border-radius: 15px 15px 0 0 !important;
+    }
+    .otp-input {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        padding: 20px 15px;
+        font-size: 24px;
+        font-weight: bold;
+        letter-spacing: 8px;
+    }
+    .otp-input:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+    .form-control {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        padding: 12px 15px;
+    }
+    .btn {
+        border-radius: 10px;
+        padding: 12px 20px;
+        font-weight: 600;
+    }
+    .alert {
+        border-radius: 10px;
+        border: none;
+    }
+</style>
+
+<script>
+    // Auto-format OTP input
+    document.getElementById('otp').addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length === 6) {
+            // Auto-submit when 6 digits are entered
+            setTimeout(() => {
+                this.form.submit();
+            }, 500);
+        }
+    });
+
+    // Focus on OTP input when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('otp').focus();
+    });
+</script>

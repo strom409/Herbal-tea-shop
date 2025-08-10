@@ -1,0 +1,131 @@
+@model MvcHer.Models.ContactMessage
+@{
+    ViewData["Title"] = "Form Testing Page";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <h2 class="text-center mb-4">Form Testing Page</h2>
+            
+            <!-- Display Messages -->
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fa fa-check-circle me-2"></i>@TempData["Success"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fa fa-exclamation-triangle me-2"></i>@TempData["Error"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <!-- Contact Form Test -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4><i class="fa fa-envelope me-2"></i>Contact Form Test</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="TestContact" asp-controller="Home" method="post">
+                        @Html.AntiForgeryToken()
+                        
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label">Name</label>
+                            <input asp-for="Name" class="form-control" placeholder="Enter your name" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Subject" class="form-label">Subject</label>
+                            <input asp-for="Subject" class="form-control" placeholder="Enter subject" />
+                            <span asp-validation-for="Subject" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Message" class="form-label">Message</label>
+                            <textarea asp-for="Message" class="form-control" rows="4" placeholder="Enter your message"></textarea>
+                            <span asp-validation-for="Message" class="text-danger"></span>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-paper-plane me-2"></i>Test Contact Form
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Quick Track Form Test -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4><i class="fa fa-search me-2"></i>Quick Track Form Test</h4>
+                </div>
+                <div class="card-body">
+                    <form id="testTrackForm">
+                        <div class="mb-3">
+                            <label for="testOrderNumber" class="form-label">Order Number</label>
+                            <input type="text" class="form-control" id="testOrderNumber" 
+                                   placeholder="Enter order number (e.g., ORD-20240108-001)" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa fa-search me-2"></i>Test Track Order
+                        </button>
+                    </form>
+                    <div id="trackResult" class="mt-3"></div>
+                </div>
+            </div>
+
+            <!-- Database Test -->
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="fa fa-database me-2"></i>Database Connection Test</h4>
+                </div>
+                <div class="card-body">
+                    <a href="/Home/TestDatabase" class="btn btn-info">
+                        <i class="fa fa-database me-2"></i>Test Database Connection
+                    </a>
+                    <p class="mt-2 text-muted">This will test if the database connection and ContactMessages table are working.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // Test Track Form Handler
+        document.getElementById('testTrackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const orderNumber = document.getElementById('testOrderNumber').value.trim();
+            const resultDiv = document.getElementById('trackResult');
+            
+            if (orderNumber) {
+                resultDiv.innerHTML = '<div class="alert alert-info"><i class="fa fa-spinner fa-spin me-2"></i>Testing redirect to: /Order/Track?orderNumber=' + encodeURIComponent(orderNumber) + '</div>';
+                
+                // Test the redirect after 2 seconds
+                setTimeout(function() {
+                    window.location.href = '/Order/Track?orderNumber=' + encodeURIComponent(orderNumber);
+                }, 2000);
+            } else {
+                resultDiv.innerHTML = '<div class="alert alert-warning">Please enter an order number.</div>';
+            }
+        });
+        
+        // Auto-dismiss alerts
+        setTimeout(function() {
+            $('.alert').fadeOut('slow');
+        }, 5000);
+    </script>
+}

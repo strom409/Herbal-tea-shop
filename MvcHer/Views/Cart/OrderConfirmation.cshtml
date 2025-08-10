@@ -1,0 +1,240 @@
+@model MvcHer.Models.Order
+@{
+    ViewData["Title"] = "Order Confirmation";
+}
+
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <i class="fa fa-check-circle text-success" style="font-size: 4rem;"></i>
+                    <h1 class="display-4 text-success mb-3">Order Placed Successfully!</h1>
+                    <p class="lead text-muted">Thank you for your order. We'll send you a confirmation email shortly.</p>
+                </div>
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fa fa-receipt me-2"></i>Order Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Order Number</h6>
+                                <p class="fw-bold">#@Model.OrderNumber</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Order Date</h6>
+                                <p class="fw-bold">@Model.OrderDate.ToString("MMMM dd, yyyy 'at' hh:mm tt")</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Status</h6>
+                                <span class="badge bg-warning">@Model.Status</span>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Notes</h6>
+                                <p class="fw-bold">@Model.Notes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fa fa-user me-2"></i>Customer Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Name</h6>
+                                <p class="fw-bold">@Model.Customer.FirstName @Model.Customer.LastName</p>
+                                
+                                <h6 class="text-muted">Email</h6>
+                                <p class="fw-bold">@Model.Customer.Email</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Phone</h6>
+                                <p class="fw-bold">@Model.Customer.PhoneNumber</p>
+                                
+                                <h6 class="text-muted">Shipping Address</h6>
+                                <p class="fw-bold">
+                                    @Model.ShippingAddress<br>
+                                    @Model.ShippingCity, @Model.ShippingState @Model.ShippingZipCode
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fa fa-shopping-bag me-2"></i>Order Items</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-borderless mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.OrderItems)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="@item.Product.ImageUrl" alt="@item.Product.Name" 
+                                                         class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                                    <div>
+                                                        <h6 class="mb-0">@item.Product.Name</h6>
+                                                        <small class="text-muted">SKU: @item.Product.SKU</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="align-middle">$@item.UnitPrice.ToString("F2")</td>
+                                            <td class="align-middle">@item.Quantity</td>
+                                            <td class="align-middle fw-bold">$@item.TotalPrice.ToString("F2")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 offset-md-6">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Subtotal:</span>
+                                    <span>$@Model.OrderItems.Sum(i => i.TotalPrice).ToString("F2")</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Tax (10%):</span>
+                                    <span>$@((Model.OrderItems.Sum(i => i.TotalPrice) * 0.1m).ToString("F2"))</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Shipping:</span>
+                                    <span class="text-success">Free</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <strong>Total:</strong>
+                                    <strong class="text-primary">$@Model.TotalAmount.ToString("F2")</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Tracking Section -->
+                <div class="card shadow-sm mb-4 border-success">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fa fa-search me-2"></i>Track Your Order</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <p class="mb-3">Save this order number to track your order status:</p>
+                        <div class="alert alert-success d-inline-block px-4 py-3 mb-3">
+                            <h4 class="mb-0 fw-bold">#@Model.OrderNumber</h4>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <a asp-controller="Order" asp-action="Track" asp-route-orderNumber="@Model.OrderNumber" class="btn btn-success btn-lg me-md-2">
+                                <i class="fa fa-search me-2"></i>Track This Order Now
+                            </a>
+                            <button type="button" class="btn btn-outline-success btn-lg" onclick="copyOrderNumber()">
+                                <i class="fa fa-copy me-2"></i>Copy Order Number
+                            </button>
+                        </div>
+                        <small class="text-muted d-block mt-2">You can track your order anytime using the order number above</small>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a asp-controller="Store" asp-action="Index" class="btn btn-primary btn-lg me-3">
+                        <i class="fa fa-shopping-bag me-2"></i>Continue Shopping
+                    </a>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                        <i class="fa fa-home me-2"></i>Back to Home
+                    </a>
+                </div>
+
+                <div class="alert alert-info mt-4">
+                    <h6><i class="fa fa-info-circle me-2"></i>What's Next?</h6>
+                    <ul class="mb-0">
+                        <li>You'll receive an order confirmation email within a few minutes</li>
+                        <li>We'll send you tracking information once your order ships</li>
+                        <li>Expected delivery: 3-5 business days</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function copyOrderNumber() {
+            const orderNumber = '@Model.OrderNumber';
+            
+            // Try to use the modern clipboard API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(orderNumber).then(function() {
+                    showCopySuccess();
+                }, function() {
+                    fallbackCopyTextToClipboard(orderNumber);
+                });
+            } else {
+                // Fallback for older browsers
+                fallbackCopyTextToClipboard(orderNumber);
+            }
+        }
+        
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showCopySuccess();
+            } catch (err) {
+                alert('Unable to copy order number. Please copy it manually: ' + text);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+        
+        function showCopySuccess() {
+            const button = document.querySelector('button[onclick="copyOrderNumber()"]');
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = '<i class="fa fa-check me-2"></i>Copied!';
+            button.classList.remove('btn-outline-success');
+            button.classList.add('btn-success');
+            
+            setTimeout(function() {
+                button.innerHTML = originalText;
+                button.classList.remove('btn-success');
+                button.classList.add('btn-outline-success');
+            }, 2000);
+        }
+        
+        // Auto-focus on track order button when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const trackButton = document.querySelector('a[asp-controller="Order"]');
+            if (trackButton) {
+                trackButton.focus();
+            }
+        });
+    </script>
+}

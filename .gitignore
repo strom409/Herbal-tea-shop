@@ -1,0 +1,57 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+[Xx]64/
+[Xx]86/
+[Bb]uild/
+bin/
+obj/
+
+# Rider
+.idea/
+*.iml
+
+# DotCover
+*.dotCover
+
+# Logs
+*.log
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# Backup & reports
+*.Report.xml
+*_backup*/
+
+# Node
+node_modules/
+
+# Publish
+wwwroot/lib/
+
+# EF Migrations snapshots (optional)
+# Migrations/Backup/
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# Others
+*.vsidx
+*.db-shm
+*.db-wal
+*.db

@@ -1,0 +1,343 @@
+@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Page Header Start -->
+<div class="container-fluid page-header py-5">
+    <h1 class="text-center text-white display-6">Checkout</h1>
+    <ol class="breadcrumb justify-content-center mb-0">
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home</a></li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Store")">Store</a></li>
+        <li class="breadcrumb-item active text-white">Checkout</li>
+    </ol>
+</div>
+<!-- Page Header End -->
+
+<!-- Checkout Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <h1 class="mb-4">Billing details</h1>
+        <form action="/Cart/PlaceOrder" method="post">
+            @Html.AntiForgeryToken()
+            <div class="row g-5">
+                <div class="col-md-12 col-lg-6 col-xl-7">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-item w-100">
+                                <label class="form-label my-3">Full Name<sup>*</sup></label>
+                                <input type="text" name="customerName" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label my-3">Email Address<sup>*</sup></label>
+                        <input type="email" name="customerEmail" class="form-control" required>
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label my-3">Phone Number<sup>*</sup></label>
+                        <input type="tel" name="customerPhone" class="form-control" required>
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label my-3">Shipping Address <sup>*</sup></label>
+                        <input type="text" name="shippingAddress" class="form-control" placeholder="House Number Street Name" required>
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label my-3">Town/City<sup>*</sup></label>
+                        <input type="text" name="city" class="form-control" required>
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label my-3">State<sup>*</sup></label>
+                        <input type="text" name="state" class="form-control" required>
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label my-3">Postcode/Zip<sup>*</sup></label>
+                        <input type="text" name="zipCode" class="form-control" required>
+                    </div>
+
+                    <div class="form-check my-3">
+                        <input type="checkbox" class="form-check-input" id="Account-1" name="Accounts" value="Accounts">
+                        <label class="form-check-label" for="Account-1">Create an account?</label>
+                    </div>
+                    <hr>
+                    <div class="form-check my-3">
+                        <input class="form-check-input" type="checkbox" id="Address-1" name="Address" value="Address">
+                        <label class="form-check-label" for="Address-1">Ship to a different address?</label>
+                    </div>
+                    <div class="form-item">
+                        <textarea name="text" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Order Notes (Optional)"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6 col-xl-5">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Products</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (ViewBag.CartItems != null)
+                                {
+                                    @foreach (var item in (IEnumerable<MvcHer.Models.CartItem>)ViewBag.CartItems)
+                                    {
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="d-flex align-items-center mt-2">
+                                                    <img src="@item.Product.ImageUrl" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="">
+                                                </div>
+                                            </th>
+                                            <td class="py-5">@item.Product.Name</td>
+                                            <td class="py-5">$@item.Product.Price.ToString("F2")</td>
+                                            <td class="py-5">@item.Quantity</td>
+                                            <td class="py-5">$@item.TotalPrice.ToString("F2")</td>
+                                        </tr>
+                                    }
+                                }
+                                <tr>
+                                    <th scope="row">
+                                    </th>
+                                    <td class="py-5"></td>
+                                    <td class="py-5"></td>
+                                    <td class="py-5">
+                                        <p class="mb-0 text-dark py-3">Subtotal</p>
+                                    </td>
+                                    <td class="py-5">
+                                        <div class="py-3 border-bottom border-top">
+                                            <p class="mb-0 text-dark">$@ViewBag.CartTotal</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                    </th>
+                                    <td class="py-5">
+                                        <p class="mb-0 text-dark py-4">Shipping</p>
+                                    </td>
+                                    <td colspan="3" class="py-5">
+                                        <div class="form-check text-start">
+                                            <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-1" name="Shipping-1" value="Shipping">
+                                            <label class="form-check-label" for="Shipping-1">Free Shipping</label>
+                                        </div>
+                                        <div class="form-check text-start">
+                                            <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-2" name="Shipping-1" value="Shipping">
+                                            <label class="form-check-label" for="Shipping-2">Flat rate: $15.00</label>
+                                        </div>
+                                        <div class="form-check text-start">
+                                            <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-3" name="Shipping-1" value="Shipping">
+                                            <label class="form-check-label" for="Shipping-3">Local Pickup: $8.00</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                    </th>
+                                    <td class="py-5">
+                                        <p class="mb-0 text-dark text-uppercase py-3">TOTAL</p>
+                                    </td>
+                                    <td class="py-5"></td>
+                                    <td class="py-5"></td>
+                                    <td class="py-5">
+                                        <div class="py-3 border-bottom border-top">
+                                            <p class="mb-0 text-dark">$@ViewBag.CartTotal</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
+                        <div class="col-12">
+                            <h5 class="mb-3">Payment Method</h5>
+                            <div class="form-check text-start my-3">
+                                <input type="radio" class="form-check-input" id="Stripe-1" name="paymentMethod" value="Stripe" checked>
+                                <label class="form-check-label" for="Stripe-1">
+                                    <i class="fas fa-credit-card me-2"></i>Pay Online (Cards)
+                                    <small class="d-block text-muted">Powered by Stripe - Secure & Fast</small>
+                                </label>
+                            </div>
+                            <div class="form-check text-start my-3">
+                                <input type="radio" class="form-check-input" id="Delivery-1" name="paymentMethod" value="Cash On Delivery">
+                                <label class="form-check-label" for="Delivery-1">
+                                    <i class="fas fa-money-bill-wave me-2"></i>Cash On Delivery
+                                    <small class="d-block text-muted">Pay when you receive your order</small>
+                                </label>
+                            </div>
+                            <div class="form-check text-start my-3">
+                                <input type="radio" class="form-check-input" id="Transfer-1" name="paymentMethod" value="Bank Transfer">
+                                <label class="form-check-label" for="Transfer-1">
+                                    <i class="fas fa-university me-2"></i>Direct Bank Transfer
+                                    <small class="d-block text-muted">Transfer directly to our bank account</small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-4 text-center align-items-center justify-content-center pt-4">
+                        <button type="submit" class="btn btn-primary py-3 px-4 text-uppercase w-100">Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Checkout End -->
+
+@section Scripts {
+<!-- Stripe Checkout Script -->
+<script src="https://js.stripe.com/v3/"></script>
+
+<script>
+$(document).ready(function() {
+    console.log('Checkout page loaded with Stripe integration');
+    
+    // Test: Fill form fields for testing
+    $('input[name="customerName"]').val('John Doe');
+    $('input[name="customerEmail"]').val('john@example.com');
+    $('input[name="customerPhone"]').val('1234567890');
+    $('input[name="shippingAddress"]').val('123 Main Street');
+    $('input[name="city"]').val('New York');
+    $('input[name="state"]').val('NY');
+    $('input[name="zipCode"]').val('10001');
+    console.log('Form fields filled for testing');
+    
+    // Handle form submission
+    $('form').on('submit', function(e) {
+        e.preventDefault();
+        console.log('Form submission triggered');
+        
+        var paymentMethod = $('input[name="paymentMethod"]:checked').val();
+        console.log('Selected payment method:', paymentMethod);
+        
+        if (paymentMethod === 'Stripe') {
+            handleStripePayment();
+        } else {
+            // For other payment methods, submit form normally
+            handleOtherPaymentMethods();
+        }
+    });
+    
+    function handleStripePayment() {
+        // Validate form first
+        if (!validateForm()) {
+            return;
+        }
+        
+        // Show loading
+        var submitBtn = $('button[type="submit"]');
+        var originalText = submitBtn.html();
+        submitBtn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin me-2"></i>Processing...');
+        
+        // Calculate total amount from cart items
+        var totalAmount = 0;
+        $('tbody tr').each(function() {
+            var priceText = $(this).find('td:nth-child(4)').text();
+            var quantityText = $(this).find('td:nth-child(3)').text();
+            if (priceText && quantityText) {
+                var price = parseFloat(priceText.replace('$', '').replace('₹', '').replace(',', ''));
+                var quantity = parseInt(quantityText);
+                if (!isNaN(price) && !isNaN(quantity)) {
+                    totalAmount += price * quantity;
+                }
+            }
+        });
+        
+        // Fallback: try to get from ViewBag or calculate from visible elements
+        if (totalAmount === 0) {
+            var totalText = $('p:contains("TOTAL")').closest('tr').find('td:last p').text();
+            if (totalText) {
+                totalAmount = parseFloat(totalText.replace('$', '').replace('₹', '').replace(',', ''));
+            }
+        }
+        
+        // Store customer data in session before redirecting to Stripe
+        var customerData = {
+            customerName: $('input[name="customerName"]').val(),
+            customerEmail: $('input[name="customerEmail"]').val(),
+            customerPhone: $('input[name="customerPhone"]').val(),
+            shippingAddress: $('input[name="shippingAddress"]').val(),
+            city: $('input[name="city"]').val(),
+            state: $('input[name="state"]').val(),
+            zipCode: $('input[name="zipCode"]').val()
+        };
+        
+        // Store customer data in session
+        $.ajax({
+            url: '/Cart/StoreCustomerData',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(customerData),
+            success: function() {
+                // Create Stripe checkout session
+                createStripeCheckoutSession(totalAmount, submitBtn, originalText);
+            },
+            error: function() {
+                alert('Error storing customer data');
+                submitBtn.prop('disabled', false).html(originalText);
+            }
+        });
+    }
+    
+    function createStripeCheckoutSession(totalAmount, submitBtn, originalText) {
+        $.ajax({
+            url: '/Payment/CreateCheckoutSession',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ amount: totalAmount }),
+            success: function(response) {
+                if (response.success) {
+                    // Redirect to Stripe Checkout
+                    window.location.href = response.checkoutUrl;
+                } else {
+                    alert('Error creating checkout session: ' + response.error);
+                    submitBtn.prop('disabled', false).html(originalText);
+                }
+            },
+            error: function() {
+                alert('Error connecting to payment server');
+                submitBtn.prop('disabled', false).html(originalText);
+            }
+        });
+    }
+    
+    // Stripe handles payment verification automatically
+    
+    function handleOtherPaymentMethods() {
+        // For Cash on Delivery and Bank Transfer, submit form normally
+        var form = $('form')[0];
+        form.action = '/Cart/PlaceOrder';
+        form.submit();
+    }
+    
+    function validateForm() {
+        console.log('Validating form...');
+        var isValid = true;
+        var requiredFields = ['customerName', 'customerEmail', 'customerPhone', 'shippingAddress', 'city', 'state', 'zipCode'];
+        
+        requiredFields.forEach(function(fieldName) {
+            var field = $('input[name="' + fieldName + '"]');
+            if (!field.val().trim()) {
+                field.addClass('is-invalid');
+                isValid = false;
+            } else {
+                field.removeClass('is-invalid');
+            }
+        });
+        
+        if (!isValid) {
+            alert('Please fill in all required fields');
+        }
+        
+        return isValid;
+    }
+    
+    // Remove validation styling on input
+    $('input').on('input', function() {
+        $(this).removeClass('is-invalid');
+    });
+});
+</script>
+}

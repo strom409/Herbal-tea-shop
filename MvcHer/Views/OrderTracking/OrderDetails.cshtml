@@ -1,0 +1,276 @@
+@model MvcHer.Models.Order
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h4><i class="fas fa-box"></i> Order Details - #@Model.OrderNumber</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Order Status -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="status-card">
+                                <h5><i class="fas fa-info-circle"></i> Order Status</h5>
+                                <span class="badge badge-status badge-@Model.Status.ToLower()">
+                                    @Model.Status
+                                </span>
+                                <p class="text-muted mt-2">
+                                    <small>Order placed on @Model.CreatedAt.ToString("MMM dd, yyyy 'at' hh:mm tt")</small>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="status-card">
+                                <h5><i class="fas fa-dollar-sign"></i> Order Total</h5>
+                                <h3 class="text-success">₹@Model.TotalAmount.ToString("N2")</h3>
+                                <p class="text-muted mt-2">
+                                    <small>Payment Method: Stripe</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customer Information -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="info-card">
+                                <h5><i class="fas fa-user"></i> Customer Information</h5>
+                                <p><strong>Name:</strong> @Model.Customer.FirstName @Model.Customer.LastName</p>
+                                <p><strong>Email:</strong> @Model.Customer.Email</p>
+                                <p><strong>Phone:</strong> @Model.Customer.PhoneNumber</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-card">
+                                <h5><i class="fas fa-shipping-fast"></i> Shipping Address</h5>
+                                <p>@Model.ShippingAddress</p>
+                                <p>@Model.ShippingCity, @Model.ShippingState @Model.ShippingZipCode</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Items -->
+                    <div class="mb-4">
+                        <h5><i class="fas fa-list"></i> Order Items</h5>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Unit Price</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.OrderItems)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@item.Product.Name</strong>
+                                                @if (!string.IsNullOrEmpty(item.Product.Description))
+                                                {
+                                                    <br><small class="text-muted">@item.Product.Description</small>
+                                                }
+                                            </td>
+                                            <td>@item.Quantity</td>
+                                            <td>₹@item.UnitPrice.ToString("N2")</td>
+                                            <td>₹@item.TotalPrice.ToString("N2")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr class="table-info">
+                                        <th colspan="3">Total Amount</th>
+                                        <th>₹@Model.TotalAmount.ToString("N2")</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Order Timeline -->
+                    <div class="mb-4">
+                        <h5><i class="fas fa-clock"></i> Order Timeline</h5>
+                        <div class="timeline">
+                            <div class="timeline-item completed">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <h6>Order Placed</h6>
+                                    <p>@Model.CreatedAt.ToString("MMM dd, yyyy 'at' hh:mm tt")</p>
+                                </div>
+                            </div>
+                            
+                            @if (Model.Status == "Paid" || Model.Status == "Processing" || Model.Status == "Shipped" || Model.Status == "Delivered")
+                            {
+                                <div class="timeline-item completed">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <h6>Payment Confirmed</h6>
+                                        <p>Payment processed successfully</p>
+                                    </div>
+                                </div>
+                            }
+                            
+                            @if (Model.Status == "Processing" || Model.Status == "Shipped" || Model.Status == "Delivered")
+                            {
+                                <div class="timeline-item completed">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <h6>Order Processing</h6>
+                                        <p>Your order is being prepared</p>
+                                    </div>
+                                </div>
+                            }
+                            
+                            @if (Model.Status == "Shipped" || Model.Status == "Delivered")
+                            {
+                                <div class="timeline-item completed">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <h6>Order Shipped</h6>
+                                        <p>Your order is on its way</p>
+                                    </div>
+                                </div>
+                            }
+                            
+                            @if (Model.Status == "Delivered")
+                            {
+                                <div class="timeline-item completed">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <h6>Order Delivered</h6>
+                                        <p>Order delivered successfully</p>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="timeline-item pending">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <h6>Delivery</h6>
+                                        <p>Estimated delivery in 3-5 business days</p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    @if (!string.IsNullOrEmpty(Model.Notes))
+                    {
+                        <div class="mb-4">
+                            <h5><i class="fas fa-sticky-note"></i> Order Notes</h5>
+                            <div class="alert alert-info">
+                                @Model.Notes
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Actions -->
+                    <div class="text-center">
+                        <a href="@Url.Action("Track")" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Track Another Order
+                        </a>
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary">
+                            <i class="fas fa-home"></i> Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 15px;
+        border: none;
+    }
+    .card-header {
+        border-radius: 15px 15px 0 0 !important;
+    }
+    .status-card, .info-card {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        height: 100%;
+    }
+    .badge-status {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+    .badge-paid { background-color: #28a745; }
+    .badge-pending { background-color: #ffc107; color: #212529; }
+    .badge-processing { background-color: #17a2b8; }
+    .badge-shipped { background-color: #6f42c1; }
+    .badge-delivered { background-color: #28a745; }
+    .badge-cancelled { background-color: #dc3545; }
+
+    .timeline {
+        position: relative;
+        padding-left: 30px;
+    }
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 15px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #dee2e6;
+    }
+    .timeline-item {
+        position: relative;
+        margin-bottom: 30px;
+    }
+    .timeline-marker {
+        position: absolute;
+        left: -23px;
+        top: 0;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 3px solid #dee2e6;
+        background: white;
+    }
+    .timeline-item.completed .timeline-marker {
+        border-color: #28a745;
+        background: #28a745;
+    }
+    .timeline-item.pending .timeline-marker {
+        border-color: #ffc107;
+        background: #ffc107;
+    }
+    .timeline-content h6 {
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+    .timeline-content p {
+        margin: 0;
+        color: #6c757d;
+        font-size: 14px;
+    }
+    .timeline-item.completed .timeline-content h6 {
+        color: #28a745;
+    }
+    .timeline-item.pending .timeline-content h6 {
+        color: #ffc107;
+    }
+
+    .table th {
+        border-top: none;
+        font-weight: 600;
+    }
+    .btn {
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-weight: 600;
+    }
+</style>

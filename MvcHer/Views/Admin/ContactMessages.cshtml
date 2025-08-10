@@ -1,0 +1,279 @@
+@model List<MvcHer.Models.ContactMessage>
+@{
+    ViewData["Title"] = "Contact Messages";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Cache Buster: @DateTime.Now.Ticks -->
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-envelope me-2"></i>Contact Messages
+                        @if (Model.Count(m => !m.IsRead) > 0)
+                        {
+                            <span class="badge bg-warning ms-2">@Model.Count(m => !m.IsRead) New</span>
+                        }
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>@TempData["Error"]
+                        </div>
+                    }
+
+                    @if (Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th>Name</th>
+                                        <th>Contact Info</th>
+                                        <th>Subject</th>
+                                        <th>Message</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var message in Model)
+                                    {
+                                        <tr class="@(message.IsRead ? "" : "table-warning")">
+                                            <td>
+                                                @if (message.IsRead)
+                                                {
+                                                    <span class="badge bg-success">
+                                                        <i class="fas fa-check me-1"></i>Read
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-warning">
+                                                        <i class="fas fa-envelope me-1"></i>New
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <small>@message.CreatedAt.ToString("MMM dd, yyyy")</small><br>
+                                                <small class="text-muted">@message.CreatedAt.ToString("hh:mm tt")</small>
+                                            </td>
+                                            <td>
+                                                <strong>@message.Name</strong>
+                                            </td>
+                                            <td>
+                                                <div class="small">
+                                                    <div class="mb-1">
+                                                        <i class="fas fa-envelope me-1 text-primary"></i>
+                                                        <a href="mailto:@message.Email" class="text-decoration-none">@message.Email</a>
+                                                    </div>
+                                                    @if (!string.IsNullOrEmpty(message.Phone))
+                                                    {
+                                                        <div class="mb-1">
+                                                            <i class="fas fa-phone me-1 text-success"></i>
+                                                            <a href="tel:@message.Phone" class="text-decoration-none">@message.Phone</a>
+                                                        </div>
+                                                    }
+                                                    @if (!string.IsNullOrEmpty(message.SecondaryEmail))
+                                                    {
+                                                        <div class="mb-1">
+                                                            <i class="fas fa-envelope me-1 text-info"></i>
+                                                            <a href="mailto:@message.SecondaryEmail" class="text-decoration-none">@message.SecondaryEmail</a>
+                                                        </div>
+                                                    }
+                                                    @if (!string.IsNullOrEmpty(message.SecondaryPhone))
+                                                    {
+                                                        <div>
+                                                            <i class="fas fa-phone me-1 text-warning"></i>
+                                                            <a href="tel:@message.SecondaryPhone" class="text-decoration-none">@message.SecondaryPhone</a>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <strong>@message.Subject</strong>
+                                            </td>
+                                            <td>
+                                                <div class="message-preview" style="max-width: 300px;">
+                                                    @if (message.Message.Length > 100)
+                                                    {
+                                                        <span>@message.Message.Substring(0, 100)...</span>
+                                                        <small class="text-muted d-block">Click "View" to read full message</small>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@message.Message</span>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button type="button" class="btn btn-outline-primary" 
+                                                            onclick="viewMessage(@message.Id)" title="View Message">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    @if (!message.IsRead)
+                                                    {
+                                                        <button type="button" class="btn btn-outline-success" 
+                                                                onclick="markAsRead(@message.Id)" title="Mark as Read">
+                                                            <i class="fas fa-check"></i>
+                                                        </button>
+                                                    }
+                                                    <a href="mailto:@message.Email?subject=Re: @message.Subject" 
+                                                       class="btn btn-outline-info" title="Reply via Email">
+                                                        <i class="fas fa-reply"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Statistics -->
+                        <div class="row mt-4">
+                            <div class="col-md-3">
+                                <div class="card bg-primary text-white">
+                                    <div class="card-body text-center">
+                                        <h3>@Model.Count</h3>
+                                        <p class="mb-0">Total Messages</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-warning text-white">
+                                    <div class="card-body text-center">
+                                        <h3>@Model.Count(m => !m.IsRead)</h3>
+                                        <p class="mb-0">Unread Messages</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-success text-white">
+                                    <div class="card-body text-center">
+                                        <h3>@Model.Count(m => m.IsRead)</h3>
+                                        <p class="mb-0">Read Messages</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-info text-white">
+                                    <div class="card-body text-center">
+                                        <h3>@Model.Where(m => m.CreatedAt >= DateTime.Today).Count()</h3>
+                                        <p class="mb-0">Today's Messages</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-envelope fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No contact messages yet</h5>
+                            <p class="text-muted">Contact messages will appear here when customers send them.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Message Details Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalLabel">Message Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="messageContent">
+                <!-- Message content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="replyButton">Reply via Email</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function viewMessage(messageId) {
+            // Find the message in the model data
+            var message = @Html.Raw(Json.Serialize(Model));
+            var selectedMessage = message.find(m => m.id === messageId);
+            
+            if (selectedMessage) {
+                var content = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>From:</h6>
+                            <p><strong>${selectedMessage.name}</strong></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Email:</h6>
+                            <p><a href="mailto:${selectedMessage.email}">${selectedMessage.email}</a></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Subject:</h6>
+                            <p><strong>${selectedMessage.subject}</strong></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Date:</h6>
+                            <p>${new Date(selectedMessage.createdAt).toLocaleString()}</p>
+                        </div>
+                        <div class="col-12">
+                            <h6>Message:</h6>
+                            <div class="border p-3 bg-light">
+                                ${selectedMessage.message.replace(/\n/g, '<br>')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('messageContent').innerHTML = content;
+                document.getElementById('replyButton').onclick = function() {
+                    window.location.href = `mailto:${selectedMessage.email}?subject=Re: ${selectedMessage.subject}`;
+                };
+                
+                var modal = new bootstrap.Modal(document.getElementById('messageModal'));
+                modal.show();
+                
+                // Mark as read if not already read
+                if (!selectedMessage.isRead) {
+                    markAsRead(messageId);
+                }
+            }
+        }
+        
+        function markAsRead(messageId) {
+            fetch('/Admin/MarkAsRead', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify({ id: messageId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload(); // Refresh to update the UI
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+}

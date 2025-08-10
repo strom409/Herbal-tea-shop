@@ -1,0 +1,111 @@
+@{
+    ViewData["Title"] = "Cart Test";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <h1>Cart Functionality Test</h1>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Test Add to Cart</h3>
+            <div class="card">
+                <div class="card-body">
+                    <h5>Test Product</h5>
+                    <p>Price: $10.00</p>
+                    <button class="btn btn-primary" onclick="addToCart(1, 'Test Product', 1)">
+                        Add to Cart (Product ID: 1)
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <h3>Cart Status</h3>
+            <div class="card">
+                <div class="card-body">
+                    <p>Cart Count: <span id="current-cart-count">Loading...</span></p>
+                    <button class="btn btn-secondary" onclick="updateCartCount()">
+                        Refresh Cart Count
+                    </button>
+                    <button class="btn btn-info" onclick="testCartAPI()">
+                        Test Cart API
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3>Debug Console</h3>
+            <div id="debug-console" class="border p-3" style="height: 200px; overflow-y: auto; background: #f8f9fa;">
+                <p>Debug messages will appear here...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    debugLog('Cart test page loaded');
+    debugLog('jQuery version: ' + $.fn.jquery);
+    debugLog('Testing cart functionality...');
+    
+    // Test if cart.js functions are available
+    if (typeof addToCart === 'function') {
+        debugLog('✅ addToCart function is available');
+    } else {
+        debugLog('❌ addToCart function is NOT available');
+    }
+    
+    if (typeof updateCartCount === 'function') {
+        debugLog('✅ updateCartCount function is available');
+    } else {
+        debugLog('❌ updateCartCount function is NOT available');
+    }
+    
+    if (typeof openCartModal === 'function') {
+        debugLog('✅ openCartModal function is available');
+    } else {
+        debugLog('❌ openCartModal function is NOT available');
+    }
+    
+    // Test cart count update
+    updateCartCount();
+});
+
+function debugLog(message) {
+    const timestamp = new Date().toLocaleTimeString();
+    const logEntry = `[${timestamp}] ${message}`;
+    console.log(logEntry);
+    $('#debug-console').append('<div>' + logEntry + '</div>');
+    $('#debug-console').scrollTop($('#debug-console')[0].scrollHeight);
+}
+
+function testCartAPI() {
+    debugLog('Testing Cart API endpoints...');
+    
+    // Test GetCartCount
+    $.get('/Cart/GetCartCount')
+        .done(function(response) {
+            debugLog('✅ GetCartCount API working: ' + JSON.stringify(response));
+            $('#current-cart-count').text(response.count || 0);
+        })
+        .fail(function(xhr, status, error) {
+            debugLog('❌ GetCartCount API failed: ' + error);
+        });
+}
+
+// Override showNotification for testing
+function showNotification(type, message) {
+    debugLog(`Notification [${type}]: ${message}`);
+    // Also show in UI
+    const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+    const alertHtml = `<div class="alert ${alertClass} alert-dismissible fade show mt-3" role="alert">
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>`;
+    $('.container').prepend(alertHtml);
+}
+</script>
