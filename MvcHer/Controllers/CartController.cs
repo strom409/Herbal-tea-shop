@@ -110,10 +110,10 @@ namespace MvcHer.Controllers
         }
 
         [HttpPost]
-        public IActionResult RemoveFromCart(int productId)
+        public IActionResult RemoveFromCart([FromBody] RemoteCart dto)
         {
             var cart = GetCartFromSession();
-            var item = cart.FirstOrDefault(c => c.ProductId == productId);
+            var item = cart.FirstOrDefault(c => c.ProductId == dto.ProductId);
             
             if (item != null)
             {
@@ -550,5 +550,9 @@ namespace MvcHer.Controllers
         public string City { get; set; } = string.Empty;
         public string State { get; set; } = string.Empty;
         public string ZipCode { get; set; } = string.Empty;
+    }
+    public class RemoteCart
+    {
+        public int ProductId { get; set; }
     }
 }

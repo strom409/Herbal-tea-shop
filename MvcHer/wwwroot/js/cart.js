@@ -1,9 +1,50 @@
 // Global Shopping Cart Functionality
 
+$(document).ready(function () {
+    // Target the cart count element
+    const cartBadge = document.getElementById('cart-count-desktop');
+    const cartBadgeMobile = document.getElementById('cart-icon-float');
+    const badge = cartBadgeMobile.querySelector('.cart-count');
+  
+    // Create an observer instance
+    const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            const count = parseInt(cartBadge.textContent);
+            if (count > 0) {
+                badge.textContent = count;    
+                badge.style.display = 'inline-block';
+                $(cartBadge).show();
+            } else {
+                badge.style.display = 'none';
+                badge.textContent = 0;
+                $(cartBadge).hide();
+            }
+        });
+    });
+
+    // Configuration of the observer
+    const config = {
+        childList: true,
+        characterData: true,
+        subtree: true
+    };
+
+    // Start observing
+    observer.observe(cartBadge, config);
+
+    // Initial check
+    const initialCount = parseInt(cartBadge.textContent);
+    if (initialCount > 0) {
+        $(cartBadge).show();
+    } else {
+        $(cartBadge).hide();
+    }
+});
+
 // Global function to update cart count
 function updateCartCount() {
     $.get('/Cart/GetCartCount')
-        .done(function(response) {
+        .done(function (response) {
             const count = response.count || 0;
             $('#cart-count').text(count);
             

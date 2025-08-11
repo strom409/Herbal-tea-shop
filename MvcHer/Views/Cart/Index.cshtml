@@ -362,7 +362,7 @@
                                     </div>
                                     <div class="summary-row">
                                         <span>Tax (18% GST)</span>
-                                        <span>₹@(Model.Sum(c => c.Product.Price * c.Quantity) * 0.18m).ToString("N2")</span>
+                                        <span>₹@((Model.Sum(c => c.Product.Price * c.Quantity) * 0.18m).ToString("N2"))</span>
                                     </div>
                                     <div class="summary-row">
                                         <span><strong>Total Amount</strong></span>
