@@ -1,0 +1,1336 @@
+@model IEnumerable<MvcHer.Models.Product>
+
+@{
+    ViewData["Title"] = "Premium Tea Collection";
+}
+
+<!-- Hero Section with Gradient Background -->
+<div class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container">
+        <div class="hero-content text-center">
+            <div class="hero-badge mb-4">
+                <span class="badge-text">🍃 Premium Collection</span>
+            </div>
+            <h1 class="hero-title mb-4">
+                Discover the World's
+                <span class="gradient-text">Finest Teas</span>
+            </h1>
+            <p class="hero-subtitle mb-5">
+                Handpicked from the most prestigious tea gardens around the globe
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Premium Blends</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Organic</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24h</div>
+                    <div class="stat-label">Fresh Delivery</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-scroll-indicator">
+        <div class="scroll-arrow"></div>
+    </div>
+</div>
+
+<!-- Premium Tea Collection -->
+<div class="tea-collection-section">
+    <div class="container">
+        <!-- Collection Header -->
+        <div class="collection-header text-center mb-5">
+            <div class="section-badge mb-3">
+                <span class="badge-icon">✨</span>
+                <span class="badge-text">Curated Selection</span>
+            </div>
+            <h2 class="collection-title mb-4">
+                Our <span class="highlight-text">Premium</span> Tea Collection
+            </h2>
+            <p class="collection-subtitle">
+                Each blend tells a story of tradition, craftsmanship, and exceptional quality
+            </p>
+        </div>
+
+        <!-- Modern Filter Bar -->
+        <div class="filter-bar mb-5">
+            <div class="filter-container">
+                <div class="filter-group">
+                    <div class="filter-item">
+                        <label class="filter-label">Category</label>
+                        <div class="custom-select">
+                            <select class="filter-select" id="categoryFilter">
+                                <option value="">All Categories</option>
+                                <option value="green">🍃 Green Tea</option>
+                                <option value="black">🖤 Black Tea</option>
+                                <option value="spiced">🌶️ Spiced Tea</option>
+                                <option value="organic">🌿 Organic Tea</option>
+                                <option value="herbal">🌸 Herbal Tea</option>
+                            </select>
+                            <div class="select-arrow"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label class="filter-label">Price </label>
+                        <div class="custom-select">
+                            <select class="filter-select" id="priceFilter">
+                                <option value="">All Prices</option>
+                                <option value="0-20">₹0 - ₹500</option>
+                                <option value="20-40">₹500 - ₹1000</option>
+                                <option value="40-60">₹1000 - ₹1500</option>
+                                <option value="60+">₹1500+</option>
+                            </select>
+                            <div class="select-arrow"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label class="filter-label">Sort By</label>
+                        <div class="custom-select">
+                            <select class="filter-select" id="sortFilter">
+                                <option value="">Featured</option>
+                                <option value="name">Name A-Z</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="rating">⭐ Top Rated</option>
+                            </select>
+                            <div class="select-arrow"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-item">
+                        <button class="filter-apply-btn" onclick="applyFilters()">
+                            <span class="btn-icon">🔍</span>
+                            <span class="btn-text">Apply Filters</span>
+                        </button>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+
+        <!-- Premium Products Grid -->
+        <div class="products-grid" id="productsGrid">
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var product in Model)
+                {
+                    <div class="product-card" data-category="@(product.Category?.ToLower() ?? "general")" data-price="@product.Price">
+                        <div class="card-inner">
+                            <!-- Product Image -->
+                            <div class="product-image-container">
+                                <img class="product-image" 
+                                     src="@(string.IsNullOrEmpty(product.ImageUrl) ? "/img/product-1.jpg" : product.ImageUrl)" 
+                                     alt="@product.Name"
+                                     loading="lazy">
+                                <div class="product-badges">
+                                    <span class="badge premium-badge">✨ Premium</span>
+                                    @if (product.Price < 500)
+                                    {
+                                        <span class="badge sale-badge">🔥 Best Value</span>
+                                    }
+                                </div>
+                                <div class="product-overlay">
+                                    <div class="overlay-buttons">
+                                        <button class="action-btn quick-view-btn"
+                                                data-product-id="@product.Id"
+                                                data-product-name="@product.Name"
+                                                data-product-price="@product.Price.ToString("F2")"
+                                                data-product-image="@(string.IsNullOrEmpty(product.ImageUrl) ? "/img/product-1.jpg" : product.ImageUrl)"
+                                                data-product-description="@product.Description"
+                                                title="Quick View">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="action-btn wishlist-btn" title="Add to Wishlist">
+                                            <i class="far fa-heart"></i>
+                                        </button>
+                                        <button class="action-btn share-btn" title="Share">
+                                            <i class="fas fa-share-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Product Info -->
+                            <div class="product-info">
+                                <div class="product-category">
+                                    @(string.IsNullOrEmpty(product.Category) ? "Premium Tea" : product.Category)
+                                </div>
+                                <h3 class="product-title">@product.Name</h3>
+                                <p class="product-description">
+                                    @(string.IsNullOrEmpty(product.Description) ? "Handcrafted premium tea blend with exceptional flavor and aroma" : 
+                                      (product.Description.Length > 80 ? product.Description.Substring(0, 80) + "..." : product.Description))
+                                </p>
+                                
+                                <!-- Rating -->
+                                <div class="product-rating">
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <span class="rating-text">(4.9) 127 reviews</span>
+                                </div>
+                                
+                                <!-- Price and Actions -->
+                                <div class="product-footer">
+                                    <div class="price-section">
+                                        <span class="current-price">₹@product.Price.ToString("F0")</span>
+                                        @if (product.Price > 300)
+                                        {
+                                            <span class="original-price">₹@((product.Price * 1.2m).ToString("F0"))</span>
+                                            <span class="discount-badge">17% OFF</span>
+                                        }
+                                    </div>
+                                    <button class="add-to-cart-btn"
+                                            data-product-id="@product.Id"
+                                            data-product-name="@product.Name"
+                                            data-product-price="@product.Price.ToString("F2")"
+                                            data-product-image="@(string.IsNullOrEmpty(product.ImageUrl) ? "/img/product-1.jpg" : product.ImageUrl)">
+                                        <span class="btn-icon">🛒</span>
+                                        <span class="btn-text">Add to Cart</span>
+                                        <div class="btn-loading">
+                                            <div class="spinner"></div>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        🍃
+                    </div>
+                    <h3 class="empty-state-title">No Premium Teas Found</h3>
+                    <p class="empty-state-description">
+                        We couldn't find any teas matching your criteria.<br>
+                        Try adjusting your filters or explore our full collection.
+                    </p>
+                    <button class="empty-state-btn" onclick="clearFilters()">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">Clear Filters</span>
+                    </button>
+                </div>
+            }
+        </div>
+        
+        <!-- Pagination -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <nav aria-label="Store pagination">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Store End -->
+
+<style>
+   
+/* ===== PREMIUM TEA STORE DESIGN ===== */
+
+/* Hero Section */
+
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    background: linear-gradient(135deg, 
+       #9abf69; 0%, 
+        #764ba2 25%, 
+        #f093fb 50%, 
+        #f5576c 75%, 
+        #4facfe 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(1px);
+}
+
+.hero-content {
+    margin:0 auto;
+    position: relative;
+    z-index: 2;
+    color: white;
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+    animation: float 3s ease-in-out infinite;
+}
+
+.badge-text {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.hero-title {
+    font-size: 4.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.gradient-text {
+    background: linear-gradient(45deg, #FFD700, #FFA500, #FF6B6B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 2s ease-in-out infinite alternate;
+}
+
+.hero-subtitle {
+    font-size: 1.4rem;
+    font-weight: 300;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 3rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #FFD700;
+}
+
+.stat-label {
+    font-size: 1rem;
+    font-weight: 500;
+    opacity: 0.9;
+    margin-top: 5px;
+}
+
+.hero-scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounce 2s infinite;
+}
+
+.scroll-arrow {
+    width: 30px;
+    height: 30px;
+    border-right: 3px solid white;
+    border-bottom: 3px solid white;
+    transform: rotate(45deg);
+    opacity: 0.7;
+}
+
+/* Collection Section */
+.tea-collection-section {
+    padding: 100px 0;
+    background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.collection-header {
+    margin-bottom: 4rem;
+}
+
+.section-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #8BC34A, #689F38);
+    color: white;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: #9abf69;
+}
+
+.badge-icon {
+    font-size: 18px;
+}
+
+.collection-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #2d3748;
+    margin-bottom: 1.5rem;
+}
+
+.highlight-text {
+    background: linear-gradient(135deg,#9abf69;, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.collection-subtitle {
+    font-size: 1.2rem;
+    color: #718096;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Filter Bar */
+.filter-bar {
+    margin-bottom: 4rem;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.filter-group {
+    display: flex;
+    gap: 2rem;
+    align-items: end;
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width:240px
+}
+
+.filter-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 5px;
+}
+
+.custom-select {
+    position: relative;
+    min-width: 200px;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 12px 40px 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    background: white;
+    font-size: 15px;
+    font-weight: 500;
+    color: #2d3748;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color:#9abf69;;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.select-arrow {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid #a0aec0;
+    border-bottom: 2px solid #a0aec0;
+    transform: translateY(-50%) rotate(45deg);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.filter-apply-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #8BC34A, #689F38);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: #9abf69;
+}
+    
+.filter-apply-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(104, 159, 56, 0.45);
+}
+
+@* .view-toggle {
+    display: flex;
+    gap: 8px;
+    background: #f7fafc;
+    padding: 6px;
+    border-radius: 12px;
+} *@
+
+.view-btn {
+    padding: 10px 12px;
+    border: none;
+    background: transparent;
+    color: #718096;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.view-btn.active,
+.view-btn:hover {
+    background: white;
+    color:#9abf69;;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Products Grid */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.product-card {
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    position: relative;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+}
+
+.card-inner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px 20px 0 0;
+    height: 280px;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.1);
+}
+
+.product-badges {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 2;
+}
+
+.badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.premium-badge {
+    background: rgba(255, 215, 0, 0.9);
+    color: #1a202c;
+}
+
+.sale-badge {
+    background: rgba(245, 87, 108, 0.9);
+    color: white;
+}
+
+.product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:linear-gradient(135deg, #8BC34A, #689F38);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+.product-card:hover .product-overlay {
+    opacity: 1;
+}
+
+.overlay-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.action-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    color:#9abf69;;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    backdrop-filter: blur(10px);
+}
+
+.action-btn:hover {
+    background: white;
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.product-info {
+    padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-category {
+    font-size: 12px;
+    font-weight: 600;
+    color:#9abf69;;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.product-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 12px;
+    line-height: 1.3;
+}
+
+.product-description {
+    font-size: 14px;
+    color: #718096;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    flex: 1;
+}
+
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.stars {
+    display: flex;
+    gap: 2px;
+}
+
+.stars i {
+    color: #ffd700;
+    font-size: 14px;
+}
+
+.rating-text {
+    font-size: 12px;
+    color: #a0aec0;
+    font-weight: 500;
+}
+
+.product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.price-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.current-price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #2d3748;
+}
+
+.original-price {
+    font-size: 1rem;
+    color: #a0aec0;
+    text-decoration: line-through;
+}
+
+.discount-badge {
+    background: #f56565;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.add-to-cart-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #8BC34A, #689F38);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.add-to-cart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.add-to-cart-btn:active {
+    transform: translateY(0);
+}
+
+
+-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #8BC34A, #689F38);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+
+
+.add-to-cart-btn.loading .btn-loading {
+    opacity: 1;
+}
+
+.add-to-cart-btn.loading .btn-icon,
+.add-to-cart-btn.loading .btn-text {
+    opacity: 0;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    margin: 2rem 0;
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.7;
+}
+
+.empty-state-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 1rem;
+}
+
+.empty-state-description {
+    font-size: 1rem;
+    color: #718096;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.empty-state-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg,#9abf69;, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.empty-state-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* Animations */
+@@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@@keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+
+@@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+    40% { transform: translateX(-50%) translateY(-10px); }
+    60% { transform: translateX(-50%) translateY(-5px); }
+}
+
+@@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .collection-title {
+        font-size: 2.5rem;
+    }
+    
+    .filter-container {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .filter-group {
+        width: 100%;
+        gap: 1rem;
+    }
+    
+    .custom-select {
+        min-width: auto;
+        width: 100%;
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .collection-title {
+        font-size: 2rem;
+    }
+    
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+
+        .filter-apply-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 2px 14px;
+            background: linear-gradient(135deg,#9abf69;, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+}
+</style>
+
+@section Scripts {
+<script>
+$(document).ready(function() {
+    // Add to Cart functionality with new design
+    $('.add-to-cart-btn').click(function(e) {
+        e.preventDefault();
+        
+        var productId = $(this).data('product-id');
+        var productName = $(this).data('product-name');
+        
+        // Add loading state
+        var $button = $(this);
+        $button.addClass('loading');
+        
+        $.ajax({
+            url: '@Url.Action("AddToCart", "Cart")',
+            type: 'POST',
+            data: {
+                productId: productId,
+                quantity: 1
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Update cart count in navigation
+                    updateCartCount();
+                    
+                    // Show premium success notification
+                    showPremiumNotification('success', '🛒 ' + productName + ' added to cart!', 'Your premium tea selection awaits');
+                    
+                    // Add success animation
+                    $button.removeClass('loading');
+                    $button.find('.btn-text').text('Added!');
+                    $button.find('.btn-icon').text('✓');
+                    
+                    setTimeout(() => {
+                        $button.find('.btn-text').text('Add to Cart');
+                        $button.find('.btn-icon').text('🛒');
+                    }, 2000);
+                } else {
+                    $button.removeClass('loading');
+                    showPremiumNotification('error', '❌ Error', response.message || 'Failed to add item to cart');
+                }
+            },
+            error: function() {
+                $button.removeClass('loading');
+                showPremiumNotification('error', '❌ Connection Error', 'Please check your internet connection and try again');
+            }
+        });
+    });
+    
+    // Quick View functionality
+    $('.quick-view-btn').click(function(e) {
+        e.preventDefault();
+        
+        var productId = $(this).data('product-id');
+        var productName = $(this).data('product-name');
+        var productPrice = $(this).data('product-price');
+        var productImage = $(this).data('product-image');
+        var productDescription = $(this).data('product-description');
+        
+        // Create and show premium modal
+        showPremiumProductModal(productId, productName, productPrice, productImage, productDescription);
+    });
+    
+    // Filter functionality
+    $('#categoryFilter, #priceFilter, #sortFilter').change(function() {
+        // Auto-apply filters when changed
+        applyFilters();
+    });
+    
+    // View toggle functionality
+    $('.view-btn').click(function() {
+        $('.view-btn').removeClass('active');
+        $(this).addClass('active');
+        
+        var view = $(this).data('view');
+        if (view === 'list') {
+            $('.products-grid').addClass('list-view');
+        } else {
+            $('.products-grid').removeClass('list-view');
+        }
+    });
+    
+    // Wishlist functionality
+    $('.wishlist-btn').click(function(e) {
+        e.preventDefault();
+        $(this).toggleClass('active');
+        
+        if ($(this).hasClass('active')) {
+            $(this).find('i').removeClass('far').addClass('fas');
+            showPremiumNotification('success', '❤️ Added to Wishlist', 'You can view your wishlist anytime');
+        } else {
+            $(this).find('i').removeClass('fas').addClass('far');
+            showPremiumNotification('info', '💔 Removed from Wishlist', 'Item removed from your wishlist');
+        }
+    });
+    
+    // Share functionality
+    $('.share-btn').click(function(e) {
+        e.preventDefault();
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'Check out this premium tea!',
+                text: 'Discover amazing tea blends at TeaHouse',
+                url: window.location.href
+            });
+        } else {
+            // Fallback - copy to clipboard
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                showPremiumNotification('success', '🔗 Link Copied', 'Share this amazing tea with friends!');
+            });
+        }
+    });
+});
+
+function updateCartCount() {
+    $.ajax({
+        url: '@Url.Action("GetCartCount", "Cart")',
+        type: 'GET',
+        success: function(response) {
+            // Update cart count display if it exists
+            $('.cart-count').text(response.count);
+            $('#cart-count').text(response.count);
+        }
+    });
+}
+
+// Premium notification system
+function showPremiumNotification(type, title, message) {
+    var iconMap = {
+        'success': '✅',
+        'error': '❌',
+        'info': 'ℹ️',
+        'warning': '⚠️'
+    };
+    
+    var colorMap = {
+        'success': 'linear-gradient(135deg, #10b981, #059669)',
+        'error': 'linear-gradient(135deg, #ef4444, #dc2626)',
+        'info': 'linear-gradient(135deg, #3b82f6, #2563eb)',
+        'warning': 'linear-gradient(135deg, #f59e0b, #d97706)'
+    };
+    
+    var notification = $(`
+        <div class="premium-notification" style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            background: ${colorMap[type]};
+            color: white;
+            padding: 20px 24px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-width: 350px;
+            max-width: 400px;
+            transform: translateX(100%);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        ">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="font-size: 24px;">${iconMap[type]}</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">${title}</div>
+                    <div style="font-size: 14px; opacity: 0.9;">${message}</div>
+                </div>
+                <button onclick="$(this).closest('.premium-notification').remove()" style="
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 20px;
+                    cursor: pointer;
+                    opacity: 0.7;
+                    transition: opacity 0.3s;
+                " onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">×</button>
+            </div>
+        </div>
+    `);
+    
+    $('body').append(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.css('transform', 'translateX(0)');
+    }, 100);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        notification.css('transform', 'translateX(100%)');
+        setTimeout(() => notification.remove(), 400);
+    }, 5000);
+}
+
+function showProductModal(productId, name, price, image, description) {
+    // Create modal HTML
+    var modalHtml = `
+        <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="productModalLabel">${name}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <img src="${image}" class="img-fluid rounded" alt="${name}">
+                            </div>
+                            <div class="col-md-6">
+                                <h4 class="text-primary mb-3">$${price}</h4>
+                                <p class="text-muted">${description || 'Premium quality tea with exceptional taste and aroma.'}</p>
+                                <div class="d-flex align-items-center mb-3">
+                                    <label for="quantity" class="form-label me-3">Quantity:</label>
+                                    <input type="number" id="quantity" class="form-control" style="width: 80px;" value="1" min="1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="addToCartFromModal(${productId}, '${name}')">
+                            <i class="fa fa-cart-plus me-1"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Remove existing modal if any
+    $('#productModal').remove();
+    
+    // Add modal to body and show
+    $('body').append(modalHtml);
+    $('#productModal').modal('show');
+}
+
+function addToCartFromModal(productId, productName) {
+    var quantity = parseInt($('#quantity').val()) || 1;
+    
+    $.ajax({
+        url: '@Url.Action("AddToCart", "Cart")',
+        type: 'POST',
+        data: {
+            productId: productId,
+            quantity: quantity
+        },
+        success: function(response) {
+            if (response.success) {
+                $('#productModal').modal('hide');
+                updateCartCount();
+                showPremiumNotification('success', '🛒 Added to Cart', 'Product added successfully!');
+                $('#productModal').modal('hide');
+            } else {
+                showPremiumNotification('error', '❌ Error', response.message || 'Failed to add item');
+            }
+        },
+        error: function() {
+            showPremiumNotification('error', '❌ Connection Error', 'Please try again');
+        }
+    });
+}
+
+// Filter functionality
+function applyFilters() {
+    var category = $('#categoryFilter').val();
+    var priceRange = $('#priceFilter').val();
+    var sortBy = $('#sortFilter').val();
+    
+    var url = new URL(window.location.href);
+    
+    if (category) {
+        url.searchParams.set('category', category);
+    } else {
+        url.searchParams.delete('category');
+    }
+    
+    if (priceRange) {
+        url.searchParams.set('priceRange', priceRange);
+    } else {
+        url.searchParams.delete('priceRange');
+    }
+    
+    if (sortBy) {
+        url.searchParams.set('sortBy', sortBy);
+    } else {
+        url.searchParams.delete('sortBy');
+    }
+    
+    // Add loading animation
+    $('.products-grid').css('opacity', '0.5');
+    
+    // Navigate to filtered URL
+    window.location.href = url.toString();
+}
+
+function clearFilters() {
+    $('#categoryFilter').val('');
+    $('#priceFilter').val('');
+    $('#sortFilter').val('');
+    
+    // Navigate to base URL
+    window.location.href = window.location.pathname;
+}
+
+// Premium product modal
+function showPremiumProductModal(productId, name, price, image, description) {
+    var modalHtml = `
+        <div class="modal fade" id="premiumProductModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content" style="border: none; border-radius: 24px; overflow: hidden;">
+                    <div class="modal-header" style="background: linear-gradient(135deg,#9abf69;, #764ba2); color: white; border: none; padding: 24px;">
+                        <h5 class="modal-title" style="font-weight: 700; font-size: 1.5rem;">✨ ${name}</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body" style="padding: 0;">
+                        <div class="row g-0">
+                            <div class="col-md-6">
+                                <div style="position: relative; height: 400px; overflow: hidden;">
+                                    <img src="${image}" style="width: 100%; height: 100%; object-fit: cover;" alt="${name}">
+                                    <div style="position: absolute; top: 16px; left: 16px;">
+                                        <span style="background: rgba(255, 215, 0, 0.9); color: #1a202c; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">✨ Premium</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6" style="padding: 32px;">
+                                <div style="margin-bottom: 16px;">
+                                    <span style="font-size: 12px; font-weight: 600; color:#9abf69;; text-transform: uppercase; letter-spacing: 1px;">Premium Tea</span>
+                                </div>
+                                <h3 style="font-size: 1.8rem; font-weight: 700; color: #2d3748; margin-bottom: 16px;">${name}</h3>
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px;">
+                                    <div style="display: flex; gap: 2px;">
+                                        <i class="fas fa-star" style="color: #ffd700; font-size: 14px;"></i>
+                                        <i class="fas fa-star" style="color: #ffd700; font-size: 14px;"></i>
+                                        <i class="fas fa-star" style="color: #ffd700; font-size: 14px;"></i>
+                                        <i class="fas fa-star" style="color: #ffd700; font-size: 14px;"></i>
+                                        <i class="fas fa-star" style="color: #ffd700; font-size: 14px;"></i>
+                                    </div>
+                                    <span style="font-size: 12px; color: #a0aec0; font-weight: 500;">(4.9) 127 reviews</span>
+                                </div>
+                                <p style="color: #718096; line-height: 1.6; margin-bottom: 24px;">${description || 'Handcrafted premium tea blend with exceptional flavor and aroma. Sourced from the finest tea gardens and carefully processed to preserve its natural goodness.'}</p>
+                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+                                    <span style="font-size: 2rem; font-weight: 800; color: #2d3748;">₹${price}</span>
+                                    <span style="background: #f56565; color: white; padding: 4px 8px; border-radius: 12px; font-size: 10px; font-weight: 600;">17% OFF</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+                                    <label style="font-weight: 600; color: #4a5568;">Quantity:</label>
+                                    <input type="number" id="modalQuantity" value="1" min="1" style="width: 80px; padding: 8px 12px; border: 2px solid #e2e8f0; border-radius: 8px; text-align: center;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border: none; padding: 24px; background: #f8f9fa;">
+                        <button type="button" class="btn" data-bs-dismiss="modal" style="padding: 12px 24px; border: 2px solid #e2e8f0; border-radius: 12px; font-weight: 600; background: white;">Close</button>
+                        <button type="button" onclick="addToCartFromModal(${productId}, '${name}')" style="padding: 12px 24px; background: linear-gradient(135deg,#9abf69;, #764ba2); color: white; border: none; border-radius: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                            <span>🛒</span>
+                            <span>Add to Cart</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    $('#premiumProductModal').remove();
+    $('body').append(modalHtml);
+    $('#premiumProductModal').modal('show');
+}
+</script>
+}
