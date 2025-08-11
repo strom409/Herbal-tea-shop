@@ -17,10 +17,28 @@ namespace MvcHer.Services
             _logger = logger;
             _configuration = configuration;
             
-            // Initialize Twilio
-            var accountSid = _configuration["Twilio:AccountSid"];
-            var authToken = _configuration["Twilio:AuthToken"];
-            TwilioClient.Init(accountSid, authToken);
+            try
+            {
+                // Initialize Twilio
+                var accountSid = _configuration["Twilio:AccountSid"];
+                var authToken = _configuration["Twilio:AuthToken"];
+                var twilioPhoneNumber = _configuration["Twilio:PhoneNumber"];
+                
+                if (string.IsNullOrEmpty(accountSid) || string.IsNullOrEmpty(authToken) || string.IsNullOrEmpty(twilioPhoneNumber))
+                {
+                    _logger.LogError("Twilio configuration is missing. Please check appsettings.json");
+                }
+                else
+                {
+                    TwilioClient.Init(accountSid, authToken);
+                    _logger.LogInformation("Twilio client initialized successfully");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to initialize Twilio client");
+                throw;
+            }
         }
 
         public async Task<string> GenerateOtpAsync(string phoneNumber, string email)
@@ -52,12 +70,35 @@ namespace MvcHer.Services
             {
                 var twilioPhoneNumber = _configuration["Twilio:PhoneNumber"];
                 
-                // Format phone number for international format if needed
-                var formattedPhoneNumber = phoneNumber;
-                if (!phoneNumber.StartsWith("+"))
+                // Format phone number for international format
+                var formattedPhoneNumber = phoneNumber?.Trim() ?? string.Empty;
+                
+                // Remove any non-digit characters
+                formattedPhoneNumber = new string(formattedPhoneNumber.Where(char.IsDigit).ToArray());
+                
+                // Add country code if missing
+                if (!formattedPhoneNumber.StartsWith("+"))
                 {
-                    // Assuming Indian number, add +91 prefix
-                    formattedPhoneNumber = "+91" + phoneNumber.TrimStart('0');
+                    // If it starts with '0', remove it and add +91 (India)
+                    if (formattedPhoneNumber.StartsWith("0"))
+                    {
+                        formattedPhoneNumber = "+91" + formattedPhoneNumber.TrimStart('0');
+                    }
+                    // If it's 10 digits, assume it's an Indian number
+                    else if (formattedPhoneNumber.Length == 10)
+                    {
+                        formattedPhoneNumber = "+91" + formattedPhoneNumber;
+                    }
+                    // If it's 12 digits, it might already have 91 prefix
+                    else if (formattedPhoneNumber.Length == 12 && formattedPhoneNumber.StartsWith("91"))
+                    {
+                        formattedPhoneNumber = "+" + formattedPhoneNumber;
+                    }
+                    else
+                    {
+                        // Default to +91 if we're not sure
+                        formattedPhoneNumber = "+91" + formattedPhoneNumber;
+                    }
                 }
 
                 // Create SMS message

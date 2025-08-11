@@ -3,15 +3,280 @@
     ViewData["Title"] = "Shopping Cart";
 }
 
-<link rel="stylesheet" href="~/css/cart.css" />
+<style>
+    /* === Cart Modal === */
+    .modal-content {
+        border-radius: 20px;
+        overflow: hidden;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
 
-<!-- Hero Section -->
-@* <div class="cart-hero">
-    <div class="container text-center">
-        <h1><i class="fas fa-shopping-cart me-3"></i>Shopping Cart</h1>
-        <p>Review your selected premium tea collection</p>
-    </div>
-</div> *@
+    .modal-header {
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        padding: 1.5rem;
+    }
+
+    .modal-title {
+        color: #4a7c35;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+    }
+
+    .modal-body {
+        padding: 2rem;
+    }
+
+    /* === Cart Items === */
+    .cart-container {
+        min-height: 300px;
+    }
+
+    .cart-item-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: fadeInUp 0.5s ease forwards;
+        opacity: 0;
+    }
+
+    .cart-item-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .cart-item-content {
+        display: flex;
+        gap: 20px;
+    }
+
+    .product-image {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-details {
+        flex: 1;
+    }
+
+    .product-name {
+        color: #33691e;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .product-description {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+    }
+
+    .product-price {
+        font-weight: 700;
+        color: #558b2f;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+
+    /* === Quantity Controls === */
+    .quantity-section {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .quantity-label {
+        margin-right: 15px;
+        color: #6c757d;
+    }
+
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+    }
+
+    .quantity-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: #8bc34a;
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .quantity-btn:hover {
+        background: #7cb342;
+    }
+
+    .quantity-input {
+        width: 50px;
+        text-align: center;
+        margin: 0 10px;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        padding: 5px;
+    }
+
+    /* === Remove Button === */
+    .remove-btn {
+        background: #e57373;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .remove-btn:hover {
+        background: #ef5350;
+    }
+
+    /* === Order Summary === */
+    .order-summary {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        position: sticky;
+        top: 20px;
+    }
+
+    .summary-header {
+        border-bottom: 1px solid #e9ecef;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+    }
+
+    .summary-title {
+        color: #4a7c35;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        font-size: 1.2rem;
+    }
+
+    .summary-content {
+        padding: 10px 0;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        color: #495057;
+    }
+
+    .summary-row:last-child {
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #e9ecef;
+        font-weight: 700;
+        color: #212529;
+    }
+
+    /* === Checkout Button === */
+    .checkout-btn {
+        width: 100%;
+        padding: 12px;
+        background: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .checkout-btn:hover {
+        background: #43a047;
+    }
+
+    /* === Empty Cart === */
+    .empty-cart-section {
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .empty-cart-icon {
+        font-size: 4rem;
+        color: #8bc34a;
+        margin-bottom: 20px;
+    }
+
+    .empty-cart-title {
+        color: #4a7c35;
+        margin-bottom: 15px;
+    }
+
+    .empty-cart-text {
+        color: #6c757d;
+        margin-bottom: 25px;
+    }
+
+    .start-shopping-btn {
+        background: #8bc34a;
+        color: white;
+        padding: 10px 25px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .start-shopping-btn:hover {
+        background: #7cb342;
+        color: white;
+    }
+
+    /* === Animations === */
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* === Responsive Adjustments === */
+    @@media (max-width: 768px) {
+        .cart-item-content {
+            flex-direction: column;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: auto;
+            max-height: 200px;
+        }
+    }
+</style>
+
 <div class="modal-content">
     <div class="modal-header">
         <h5 class="modal-title" id="cartModalLabel">
@@ -21,12 +286,9 @@
     </div>
     <div class="modal-body">
         <div id="cart-items">
-           
-            <!-- Cart items will be dynamically loaded here -->
             <div class="cart-container">
                 @if (Model == null || !Model.Any())
                 {
-                    <!-- Empty Cart Section -->
                     <div class="empty-cart-section">
                         <div class="empty-cart-icon">
                             <i class="fas fa-shopping-cart"></i>
@@ -37,30 +299,27 @@
                             and start your wellness journey today!
                         </p>
                         <a asp-controller="Store" asp-action="Index" class="start-shopping-btn">
-                            <i class="fas fa-leaf me-3"></i>Start Shopping
+                            <i class="fas fa-leaf me-2"></i>Start Shopping
                         </a>
                     </div>
                 }
                 else
                 {
                     <div class="row">
-                        <!-- Cart Items -->
+                        <!-- Cart Items Column -->
                         <div class="col-lg-8">
                             <div class="cart-items-section">
                                 @foreach (var item in Model)
                                 {
-                                    <div class="cart-item-card" data-product-id="@item.ProductId">
+                                    <div class="cart-item-card" data-product-id="@item.ProductId" style="animation-delay: @(Model.IndexOf(item) * 0.1)">
                                         <div class="cart-item-content">
                                             <img src="@item.Product.ImageUrl" alt="@item.Product.Name" class="product-image">
-
                                             <div class="product-details">
                                                 <h3 class="product-name">@item.Product.Name</h3>
                                                 <p class="product-description">@item.Product.Description</p>
-
                                                 <div class="product-price">
                                                     ₹@item.Product.Price.ToString("N2")
                                                 </div>
-
                                                 <div class="quantity-section">
                                                     <span class="quantity-label">Quantity:</span>
                                                     <div class="quantity-controls">
@@ -74,7 +333,6 @@
                                                         </button>
                                                     </div>
                                                 </div>
-
                                                 <button class="remove-btn" onclick="removeFromCart(@item.ProductId)">
                                                     <i class="fas fa-trash me-2"></i>Remove Item
                                                 </button>
@@ -85,7 +343,7 @@
                             </div>
                         </div>
 
-                        <!-- Order Summary -->
+                        <!-- Order Summary Column -->
                         <div class="col-lg-4">
                             <div class="order-summary">
                                 <div class="summary-header">
@@ -93,7 +351,6 @@
                                         <i class="fas fa-receipt me-2"></i>Order Summary
                                     </h3>
                                 </div>
-
                                 <div class="summary-content">
                                     <div class="summary-row">
                                         <span>Items (@Model.Sum(c => c.Quantity))</span>
@@ -105,13 +362,12 @@
                                     </div>
                                     <div class="summary-row">
                                         <span>Tax (18% GST)</span>
-                                        <span>₹@((Model.Sum(c => c.Product.Price * c.Quantity) * 0.18m).ToString("N2"))</span>
+                                        <span>₹@(Model.Sum(c => c.Product.Price * c.Quantity) * 0.18m).ToString("N2")</span>
                                     </div>
                                     <div class="summary-row">
                                         <span><strong>Total Amount</strong></span>
                                         <span><strong>₹@((Model.Sum(c => c.Product.Price * c.Quantity) * 1.18m).ToString("N2"))</strong></span>
                                     </div>
-
                                     <button class="checkout-btn" onclick="proceedToCheckout()">
                                         <i class="fas fa-lock me-2"></i>Secure Checkout
                                     </button>
@@ -122,75 +378,74 @@
                 }
             </div>
         </div>
-        </div>
     </div>
-    @* <div class="modal-footer">
-        <div class="d-flex justify-content-between align-items-center w-100">
-            <div>
-                <strong>Total: <span id="cart-total" class="text-primary">$0.00</span></strong>
-            </div>
-            <div class="d-flex justify-content-between align-items-baseline">
-                <button type="button" class="btn btn-outline-secondary clear-cart me-2" style="width: 100%;height: 60px;border-radius: 50px;">
-                    Clear Cart
-                </button>
-                <button type="button" class="btn btn-primary checkout-btn">Checkout</button>
-            </div>
-        </div>
-    </div> *@
 </div>
-
 
 <!-- Success/Error Messages -->
 <div id="cart-messages" class="position-fixed" style="top: 100px; right: 20px; z-index: 1050;"></div>
 
 <script>
-// Cart functionality with smooth animations
-function updateQuantity(productId, newQuantity) {
-    if (newQuantity < 1) {
-        removeFromCart(productId);
-        return;
-    }
-    
-    const card = document.querySelector(`[data-product-id="${productId}"]`);
-    card.style.opacity = '0.7';
-    
-    fetch('/Cart/UpdateCartItem', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
-        },
-        body: JSON.stringify({
-            productId: productId,
-            quantity: newQuantity
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showMessage('Cart updated successfully!', 'success');
-            setTimeout(() => location.reload(), 1000);
-        } else {
-            showMessage('Error updating cart: ' + data.message, 'error');
-            card.style.opacity = '1';
+    // Cart functionality with smooth animations
+    function updateQuantity(productId, newQuantity) {
+        newQuantity = parseInt(newQuantity);
+        if (isNaN(newQuantity)) {
+            return;
         }
-    })
-    .catch(error => {
-        showMessage('Error updating cart', 'error');
-        card.style.opacity = '1';
-    });
-}
 
-function removeFromCart(productId) {
-    if (!confirm('Are you sure you want to remove this item from your cart?')) {
-        return;
+        if (newQuantity < 1) {
+            removeFromCart(productId);
+            return;
+        }
+
+        const card = document.querySelector(`.cart-item-card[data-product-id="${productId}"]`);
+        if (card) {
+            card.style.opacity = '0.7';
+        }
+
+        fetch('/Cart/UpdateCartItem', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+            },
+            body: JSON.stringify({
+                productId: productId,
+                quantity: newQuantity
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                showMessage('Cart updated successfully!', 'success');
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                showMessage('Error updating cart: ' + (data.message || 'Unknown error'), 'error');
+                if (card) card.style.opacity = '1';
+            }
+        })
+        .catch(error => {
+            showMessage('Error updating cart: ' + error.message, 'error');
+            if (card) card.style.opacity = '1';
+        });
     }
-    
-    const card = document.querySelector(`[data-product-id="${productId}"]`);
-    card.style.transform = 'translateX(-100%)';
-    card.style.opacity = '0';
-    
-    setTimeout(() => {
+
+    function removeFromCart(productId) {
+        if (!confirm('Are you sure you want to remove this item from your cart?')) {
+            return;
+        }
+
+        const card = document.querySelector(`.cart-item-card[data-product-id="${productId}"]`);
+        if (card) {
+            card.style.transform = 'translateX(-100%)';
+            card.style.opacity = '0';
+            card.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
+        }
+
         fetch('/Cart/RemoveFromCart', {
             method: 'POST',
             headers: {
@@ -199,51 +454,108 @@ function removeFromCart(productId) {
             },
             body: JSON.stringify({ productId: productId })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
                 showMessage('Item removed from cart!', 'success');
                 setTimeout(() => location.reload(), 1000);
             } else {
-                showMessage('Error removing item: ' + data.message, 'error');
+                showMessage('Error removing item: ' + (data.message || 'Unknown error'), 'error');
+                if (card) {
+                    card.style.transform = '';
+                    card.style.opacity = '1';
+                }
             }
         })
         .catch(error => {
-            showMessage('Error removing item', 'error');
+            showMessage('Error removing item: ' + error.message, 'error');
+            if (card) {
+                card.style.transform = '';
+                card.style.opacity = '1';
+            }
         });
-    }, 400);
-}
+    }
 
-function proceedToCheckout() {
-    window.location.href = '/Cart/Checkout';
-}
+    function proceedToCheckout() {
+        // First validate cart is not empty
+        const cartItems = document.querySelectorAll('.cart-item-card');
+        if (cartItems.length === 0) {
+            showMessage('Your cart is empty!', 'error');
+            return;
+        }
 
-function showMessage(message, type) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `alert alert-${type === 'error' ? 'danger' : type === 'success' ? 'success' : 'info'} alert-dismissible fade show`;
-    messageDiv.style.minWidth = '350px';
-    messageDiv.style.borderRadius = '15px';
-    messageDiv.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
-    messageDiv.innerHTML = `
-        <strong>${type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ'}</strong> ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    `;
-    
-    document.getElementById('cart-messages').appendChild(messageDiv);
-    
-    setTimeout(() => {
-        messageDiv.remove();
-    }, 5000);
-}
+        // Check if user is authenticated (you might need to adjust this)
+        fetch('/Account/IsAuthenticated')
+            .then(response => response.json())
+            .then(data => {
+                if (data.isAuthenticated) {
+                    window.location.href = '/Cart/Checkout';
+                } else {
+                    showMessage('Please login to proceed to checkout', 'error');
+                    window.location.href = '/Account/Login?returnUrl=/Cart';
+                }
+            })
+            .catch(() => {
+                window.location.href = '/Cart/Checkout';
+            });
+    }
 
-// Smooth page loading effects
-document.addEventListener('DOMContentLoaded', function() {
-    document.documentElement.style.scrollBehavior = 'smooth';
-    
-    // Add entrance animations to elements
-    const cards = document.querySelectorAll('.cart-item-card');
-    cards.forEach((card, index) => {
-        card.style.animationDelay = `${index * 0.2}s`;
+    function showMessage(message, type) {
+        const container = document.getElementById('cart-messages');
+        if (!container) return;
+
+        // Remove any existing messages
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `alert alert-${type === 'error' ? 'danger' : 'success'} alert-dismissible fade show`;
+        messageDiv.style.minWidth = '350px';
+        messageDiv.style.borderRadius = '15px';
+        messageDiv.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
+        messageDiv.innerHTML = `
+            <strong>${type === 'success' ? '✓' : '✗'}</strong> ${message}
+            <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+        `;
+
+        container.appendChild(messageDiv);
+
+        setTimeout(() => {
+            messageDiv.remove();
+        }, 5000);
+    }
+
+    // Initialize animations and event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animate cart items
+        const cards = document.querySelectorAll('.cart-item-card');
+        cards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Fix for quantity input changes
+        document.querySelectorAll('.quantity-input').forEach(input => {
+            input.addEventListener('change', function() {
+                const productId = this.closest('.cart-item-card').dataset.productId;
+                updateQuantity(productId, this.value);
+            });
+        });
+
+        // Fix for remove buttons
+        document.querySelectorAll('.remove-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.closest('.cart-item-card').dataset.productId;
+                removeFromCart(productId);
+            });
+        });
+
+        // Fix for checkout button
+        document.querySelector('.checkout-btn')?.addEventListener('click', proceedToCheckout);
     });
-});
 </script>

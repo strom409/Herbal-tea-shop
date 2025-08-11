@@ -5,7 +5,8 @@
 }
 
 <!-- Hero Section with Gradient Background -->
-<div class="hero-section">
+<div class="
+">
     <div class="hero-overlay"></div>
     <div class="container">
         <div class="hero-content text-center">
