@@ -1,9 +1,50 @@
 // Global Shopping Cart Functionality
 
+$(document).ready(function () {
+    // Target the cart count element
+    const cartBadge = document.getElementById('cart-count-desktop');
+    const cartBadgeMobile = document.getElementById('cart-icon-float');
+    const badge = cartBadgeMobile.querySelector('.cart-count');
+  
+    // Create an observer instance
+    const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            const count = parseInt(cartBadge.textContent);
+            if (count > 0) {
+                badge.textContent = count;    
+                badge.style.display = 'inline-block';
+                $(cartBadge).show();
+            } else {
+                badge.style.display = 'none';
+                badge.textContent = 0;
+                $(cartBadge).hide();
+            }
+        });
+    });
+
+    // Configuration of the observer
+    const config = {
+        childList: true,
+        characterData: true,
+        subtree: true
+    };
+
+    // Start observing
+    observer.observe(cartBadge, config);
+
+    // Initial check
+    const initialCount = parseInt(cartBadge.textContent);
+    if (initialCount > 0) {
+        $(cartBadge).show();
+    } else {
+        $(cartBadge).hide();
+    }
+});
+
 // Global function to update cart count
 function updateCartCount() {
     $.get('/Cart/GetCartCount')
-        .done(function(response) {
+        .done(function (response) {
             const count = response.count || 0;
             $('#cart-count').text(count);
             
@@ -25,11 +66,65 @@ function openCartModal() {
 
 // Global function to show notifications
 function showNotification(type, message) {
-    // Simple alert for now - you can enhance this with toast notifications
-    if (type === 'success') {
-        alert(' ' + message);
-    } else {
-        alert(' ' + message);
+    // Create toast container if it doesn't exist
+    let toastContainer = document.querySelector('.toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.className = 'toast-container';
+        document.body.appendChild(toastContainer);
+    }
+
+    // Create a unique ID for the toast
+    const toastId = 'toast-' + Date.now();
+    
+    // Create toast element with the new design
+    const toast = document.createElement('div');
+    toast.id = toastId;
+    toast.className = `toast show align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'}`;
+    toast.role = 'alert';
+    toast.setAttribute('aria-live', 'assertive');
+    toast.setAttribute('aria-atomic', 'true');
+    
+    // Set up the toast content with the new structure
+    const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+    
+    toast.innerHTML = `
+        <div class="d-flex w-100">
+            <div class="toast-body">
+                <i class="fas fa-${icon}"></i>
+                <div class="toast-content">${message}</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    `;
+    
+    // Add to container
+    toastContainer.prepend(toast);
+    
+    // Auto remove after 4 seconds
+    setTimeout(() => {
+        const toastElement = document.getElementById(toastId);
+        if (toastElement) {
+            toastElement.classList.add('hide');
+            setTimeout(() => {
+                if (toastElement && toastElement.parentNode) {
+                    toastElement.remove();
+                }
+            }, 300);
+        }
+    }, 4000);
+    
+    // Close button functionality
+    const closeButton = toast.querySelector('.btn-close');
+    if (closeButton) {
+        closeButton.addEventListener('click', () => {
+            toast.classList.add('hide');
+            setTimeout(() => {
+                if (toast && toast.parentNode) {
+                    toast.remove();
+                }
+            }, 300);
+        });
     }
 }
 

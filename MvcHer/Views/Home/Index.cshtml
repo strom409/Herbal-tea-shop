@@ -16,7 +16,8 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, #8BC34A 0%, #689F38 50%, #558B2F 100%);
+        /* background: linear-gradient(135deg, #8BC34A 0%, #689F38 50%, #558B2F 100%); */
+        background: rgba(136, 180, 78, .7);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -32,6 +33,9 @@
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
+        width:100% !important;
+            object-fit: cover !important;
+            min-height: 450px !important;
     }
 
     .banner-slide.has-image::before {
@@ -213,6 +217,7 @@
         .banner-slider {
             margin: 0;
             padding: 0;
+            height:499px;
         }
         
         .banner-slide {
@@ -1537,7 +1542,7 @@
                     <h2 class="banner-subtitle">@banner.Subtitle</h2>
                     @if (!string.IsNullOrEmpty(banner.ButtonText))
                     {
-                        <a href="@banner.ButtonUrl" class="banner-btn">@banner.ButtonText</a>
+                        <a href="@banner.ButtonUrl" class="banner-btn py-3 px-5" style="font-size: 1rem;">@banner.ButtonText</a>
                     }
                 </div>
             </div>
@@ -1729,8 +1734,8 @@ my-5">
 </div>
 <!-- Cart Modal End -->
 
-<!-- About Section Start -->
-<div class="container-xxl py-5">
+<!-- Featured Article Section Start -->
+<div id="featured-article" class="container-xxl py-5">
     <div class="container">
         <div class="row g-5">
             <div class="col-lg-5 wow fadeIn" data-wow-delay="0.1s">
