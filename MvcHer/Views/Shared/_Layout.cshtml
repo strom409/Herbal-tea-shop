@@ -852,72 +852,72 @@
 
     <!-- Bootstrap Tooltips and Popovers -->
     <script>
-                function updateCartCount(count) {
-            const cartElements = document.querySelectorAll('.cart-count');
-            console.log('Updating cart count to:', count, 'Found elements:', cartElements.length);
+        // function updateCartCount(count) {
+        //     const cartElements = document.querySelectorAll('.cart-count');
+        //     console.log('Updating cart count to:', count, 'Found elements:', cartElements.length);
 
-            cartElements.forEach(el => {
-                el.textContent = count;
-                // Hide the badge completely when count is 0
-                if (count === 0) {
-                    el.style.display = 'none';
-                } else {
-                    el.style.display = 'flex';
-                }
-            });
+        //     cartElements.forEach(el => {
+        //         el.textContent = count;
+        //         // Hide the badge completely when count is 0
+        //         if (count === 0) {
+        //             el.style.display = 'none';
+        //         } else {
+        //             el.style.display = 'flex';
+        //         }
+        //     });
 
-            // Force a re-render by triggering a small delay
-            setTimeout(() => {
-                const cartElements2 = document.querySelectorAll('.cart-count');
-                cartElements2.forEach(el => {
-                    if (count === 0) {
-                        el.style.display = 'none';
-                    } else {
-                        el.style.display = 'flex';
-                    }
-                });
-            }, 10);
-        }
+        //     // Force a re-render by triggering a small delay
+        //     setTimeout(() => {
+        //         const cartElements2 = document.querySelectorAll('.cart-count');
+        //         cartElements2.forEach(el => {
+        //             if (count === 0) {
+        //                 el.style.display = 'none';
+        //             } else {
+        //                 el.style.display = 'flex';
+        //             }
+        //         });
+        //     }, 10);
+        // }
 
         // Function to check cart state and update badge
-        function checkCartState() {
-            try {
-                // Get cart from localStorage or use empty array
-                const cartData = localStorage.getItem('cart');
-                const cart = cartData ? JSON.parse(cartData) : [];
-                const count = Array.isArray(cart) ? cart.length : 0;
+        // function checkCartState() {
+        //     try {
+        //         // Get cart from localStorage or use empty array
+        //         const cartData = localStorage.getItem('cart');
+        //         const cart = cartData ? JSON.parse(cartData) : [];
+        //         const count = Array.isArray(cart) ? cart.length : 0;
 
-                console.log('Cart state checked - Count:', count, 'Cart:', cart);
-                updateCartCount(count);
+        //         console.log('Cart state checked - Count:', count, 'Cart:', cart);
+        //         updateCartCount(count);
 
-                // Also update the data attribute on cart icon
-                const cartIcon = document.getElementById('cart-icon-float');
-                if (cartIcon) {
-                    cartIcon.setAttribute('data-cart-count', count);
-                }
-            } catch (error) {
-                console.error('Error checking cart state:', error);
-                updateCartCount(0);
-            }
-        }
+        //         // Also update the data attribute on cart icon
+        //         const cartIcon = document.getElementById('cart-icon-float');
+        //         if (cartIcon) {
+        //             cartIcon.setAttribute('data-cart-count', count);
+        //         }
+        //     } catch (error) {
+        //         console.error('Error checking cart state:', error);
+        //         updateCartCount(0);
+        //     }
+        // }
 
 
 
         // Example: when adding a product to cart
-        function addToCart(product) {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart.push(product);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartCount(cart.length);
-        }
+        // function addToCart(product) {
+        //     const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        //     cart.push(product);
+        //     localStorage.setItem('cart', JSON.stringify(cart));
+        //     updateCartCount(cart.length);
+        // }
 
         // Function to remove item from cart
-        function removeFromCart(index) {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart.splice(index, 1);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartCount(cart.length);
-        }
+        // function removeFromCart(index) {
+        //     const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        //     cart.splice(index, 1);
+        //     localStorage.setItem('cart', JSON.stringify(cart));
+        //     updateCartCount(cart.length);
+        // }
 
         // Function to clear cart
         function clearCart() {
@@ -948,24 +948,24 @@
         }
 
         // Check cart state immediately when script loads
-        checkCartState();
+        // checkCartState();
 
         // Also check cart state when window loads
-        window.addEventListener('load', function() {
-            setTimeout(checkCartState, 100);
-        });
+        // window.addEventListener('load', function() {
+        //     setTimeout(checkCartState, 1000);
+        // });
 
-        // Force check cart state after a short delay to ensure DOM is ready
-        setTimeout(checkCartState, 50);
+        // // Force check cart state after a short delay to ensure DOM is ready
+        // setTimeout(checkCartState, 50);
 
-        // Additional checks to ensure cart state is always correct
-        setTimeout(checkCartState, 200);
-        setTimeout(checkCartState, 500);
-        setTimeout(checkCartState, 1000);
+        // // Additional checks to ensure cart state is always correct
+        // setTimeout(checkCartState, 200);
+        // setTimeout(checkCartState, 500);
+        // setTimeout(checkCartState, 1000);
 
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize cart count display
-            checkCartState();
+            // checkCartState();
 
             // Initialize Tooltips
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -1039,39 +1039,39 @@
                 }
             }
 
-            // Listen for storage changes (when cart is modified from other pages)
-            window.addEventListener('storage', function(e) {
-                if (e.key === 'cart') {
-                    checkCartState();
-                }
-            });
+            // // Listen for storage changes (when cart is modified from other pages)
+            // window.addEventListener('storage', function(e) {
+            //     if (e.key === 'cart') {
+            //         checkCartState();
+            //     }
+            // });
 
             // Check cart state periodically to ensure badge is always correct
-            setInterval(checkCartState, 500);
+            // setInterval(checkCartState, 500);
 
             // Also check cart state when page becomes visible (for better cross-page updates)
-            document.addEventListener('visibilitychange', function() {
-                if (!document.hidden) {
-                    setTimeout(checkCartState, 100);
-                }
-            });
+            // document.addEventListener('visibilitychange', function() {
+            //     if (!document.hidden) {
+            //         setTimeout(checkCartState, 100);
+            //     }
+            // });
 
             // Check cart state on window focus (when user returns to tab)
-            window.addEventListener('focus', function() {
-                setTimeout(checkCartState, 100);
-            });
+            // window.addEventListener('focus', function() {
+            //     setTimeout(checkCartState, 100);
+            // });
 
-            // Check cart state when navigating between pages
-            window.addEventListener('pageshow', function() {
-                setTimeout(checkCartState, 200);
-            });
+            // // Check cart state when navigating between pages
+            // window.addEventListener('pageshow', function() {
+            //     setTimeout(checkCartState, 200);
+            // });
 
-            // Check cart state when page is restored from cache
-            window.addEventListener('pageshow', function(event) {
-                if (event.persisted) {
-                    setTimeout(checkCartState, 300);
-                }
-            });
+            // // Check cart state when page is restored from cache
+            // window.addEventListener('pageshow', function(event) {
+            //     if (event.persisted) {
+            //         setTimeout(checkCartState, 300);
+            //     }
+            // });
 
             // Additional event listeners for better cross-page updates
             window.addEventListener('beforeunload', function() {
@@ -1087,7 +1087,8 @@
             if (lastCartState) {
                 localStorage.setItem('cart', lastCartState);
                 sessionStorage.removeItem('lastCartState');
-                setTimeout(checkCartState, 100);
+                //setTimeout(checkCartState, 100);
+               // checkCartState();
             }
         });
     </script>

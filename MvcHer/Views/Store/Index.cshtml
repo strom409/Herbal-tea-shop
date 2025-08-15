@@ -969,6 +969,25 @@
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
     }
+
+
+    .quantity-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: #8bc34a;
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+        .quantity-btn:hover {
+            background: #7cb342;
+        }
 </style>
 
 @section Scripts {
@@ -1087,17 +1106,17 @@
             });
         });
 
-        function updateCartCount() {
-            $.ajax({
-                url: '@Url.Action("GetCartCount", "Cart")',
-                type: 'GET',
-                success: function(response) {
-                    // Update cart count display if it exists
-                    $('.cart-count').text(response.count);
-                    $('#cart-count').text(response.count);
-                }
-            });
-        }
+        // function updateCartCount() {
+        //     $.ajax({
+        //         url: '@Url.Action("GetCartCount", "Cart")',
+        //         type: 'GET',
+        //         success: function(response) {
+        //             // Update cart count display if it exists
+        //             $('.cart-count').text(response.count);
+        //             $('#cart-count').text(response.count);
+        //         }
+        //     });
+        // }
 
         // Premium notification system
         function showPremiumNotification(type, title, message) {
@@ -1320,7 +1339,12 @@
                                         </div>
                                         <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
                                             <label style="font-weight: 600; color: #4a5568;">Quantity:</label>
-                                            <input type="number" id="modalQuantity" value="1" min="1" style="width: 80px; padding: 8px 12px; border: 2px solid #e2e8f0; border-radius: 8px; text-align: center;">
+                                            <button class="quantity-btn" onclick="updateSubProductQuantity()">
+                                                            <i class="fas fa-minus"></i></button>
+                                            <input type="number" id="quantity" value="1" min="1"
+                                                style="width: 80px; padding: 8px 12px; border: 2px solid #e2e8f0; border-radius: 8px; text-align: center;">
+                                            <button class="quantity-btn" onclick="updateAddProductQuantity()">
+                                                            <i class="fas fa-plus"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -1340,6 +1364,20 @@
             $('#premiumProductModal').remove();
             $('body').append(modalHtml);
             $('#premiumProductModal').modal('show');
+        }
+        function updateAddProductQuantity(){
+           let input = $("#quantity");
+            let currentValue = parseInt(input.val());
+            input.val(currentValue + 1);
+        }
+         function updateSubProductQuantity(){
+            let input = $("#quantity");
+            let currentValue = parseInt(input.val());
+            let minValue = parseInt(input.attr("min")) || 1;
+
+            if (currentValue > minValue) {
+                input.val(currentValue - 1);
+            }
         }
     </script>
 }

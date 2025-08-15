@@ -1,65 +1,18 @@
-// Global Shopping Cart Functionality
-
-$(document).ready(function () {
-    CartCountIcon();
-});
-
-function CartCountIcon() {
-    // Target the cart count element
-    const cartBadge = document.getElementById('cart-count-desktop');
-    const cartBadgeMobile = document.getElementById('cart-icon-float');
-    const badge = cartBadgeMobile.querySelector('.cart-count');
-
-    if (!cartBadge || !badge) {
-        return; // Stop script
-    }
-
-    // Create an observer instance
-    const observer = new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
-            const count = parseInt(cartBadge.textContent);
-            if (count > 0) {
-                badge.textContent = count;
-                badge.style.display = 'inline-block';
-                $(cartBadge).show();
-            } else {
-                badge.style.display = 'none';
-                badge.textContent = 0;
-                $(cartBadge).hide();
-            }
-        });
-    });
-
-    // Configuration of the observer
-    const config = {
-        childList: true,
-        characterData: true,
-        subtree: true
-    };
-
-    // Start observing
-    observer.observe(cartBadge, config);
-
-    // Initial check
-    const initialCount = parseInt(cartBadge.textContent);
-    if (initialCount > 0) {
-        $(cartBadge).show();
-    } else {
-        $(cartBadge).hide();
-    }
-}
 
 // Global function to update cart count
 function updateCartCount() {
     $.get('/Cart/GetCartCount')
         .done(function (response) {
-            const count = response.count || 0;
-            $('#cart-count').text(count);
-            
-            if (count > 0) {
-                CartCountIcon();
+            const count = response.count || 0;         
+
+            const cartSpan = $('#cart-icon-float span');
+            $(cartSpan).text(count);
+            $(cartSpan).text(count);
+            if (count > 0) {                
+                cartSpan.addClass('cart-count'); // Add class when cart has items
                 $('#cart-count').show();
             } else {
+                cartSpan.removeClass('cart-count'); // Remove class when empty
                 $('#cart-count').hide();
             }
         })
@@ -137,35 +90,13 @@ function showNotification(type, message) {
     }
 }
 
-// Global function to add item to cart
-function addToCart(productId, productName = 'Product', quantity = 1) {
-    console.log('Adding to cart:', productId, productName, quantity);
-    
-    $.ajax({
-        url: '/Cart/AddToCart',
-        type: 'POST',
-        data: {
-            productId: productId,
-            quantity: quantity
-        },
-        success: function(response) {
-            console.log('Add to cart response:', response);
-            if (response.success) {
-                // Update cart count in navigation
-                updateCartCount();
-                
-                // Show success message
-                showNotification('success', productName + ' added to cart successfully!');
-            } else {
-                showNotification('error', 'Error: ' + response.message);
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Add to cart error:', error);
-            showNotification('error', 'Error adding product to cart');
-        }
-    });
-}
+$(document).ready(function () {
+    console.log('Cart.js loaded - Initializing shopping cart');
+    const cart = new ShoppingCart();
+
+    // Update cart count on page load
+    // updateCartCount();
+});
 
 // Server-side Shopping Cart Class
 class ShoppingCart {
@@ -205,12 +136,3 @@ class ShoppingCart {
         window.location.href = '/Cart';
     }
 }
-
-// Initialize cart when document is ready
-$(document).ready(function() {
-    console.log('Cart.js loaded - Initializing shopping cart');
-    const cart = new ShoppingCart();
-    
-    // Update cart count on page load
-    updateCartCount();
-});

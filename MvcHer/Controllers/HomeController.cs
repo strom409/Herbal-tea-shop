@@ -115,7 +115,36 @@ namespace MvcHer.Controllers
             
             return View(contactMessage);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarkAsRead(int id)
+        {
+            if (HttpContext.Session.GetString("IsAdmin") != "true")
+            {
+                _logger.LogWarning("Unauthorized attempt to mark message as read for ID {Id}", id);
+                return Json(new { success = false, message = "Unauthorized" });
+            }
 
+            try
+            {
+                var message = await _context.ContactMessages.FindAsync(id);
+                if (message != null)
+                {
+                    message.IsRead = true;
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation("Message {Id} marked as read successfully", id);
+                    return Json(new { success = true });
+                }
+                _logger.LogWarning("Message {Id} not found", id);
+                return Json(new { success = false, message = "Message not found" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error marking message {Id} as read", id);
+                return Json(new { success = false, message = ex.Message });
+            }
+        
+    }
         public IActionResult Features()
         {
             return View();

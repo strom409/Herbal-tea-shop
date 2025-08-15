@@ -391,46 +391,44 @@
             return;
         }
 
-        if (newQuantity < 1) {
-            removeFromCart(productId);
-            return;
+        if (newQuantity < 1) {            
+            const card = document.querySelector(`.cart-item-card[data-product-id="${productId}"]`);
+            if (card) {
+                card.style.opacity = '0.7';
+            }
         }
 
-        const card = document.querySelector(`.cart-item-card[data-product-id="${productId}"]`);
-        if (card) {
-            card.style.opacity = '0.7';
-        }
-
-        fetch('/Cart/UpdateCartItem', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
-            },
-            body: JSON.stringify({
-                productId: productId,
-                quantity: newQuantity
+            fetch('/Cart/UpdateCartItem', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                },
+                body: JSON.stringify({
+                    productId: productId,
+                    quantity: newQuantity
+                })
             })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                showMessage('Cart updated successfully!', 'success');
-                setTimeout(() => location.reload(), 1000);
-            } else {
-                showMessage('Error updating cart: ' + (data.message || 'Unknown error'), 'error');
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    showMessage('Cart updated successfully!', 'success');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showMessage('Error updating cart: ' + (data.message || 'Unknown error'), 'error');
+                    if (card) card.style.opacity = '1';
+                }
+            })
+            .catch(error => {
+                showMessage('Error updating cart: ' + error.message, 'error');
                 if (card) card.style.opacity = '1';
-            }
-        })
-        .catch(error => {
-            showMessage('Error updating cart: ' + error.message, 'error');
-            if (card) card.style.opacity = '1';
-        });
+            });
+        
     }
 
     function removeFromCart(productId) {
@@ -546,13 +544,7 @@
             });
         });
 
-        // Fix for remove buttons
-        document.querySelectorAll('.remove-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const productId = this.closest('.cart-item-card').dataset.productId;
-                removeFromCart(productId);
-            });
-        });
+      
 
         // Fix for checkout button
         document.querySelector('.checkout-btn')?.addEventListener('click', proceedToCheckout);

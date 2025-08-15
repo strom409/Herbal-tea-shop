@@ -1540,15 +1540,15 @@
                 </div>
                 
                 <div class="banner-content">
-                    @if (!string.IsNullOrEmpty(banner.Description))
+                    @if (!string.IsNullOrEmpty(banner.Title))
                     {
-                        <p class="banner-welcome">@banner.Description</p>
+                        <p class="banner-welcome">@banner.Title</p>
                     }
                     else
                     {
                         <p class="banner-welcome">Welcome to Herbal Formulator</p>
                     }
-                    <h1 class="banner-title">@banner.Title</h1>
+                    <h1 class="banner-title">@banner.Description</h1>
                     <h2 class="banner-subtitle">@banner.Subtitle</h2>
                     @if (!string.IsNullOrEmpty(banner.ButtonText))
                     {
@@ -2267,17 +2267,17 @@ $(document).ready(function() {
     });
 });
 
-function updateCartCount() {
-    $.ajax({
-        url: '@Url.Action("GetCartCount", "Cart")',
-        type: 'GET',
-        success: function(response) {
-            // Update cart count display if it exists
-            $('.cart-count').text(response.count);
-            $('#cart-count').text(response.count);
-        }
-    });
-}
+// function updateCartCount() {
+//     $.ajax({
+//         url: '@Url.Action("GetCartCount", "Cart")',
+//         type: 'GET',
+//         success: function(response) {
+//             // Update cart count display if it exists
+//             $('.cart-count').text(response.count);
+//             $('#cart-count').text(response.count);
+//         }
+//     });
+// }
 
 function showNotification(type, message) {
     // Create notification element

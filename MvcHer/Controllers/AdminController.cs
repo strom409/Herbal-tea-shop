@@ -530,7 +530,8 @@ namespace MvcHer.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> MarkAsRead(int id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarkAsRead([FromBody] MarkAsReadRequest request)
         {
             if (HttpContext.Session.GetString("IsAdmin") != "true")
             {
@@ -539,7 +540,7 @@ namespace MvcHer.Controllers
             
             try
             {
-                var message = await _context.ContactMessages.FindAsync(id);
+                var message = await _context.ContactMessages.FindAsync(request.Id);
                 if (message != null)
                 {
                     message.IsRead = true;
@@ -1141,6 +1142,11 @@ namespace MvcHer.Controllers
             }
 
             return RedirectToAction("Banners");
+        }
+
+        public class MarkAsReadRequest
+        {
+            public int Id { get; set; }
         }
 
         #endregion

@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using MvcHer.Services;
-using MvcHer.Models;
-using MvcHer.Data;
 using Microsoft.EntityFrameworkCore;
+using MvcHer.Data;
+using MvcHer.Models;
+using MvcHer.Services;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 namespace MvcHer.Controllers
@@ -27,13 +28,13 @@ namespace MvcHer.Controllers
         public async Task<IActionResult> Index()
         {
             var cart = GetCartFromSession();
-            
+
             // Load product details for each cart item
             foreach (var item in cart)
             {
                 item.Product = await _productService.GetProductByIdAsync(item.ProductId);
             }
-            
+
             return View(cart);
         }
 
@@ -53,7 +54,7 @@ namespace MvcHer.Controllers
 
             // Get cart from session
             var cart = GetCartFromSession();
-            
+
             // Check if product already exists in cart
             var existingItem = cart.FirstOrDefault(c => c.ProductId == productId);
             if (existingItem != null)
@@ -74,8 +75,9 @@ namespace MvcHer.Controllers
             // Save cart to session
             SaveCartToSession(cart);
 
-            return Json(new { 
-                success = true, 
+            return Json(new
+            {
+                success = true,
                 message = "Product added to cart",
                 cartCount = cart.Sum(c => c.Quantity),
                 cartTotal = cart.Sum(c => c.TotalPrice)
@@ -83,26 +85,27 @@ namespace MvcHer.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateCartItem(int productId, int quantity)
+        public IActionResult UpdateCartItem([FromBody] ProductQuantityRequest request) 
         {
             var cart = GetCartFromSession();
-            var item = cart.FirstOrDefault(c => c.ProductId == productId);
-            
+            var item = cart.FirstOrDefault(c => c.ProductId == request.ProductId);
+
             if (item != null)
             {
-                if (quantity <= 0)
+                if (request.Quantity <= 0)
                 {
                     cart.Remove(item);
                 }
                 else
                 {
-                    item.Quantity = quantity;
+                    item.Quantity = request.Quantity;
                 }
-                
+
                 SaveCartToSession(cart);
             }
 
-            return Json(new { 
+            return Json(new
+            {
                 success = true,
                 cartCount = cart.Sum(c => c.Quantity),
                 cartTotal = cart.Sum(c => c.TotalPrice)
@@ -114,14 +117,15 @@ namespace MvcHer.Controllers
         {
             var cart = GetCartFromSession();
             var item = cart.FirstOrDefault(c => c.ProductId == dto.ProductId);
-            
+
             if (item != null)
             {
                 cart.Remove(item);
                 SaveCartToSession(cart);
             }
 
-            return Json(new { 
+            return Json(new
+            {
                 success = true,
                 cartCount = cart.Sum(c => c.Quantity),
                 cartTotal = cart.Sum(c => c.TotalPrice)
@@ -132,8 +136,10 @@ namespace MvcHer.Controllers
         public IActionResult GetCartItems()
         {
             var cart = GetCartFromSession();
-            return Json(new {
-                items = cart.Select(c => new {
+            return Json(new
+            {
+                items = cart.Select(c => new
+                {
                     productId = c.ProductId,
                     name = c.Product?.Name,
                     price = c.Product?.Price,
@@ -199,10 +205,10 @@ namespace MvcHer.Controllers
 
             ViewBag.CartItems = cart;
             ViewBag.CartTotal = cart.Sum(c => c.TotalPrice);
-           // ViewBag.CustomerName = otpData.FullName;
+            // ViewBag.CustomerName = otpData.FullName;
             ViewBag.CustomerPhone = otpData.PhoneNumber;
-           // ViewBag.CustomerEmail = otpData.Email;
-            
+            // ViewBag.CustomerEmail = otpData.Email;
+
             return View();
         }
 
@@ -230,7 +236,7 @@ namespace MvcHer.Controllers
             {
                 // Generate and send OTP
                 var otpCode = await _otpService.GenerateOtpAsync(model.PhoneNumber);
-                var otpSent = await _otpService.SendOtpAsync(model.PhoneNumber,otpCode);
+                var otpSent = await _otpService.SendOtpAsync(model.PhoneNumber, otpCode);
 
                 if (!otpSent)
                 {
@@ -241,9 +247,9 @@ namespace MvcHer.Controllers
                 // Store user data in session for OTP validation
                 var otpSession = new OtpSession
                 {
-                  //  FullName = model.FullName,
+                    //  FullName = model.FullName,
                     PhoneNumber = model.PhoneNumber,
-                 //   Email = model.Email,
+                    //   Email = model.Email,
                     OtpCode = otpCode,
                     ExpiryTime = DateTime.Now.AddMinutes(5),
                     IsVerified = false
@@ -272,10 +278,10 @@ namespace MvcHer.Controllers
             }
 
             var otpSession = JsonSerializer.Deserialize<OtpSession>(otpSessionJson);
-            
+
             var model = new OtpValidationModel
             {
-               // FullName = otpSession.FullName,
+                // FullName = otpSession.FullName,
                 PhoneNumber = otpSession.PhoneNumber,
                 //Email = otpSession.Email,
                 ExpiryTime = otpSession.ExpiryTime
@@ -344,21 +350,21 @@ namespace MvcHer.Controllers
         public async Task<IActionResult> TestPlaceOrderSimple()
         {
             Console.WriteLine("TestPlaceOrderSimple GET method called");
-            
+
             try
             {
                 // Test with hardcoded values
                 var result = await PlaceOrder(
-                    "Test User", 
-                    "test@example.com", 
-                    "1234567890", 
-                    "123 Test St", 
-                    "Test City", 
-                    "TS", 
-                    "12345", 
+                    "Test User",
+                    "test@example.com",
+                    "1234567890",
+                    "123 Test St",
+                    "Test City",
+                    "TS",
+                    "12345",
                     "Bank Transfer"
                 );
-                
+
                 Console.WriteLine("PlaceOrder method executed successfully");
                 return Json(new { success = true, message = "Order placed successfully" });
             }
@@ -377,15 +383,15 @@ namespace MvcHer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PlaceOrder(string customerName, string customerEmail, string customerPhone, 
+        public async Task<IActionResult> PlaceOrder(string customerName, string customerEmail, string customerPhone,
             string shippingAddress, string city, string state, string zipCode, string paymentMethod)
         {
             // Debug logging
             Console.WriteLine($"PlaceOrder POST called with: {customerName}, {customerEmail}, {paymentMethod}");
-            
+
             var cart = GetCartFromSession();
             Console.WriteLine($"Cart has {cart.Count} items");
-            
+
             if (!cart.Any())
             {
                 Console.WriteLine("Cart is empty, redirecting to store");
@@ -532,7 +538,7 @@ namespace MvcHer.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
-        
+
         public IActionResult TestOrderFlow()
         {
             return View();
@@ -555,4 +561,14 @@ namespace MvcHer.Controllers
     {
         public int ProductId { get; set; }
     }
+    public class ProductQuantityRequest
+    {
+        [Required]
+        public int ProductId { get; set; }
+
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1")]
+        public int Quantity { get; set; }
+    }
+
 }
