@@ -4,16 +4,31 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div class="container-fluid py-4">
+<style>
+    .product-view .card { overflow: hidden; }
+    .product-view .description { word-break: break-word; }
+    .product-view .card-header .header-actions { gap: .5rem; }
+    .product-view .card-footer .footer-actions { gap: .5rem; }
+    @@media (max-width: 575.98px) {
+        .product-view .card-header h4 { font-size: 1.1rem; }
+        .product-view .card-body { padding: 1rem; }
+        .product-view .header-actions { width: 100%; display: flex; flex-direction: column; }
+        .product-view .header-actions .btn { width: 100%; }
+        .product-view .footer-actions { width: 100%; display: flex; flex-direction: column; }
+        .product-view .footer-actions .btn { width: 100%; }
+    }
+</style>
+
+<div class="container-fluid py-4 product-view">
     <div class="row">
         <div class="col-12">
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between">
                         <h4 class="mb-0">
                             <i class="fas fa-eye me-2"></i>View Product Details
                         </h4>
-                        <div>
+                        <div class="header-actions d-flex flex-wrap">
                             <a href="@Url.Action("EditProduct", new { id = Model.Id })" class="btn btn-warning btn-sm">
                                 <i class="fas fa-edit me-1"></i>Edit Product
                             </a>
@@ -26,7 +41,7 @@
                 <div class="card-body">
                     <div class="row">
                         <!-- Product Image -->
-                        <div class="col-md-4">
+                        <div class="col-12 col-md-4">
                             <div class="text-center">
                                 <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded shadow" style="max-height: 300px;">
                                 <p class="text-muted mt-2">Product Image</p>
@@ -34,9 +49,9 @@
                         </div>
                         
                         <!-- Product Details -->
-                        <div class="col-md-8">
+                        <div class="col-12 col-md-8">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-12 col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label fw-bold text-primary">Product Name</label>
                                         <p class="form-control-plaintext border rounded p-2 bg-light">@Model.Name</p>
@@ -62,7 +77,7 @@
                                     </div>
                                 </div>
                                 
-                                <div class="col-md-6">
+                                <div class="col-12 col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label fw-bold text-primary">Stock Quantity</label>
                                         <p class="form-control-plaintext border rounded p-2 bg-light">
@@ -95,7 +110,7 @@
                             
                             <div class="mb-3">
                                 <label class="form-label fw-bold text-primary">Description</label>
-                                <div class="border rounded p-3 bg-light">
+                                <div class="border rounded p-3 bg-light description">
                                     @if (!string.IsNullOrEmpty(Model.Description))
                                     {
                                         <p class="mb-0">@Model.Description</p>
@@ -112,14 +127,14 @@
                 
                 <!-- Action Buttons -->
                 <div class="card-footer bg-light">
-                    <div class="d-flex justify-content-between">
-                        <div>
+                    <div class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between">
+                        <div class="footer-actions d-flex flex-column flex-sm-row w-100 w-md-auto">
                             <a href="@Url.Action("Products")" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left me-2"></i>Back to Products List
                             </a>
                         </div>
-                        <div>
-                            <a href="@Url.Action("EditProduct", new { id = Model.Id })" class="btn btn-warning me-2">
+                        <div class="footer-actions d-flex flex-column flex-sm-row w-100 w-md-auto">
+                            <a href="@Url.Action("EditProduct", new { id = Model.Id })" class="btn btn-warning me-sm-2 mb-2 mb-sm-0">
                                 <i class="fas fa-edit me-2"></i>Edit This Product
                             </a>
                             <button type="button" class="btn btn-danger" onclick="confirmDelete(@Model.Id)">

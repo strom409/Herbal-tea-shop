@@ -37,7 +37,11 @@ namespace MvcHer.Controllers
             // Get active banners for homepage slider
             var banners = await _bannerService.GetActiveBannersAsync();
             ViewBag.Banners = banners;
-            
+
+            // Get active testimonials for homepage
+            var testimonials = await _testimonialService.GetActiveTestimonialsAsync();
+            ViewBag.Testimonials = testimonials;
+
             return View();
         }
 
@@ -46,11 +50,7 @@ namespace MvcHer.Controllers
             return View();
         }
 
-        public async Task<IActionResult> About()
-        {
-            var aboutUs = await _aboutUsService.GetAboutUsAsync();
-            return View(aboutUs);
-        }
+      
 
         public async Task<IActionResult> Testimonial()
         {
@@ -295,6 +295,11 @@ namespace MvcHer.Controllers
                 _logger.LogError(ex, "Error retrieving social links");
                 return Json(new List<object>());
             }
+        }
+
+        public IActionResult FAQ()
+        {
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

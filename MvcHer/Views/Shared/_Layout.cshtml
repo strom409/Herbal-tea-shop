@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>@ViewData["Title"] - TEA House</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title>@ViewData["Title"] - Herbal Formulator</title>
 
     <!-- Favicon -->
-    <link href="~/img/favicon.ico" rel="icon">
+    <link href="~/img/favicon.jpg" rel="icon" style="border-radius: 50% !important">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,312 +28,322 @@
 
     <!-- Template Stylesheet -->
     <link href="~/css/style.css" rel="stylesheet">
-
-    <!-- Hero Section Stylesheet -->
     <link href="~/css/hero.css" rel="stylesheet">
 
+    <!-- Additional Styles -->
     @RenderSection("Styles", required: false)
 
     <style>
+        /* Global Button Styling */
+        .btn {
+            background: linear-gradient(135deg, #689F38 0%, #558B2F 100%);
+        }
+
+        /* Carousel Caption */
         .carousel-caption {
-        background: rgba(136, 180, 78, .7);
-        z-index: 1;
-    }
+            background: rgba(136, 180, 78, 0.7);
+            z-index: 1;
+        }
 
-        /* Compact Navbar Styles */
+        /* Navbar Styling */
         .navbar {
-            min-height: 60px !important;
-            padding-top: 0.5rem !important;
-            padding-bottom: 0.5rem !important;
-            background: linear-gradient(135deg, #8BC34A 0%, #689F38 50%, #558B2F 100%) !important;
-            box-shadow: 0 2px 15px rgba(139, 195, 74, 0.3) !important;
+            background: #fff !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        /* Navbar link colors for white background */
-        .navbar-nav .nav-link {
-            color: #333333 !important;
-            font-weight: 500 !important;
-            transition: all 0.3s ease !important;
-        }
-
-        .navbar-nav .nav-link:hover,
-        .navbar-nav .nav-link:focus {
-            color: #8BC34A !important;
-            background-color: rgba(139, 195, 74, 0.1) !important;
-            border-radius: 5px !important;
-        }
-
-        /* Dropdown menu styling */
-        .dropdown-menu {
-            border: none !important;
-            box-shadow: 0 4px 15px rgba(139, 195, 74, 0.3) !important;
-        }
-
-        .dropdown-item {
-            color: #444 !important;
-            transition: all 0.3s ease !important;
-        }
-
-        .dropdown-item:hover,
-        .dropdown-item:focus {
-            background-color: #689F38 !important;
-        }
-
-        /* Mobile toggle button styling */
-        .navbar-toggler {
-            border: 2px solid #ffffff !important;
-            padding: 6px 10px !important;
-            color: #F5F8F2 !important;
-        }
-
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(0, 0, 0, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-        }
-
-        .navbar-brand h1 {
-            font-size: 1.5rem !important;
-            line-height: 1.2 !important;
-        }
-
-        /* Logo Styles */
-        .navbar-brand .logo {
-            height: 70px;
-            width: auto;
-            transition: transform 0.3s ease;
-        }
-
-            .navbar-brand .logo:hover {
-                transform: scale(1.05);
+            .navbar .container,
+            .navbar .container-fluid {
+                background: transparent !important;
+                box-shadow: none !important;
             }
 
-        /* Responsive logo sizing */
-        @@media (max-width: 768px) {
+        @@media (min-width: 992px) {
+            .navbar-collapse, .navbar-nav {
+                background: transparent !important;
+                box-shadow: none !important;
+            }
+        }
+
+        /* Navbar Brand */
+        .navbar-brand {
+            background: transparent !important;
+        }
+
             .navbar-brand .logo {
                 height: 60px;
+                border-radius: 50%;
+                object-fit: contain;
+                transition: transform 0.3s ease;
             }
+
+                .navbar-brand .logo:hover {
+                    transform: scale(1.05);
+                }
+
+        /* Nav Links */
+        .navbar-nav .nav-link {
+            color: #333 !important;
+            font-weight: 500;
+            padding: 0.6rem 1rem !important;
+            position: relative;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        @@media (max-width: 576px) {
-            .navbar-brand .logo {
-                height: 50px;
-            }
-        }
-
-        /* Mobile Navigation Complete Redesign */
-        @@media (max-width: 991.98px) {
-            /* Mobile navbar container */
-            .navbar {
-                padding: 1rem 0 !important;
-                background: rgba(255, 255, 255, 0.95) !important;
-                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1) !important;
-            }
-                /* Mobile navbar content */
-                .navbar .container {
-                    padding: 0 20px !important;
-                }
-                /* Mobile navbar flex layout */
-                .navbar .d-flex {
-                    width: 100% !important;
-                    justify-content: space-between !important;
-                    align-items: center !important;
-                }
-            /* Mobile logo styling */
-            .navbar-brand {
-                flex: 0 0 auto !important;
-                margin: 0 !important;
-                padding: 0 !important;
+            .navbar-nav .nav-link:hover {
+                color: #689F38 !important;
             }
 
-                .navbar-brand .logo {
-                    margin-top:2px;
-                    height: 90px !important;
-                    width: auto !important;
-                }
-            /* Mobile actions container */
-            .d-lg-none {
-                display: flex !important;
-                align-items: center !important;
-                gap: 15px !important;
-                flex: 0 0 auto !important;
-            }
-            /* Mobile cart button - clean design */
-            .cart-icon {
-                background: #198754 !important;
-                border: none !important;
-                border-radius: 0px !important;
-                color: white !important;
-                width: 48px !important;
-                height: 48px !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                box-shadow: 0 4px 12px rgba(25, 135, 84, 0.25) !important;
-                transition: all 0.3s ease !important;
-                position: relative !important;
-            }
-
-                .cart-icon:hover {
-                    background: #157347 !important;
-                    transform: translateY(-2px) !important;
-                    box-shadow: 0 6px 16px rgba(25, 135, 84, 0.35) !important;
-                }
-
-                .cart-icon i {
-                    font-size: 20px !important;
-                    color: white !important;
-                }
-            /* Cart count badge */
-            .cart-count {
-                font-size: 11px !important;
-                min-width: 20px !important;
-                height: 20px !important;
-                line-height: 20px !important;
-                text-align: center !important;
-            }
-            /* Mobile hamburger menu - clean design */
-            .navbar-toggler {
-                border: 2px solid #e9ecef !important;
-                border-radius: 12px !important;
-                padding: 0 !important;
-                background: white !important;
-                width: 48px !important;
-                height: 48px !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
-                transition: all 0.3s ease !important;
-            }
-
-                .navbar-toggler:hover {
-                    border-color: #198754 !important;
-                    background: #f8f9fa !important;
-                    transform: translateY(-1px) !important;
-                }
-
-                .navbar-toggler:focus {
-                    box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.15) !important;
-                    border-color: #198754 !important;
-                }
-
-            .navbar-toggler-icon {
-                width: 24px !important;
-                height: 24px !important;
-                background-size: 24px 24px !important;
-            }
-            /* Mobile navbar collapse - beautiful dropdown */
-            .navbar-collapse {
-                background: rgba(255, 255, 255, 0.98) !important;
-                border-radius: 16px !important;
-                margin-top: 20px !important;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
-                border: 1px solid #e9ecef !important;
-                overflow: hidden !important;
-                padding: 14px;
-            }
-            /* Mobile navigation links - enhanced */
-            .navbar-nav {
-                padding: 10px 0 !important;
-            }
-
-                .navbar-nav .nav-link {
-                    padding: 16px 24px !important;
-                    border-bottom: 1px solid #f1f3f4 !important;
-                    font-weight: 600 !important;
-                    font-size: 16px !important;
-                    color: #333333 !important;
-                    transition: all 0.3s ease !important;
-                    display: flex !important;
-                    align-items: center !important;
-                /*    background: rgba(139, 195, 74, 0.1) !important; */
-                    color: #8BC34A !important;
-                    padding-left: 32px !important;
-                    transform: translateX(4px) !important;
-                }
-
-                    .navbar-nav .nav-link:last-child {
-                        border-bottom: none !important;
-                    }
-
-                    .navbar-nav .nav-link:hover {
-                        background: rgba(139, 195, 74, 0.1) !important;
-                        color: #8BC34A !important;
-                        padding-left: 32px !important;
-                        transform: translateX(4px) !important;
-                    }
-
-                    .navbar-nav .nav-link:active {
-                        background: rgba(139, 195, 74, 0.2) !important;
-                        color: #8BC34A !important;
-                    }
-        }
-
-        .nav-link {
-            font-size: 0.875rem !important;
-            font-weight: 500 !important;
-            letter-spacing: 0.5px !important;
-            transition: all 0.3s ease !important;
-            position: relative !important;
-        }
-
-            .nav-link:hover {
-                color: #667eea !important;
-                transform: translateY(-1px) !important;
-            }
-
-            .nav-link::after {
-                content: '';
+            .navbar-nav .nav-link::after {
+                content: "";
                 position: absolute;
                 bottom: 0;
                 left: 50%;
-                width: 0;
+                width: 0%;
                 height: 2px;
-                background: linear-gradient(135deg, #667eea, #764ba2);
-                transition: all 0.3s ease;
+                background: #689F38;
+                transition: width 0.3s ease, left 0.3s ease;
                 transform: translateX(-50%);
             }
 
-            .nav-link:hover::after {
-                width: 80%;
+            .navbar-nav .nav-link:hover::after {
+                width: 60%;
             }
 
-        .btn-sm {
-            padding: 0.375rem 0.75rem !important;
-            font-size: 0.8rem !important;
-            border-radius: 8px !important;
+        .navbar .nav-link.active {
+            color: #9abf69 !important;
+            background-color: rgba(25, 135, 84, 0.1);
+        }
+
+        /* Cart Icon */
+        .cart-icon {
+            position: relative;
+            background: transparent !important;
+            border: none !important;
+            width: 44px !important;
+            height: 44px !important;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.25s ease, color 0.25s ease;
+        }
+
+            .cart-icon i {
+                font-size: 20px !important;
+                color: #689F38 !important;
+            }
+
+            .cart-icon:hover i {
+                color: #689F38 !important;
+            }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            min-width: 20px;
+            height: 20px;
+            line-height: 20px;
+            background: #dc3545 !important;
+            color: white !important;
+            font-size: 11px !important;
+            border-radius: 50%;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Mobile specific cart badge positioning */
+        @@media (max-width: 991.98px) {
+            .cart-count {
+                top: -8px !important;
+                right: -8px !important;
+                min-width: 22px !important;
+                height: 22px !important;
+                line-height: 22px !important;
+                font-size: 12px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+
+            #cart-icon-float {
+                position: relative !important;
+                transform: none !important;
+                padding-top: 0 !important;
+            }
+        }
+
+        /* Hamburger Button */
+        .navbar-toggler {
+            border: 2px solid #689F38 !important;
+            border-radius: 10px !important;
+            background: white !important;
+            width: 48px !important;
+            height: 48px !important;
+            padding: 8px !important;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+        }
+
+            .navbar-toggler:hover {
+                background: #689F38 !important;
+                border-color: #689F38 !important;
+            }
+
+                .navbar-toggler:hover .navbar-toggler-icon {
+                    filter: brightness(0) invert(1);
+                }
+
+        .navbar-toggler-icon {
+            width: 22px !important;
+            height: 22px !important;
+        }
+
+        /* Dropdown Styling */
+        .nav-item.dropdown {
+            position: relative !important;
         }
 
         .dropdown-menu {
-            border: none !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
-            border-radius: 12px !important;
-            padding: 0.5rem !important;
+            position: absolute !important;
+            top: 100%;
+            left: 0;
+            z-index: 9999 !important;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: none;
+            padding: 8px 0;
+            margin-top: 8px;
         }
 
         .dropdown-item {
-            border-radius: 8px !important;
-            transition: all 0.3s ease !important;
+            font-weight: 500;
+            padding: 10px 20px;
+            transition: all 0.2s ease;
+            color: #444;
         }
 
             .dropdown-item:hover {
-                background: linear-gradient(135deg, #667eea, #764ba2) !important;
-                color: white !important;
-                transform: translateX(5px) !important;
+                background-color: #f8f9fa;
+                color: #689F38;
+                transform: translateX(5px);
             }
 
-        .cart-icon {
-            transition: all 0.3s ease !important;
+        .navbar .dropdown-toggle::after {
+            content: none !important;
         }
 
-            .cart-icon:hover {
-                transform: scale(1.1) !important;
+        /* Mobile View */
+        @@media (max-width: 991.98px) {
+            .navbar {
+                padding: 8px 0 !important;
+                min-height: 60px !important;
             }
 
-        .fw-500 {
-            font-weight: 500 !important;
+            .navbar-collapse {
+                background: white !important;
+                border-radius: 12px !important;
+                margin-top: 10px !important;
+                padding: 12px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
+                border-top: 1px solid #e9ecef;
+            }
+
+            .navbar-nav .nav-link {
+                border-bottom: 1px solid #f1f3f4 !important;
+                font-size: 15px;
+                padding-left: 20px !important;
+                color: #689F38 !important;
+            }
+
+                .navbar-nav .nav-link:hover {
+                    background: rgba(25,135,84,0.08) !important;
+                    color: #689F38 !important;
+                }
+
+                .navbar-nav .nav-link:last-child {
+                    border-bottom: none !important;
+                }
+
+            .navbar-nav {
+                padding: 15px 0;
+                border-top: 1px solid #eee;
+                margin-top: 10px;
+                width: 100%;
+            }
+
+            .nav-item {
+                margin: 5px 0;
+                width: 100%;
+            }
+
+            .dropdown-menu {
+                border: none;
+                box-shadow: none;
+                background: #f8f9fa;
+                margin-left: 20px;
+                border-radius: 0;
+                position: static !important;
+                transform: none !important;
+                width: 100%;
+            }
         }
 
-        /* Reduce excessive white space globally */
+        /* Cart Icon Float */
+        .cart-icon-float {
+            position: absolute !important;
+            right: 60px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 1000;
+            background: white;
+            padding: 10px 12px !important;
+            border-radius: 50% !important;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border: none;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Ensure cart badge is always visible */
+        .cart-count {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            z-index: 1001 !important;
+        }
+
+        @@media (min-width: 992px) {
+            .cart-icon-float {
+                display: none !important;
+            }
+
+            .navbar-toggler {
+                display: none !important;
+            }
+        }
+
+        @@media (max-width: 991.98px) {
+            .cart-icon {
+                position: relative !important;
+                transform: none !important;
+                padding-top: 0 !important;
+                z-index: 1000;
+            }
+        }
+
+        /* Spacing Optimizations */
         .container-fluid.px-0.mb-5 {
             margin-bottom: 2rem !important;
         }
@@ -368,7 +378,6 @@
             margin-top: 2rem !important;
         }
 
-        /* Carousel specific fixes */
         #header-carousel {
             margin-bottom: 1rem !important;
         }
@@ -378,17 +387,114 @@
             object-fit: cover !important;
         }
 
-        /* Section spacing improvements */
         .section-title {
             margin-bottom: 1.5rem !important;
         }
 
-        /* Footer spacing */
         .footer {
             margin-top: 2rem !important;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
+            border-top: 3px solid #689F38;
+            position: relative;
         }
 
-        /* Main content area fixes */
+            .footer::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: linear-gradient(90deg, #689F38, #8BC34A, #689F38);
+            }
+
+            .footer h4 {
+                color: #689F38 !important;
+                font-weight: 600;
+                margin-bottom: 1.5rem;
+                position: relative;
+                padding-bottom: 0.5rem;
+            }
+
+                .footer h4::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 50px;
+                    height: 2px;
+                    background: #689F38;
+                }
+
+            .footer p {
+                color: rgba(255,255,255,0.8);
+                line-height: 1.6;
+            }
+
+            .footer .btn-link {
+                color: rgba(255,255,255,0.8) !important;
+                text-decoration: none;
+                padding: 0.5rem 0;
+                display: block;
+                transition: all 0.3s ease;
+                position: relative;
+                padding-left: 0;
+            }
+
+                .footer .btn-link:hover {
+                    color: #689F38 !important;
+                    text-decoration: none;
+                    padding-left: 10px;
+                }
+
+                .footer .btn-link::before {
+                    content: '→';
+                    position: absolute;
+                    left: -15px;
+                    opacity: 0;
+                    transition: all 0.3s ease;
+                }
+
+                .footer .btn-link:hover::before {
+                    opacity: 1;
+                    left: -5px;
+                }
+
+            .footer .form-control {
+                background: rgba(255, 255, 255, 0.1) !important;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: white;
+            }
+
+                .footer .form-control::placeholder {
+                    color: rgba(255,255,255,0.6);
+                }
+
+            .footer .btn-primary {
+                background: #689F38 !important;
+                border-color: #689F38 !important;
+            }
+
+                .footer .btn-primary:hover {
+                    background: #558B2F !important;
+                    border-color: #558B2F !important;
+                }
+
+            .footer .copyright {
+                background: rgba(0, 0, 0, 0.3);
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 1rem 0;
+            }
+
+                .footer .copyright a {
+                    color: #689F38;
+                    text-decoration: none;
+                }
+
+                    .footer .copyright a:hover {
+                        color: #8BC34A;
+                    }
+
         main {
             padding-top: 0 !important;
             margin-top: 0 !important;
@@ -398,21 +504,12 @@
             padding-top: 0 !important;
         }
 
-        /* Remove any extra spacing after navbar */
         .navbar + * {
             margin-top: 0 !important;
             padding-top: 0 !important;
         }
 
-        /* Mobile navbar improvements */
-        @@media (max-width: 991.98px) {
-            .navbar-collapse {
-                margin-top: 1rem;
-                padding-top: 1rem;
-                border-top: 1px solid #e9ecef;
-            }
-        }
-
+        /* Product Action Row */
         .product-action-row {
             display: flex !important;
             align-items: center !important;
@@ -428,6 +525,7 @@
                 display: inline-flex !important;
             }
 
+        /* Cart Item */
         .cart-item {
             background: none;
             border-radius: 6px;
@@ -468,6 +566,7 @@
             border-radius: 4px;
         }
 
+        /* Social Buttons */
         .btn-social {
             width: 40px;
             height: 40px;
@@ -484,91 +583,26 @@
                 box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             }
 
-        .footer {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
-        }
-
-            .footer .btn-link {
-                color: rgba(255,255,255,0.8);
-                text-decoration: none;
-                padding: 0.25rem 0;
-                display: block;
-                transition: color 0.3s ease;
-            }
-
-                .footer .btn-link:hover {
-                    color: #7ab142;
-                    text-decoration: none;
-                }
-        /* Enhanced Navbar Styling */
-        .navbar .nav-link {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #444 !important;
-            padding: 10px 16px !important;
+        /* Footer Links - Override for better styling */
+        .footer .btn-link {
+            color: rgba(255,255,255,0.8) !important;
+            text-decoration: none;
+            padding: 0.5rem 0;
+            display: block;
             transition: all 0.3s ease;
-            border-radius: 6px;
-            margin: 0 2px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
+            position: relative;
+            padding-left: 0;
+            background: transparent !important;
         }
 
-        /* Dropdown arrow alignment - force inline */
-        .navbar .dropdown-toggle {
-            display: inline-flex !important;
-            align-items: center !important;
-            flex-wrap: nowrap !important;
-        }
-
-            .navbar .dropdown-toggle::after {
-                display: inline-block !important;
-                vertical-align: middle !important;
-                margin-left: 8px !important;
-                font-size: 0.7rem !important;
-                flex-shrink: 0 !important;
+            .footer .btn-link:hover {
+                color: #689F38 !important;
+                text-decoration: none;
+                padding-left: 10px;
+                background: transparent !important;
             }
 
-        .navbar .nav-link:hover {
-            color: #198754 !important;
-            background-color: rgba(25, 135, 84, 0.08);
-            transform: translateY(-1px);
-        }
-
-        .navbar .nav-link.active {
-            color: #9abf69 !important;
-            background-color: rgba(25, 135, 84, 0.1);
-        }
-        .navbar .dropdown-toggle::after {   
-            content: none  !important;
-        }
-        .fa-ellipsis-h:before {    
-            content: none  !important;
-        }
-
-        /* Dropdown styling */
-        .dropdown-menu {
-            border-radius: 10px;
-            border: none;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            padding: 8px 0;
-            margin-top: 8px;
-        }
-
-        .dropdown-item {
-            font-weight: 500;
-            padding: 10px 20px;
-            transition: all 0.2s ease;
-            color: #444;
-        }
-
-            .dropdown-item:hover {
-                background-color: #f8f9fa;
-                color: #198754;
-                transform: translateX(5px);
-            }
-
-        /* Action buttons styling */
+        /* Action Buttons */
         .action-btn {
             font-size: 0.85rem;
             font-weight: 600;
@@ -587,9 +621,8 @@
             }
 
         .btn-track {
-            background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
+            background: linear-gradient(135deg, #689F38 0%, #558B2F 100%);
             color: white !important;
-            border: none;
             border-radius: 25px;
             padding: 10px 20px;
             font-weight: 600;
@@ -606,32 +639,30 @@
             justify-content: center;
         }
 
-        .btn-track::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
+            .btn-track::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+                transition: left 0.5s;
+            }
 
-        .btn-track:hover::before {
-            left: 100%;
-        }
+            .btn-track:hover::before {
+                left: 100%;
+            }
 
-        .btn-track:hover {
-            background: linear-gradient(135deg, #689F38 0%, #558B2F 100%);
-            color: white !important;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(139, 195, 74, 0.4);
-        }
+            .btn-track:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(139, 195, 74, 0.4);
+            }
 
-        .btn-track i {
-            margin-right: 8px;
-            font-size: 16px;
-        }
+            .btn-track i {
+                margin-right: 8px;
+                font-size: 16px;
+            }
 
         .btn-admin {
             background: linear-gradient(135deg, #007bff, #6610f2);
@@ -644,408 +675,134 @@
                 color: white !important;
             }
 
-        /* Cart icon styling - Beautiful Green Design */
-        .cart-btn {
-            border: none;
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            color: #444;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(139, 195, 74, 0.3);
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(135deg, #689F38 0%, #558B2F 100%);
-        }
-
-        .cart-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .cart-btn:hover::before {
-            left: 100%;
-        }
-
-        .cart-btn:hover {
-            background: linear-gradient(135deg, #689F38 0%, #558B2F 100%);
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(139, 195, 74, 0.4);
-        }
-
-        .cart-btn i {
-            color: white !important;
-            font-size: 18px;
-            z-index: 2;
-        }
-
-        /* Ensure navbar is always visible */
-        .navbar {
-            display: block !important;
-            visibility: visible !important;
-            z-index: 1050 !important;
-        }
-
-        .navbar-toggler {
-            display: block !important;
-            border: 1px solid #ddd !important;
-            padding: 4px 8px !important;
-        }
-
-        .navbar-brand {
-            display: block !important;
-        }
-
-        /* Mobile-specific styling */
-        @@media (max-width: 991.98px) {
-            .navbar {
-                padding: 8px 0 !important;
-                min-height: 60px !important;
-            }
-
-            .navbar-toggler {
-                display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-            }
-
-            .navbar-nav {
-                padding: 15px 0;
-                border-top: 1px solid #eee;
-                margin-top: 10px;
-                width: 100%;
-            }
-
-            .nav-item {
-                margin: 5px 0;
-                width: 100%;
-            }
-
-            .action-btn {
-                width: 100%;
-                margin: 0;
-                padding: 16px 24px;
-                justify-content: flex-start;
-                border-radius: 0;
-                height: auto;
-                background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
-                border: none;
-                border-bottom: 1px solid #f1f3f4;
-                color: white;
-                font-weight: 600;
-                text-transform: none;
-                letter-spacing: normal;
-                box-shadow: none;
-                transition: all 0.3s ease;
-                display: flex;
-                align-items: center;
-            }
-
-            .action-btn:hover {
-                background: linear-gradient(135deg, #689F38 0%, #558B2F 100%);
-                color: white;
-                padding-left: 32px;
-                transform: translateX(4px);
-                box-shadow: none;
-            }
-
-            .cart-btn {
-                width: 100%;
-                margin: 0;
-                padding: 4px;
-                color: #444 !important;
-                font-size: 16px;
-                border-radius: 0;
-                height: auto;
-                border: none;
-                border-bottom: 1px solid #f1f3f4;
-                color: white;
-                font-weight: 600;
-                box-shadow: none;
-                transition: all 0.3s ease;
-                display: flex;
-                align-items: center;
-                justify-content: flex-start;
-            }
-
-            .cart-btn:hover {
-                background: linear-gradient(135deg, #689F38 0%, #558B2F 100%);
-                color: white;
-                padding-left: 32px;
-                transform: translateX(4px);
-                box-shadow: none;
-            }
-
-            .navbar .nav-link {
-                padding: 12px 0 !important;
-                margin: 0;
-                border-radius: 0;
-                border-bottom: 1px solid #f8f9fa;
-                width: 100%;
-            }
-
-            .dropdown-menu {
-                border: none;
-                box-shadow: none;
-                background: #f8f9fa;
-                margin-left: 20px;
-                border-radius: 0;
-                position: static !important;
-                transform: none !important;
-                width: 100%;
-            }
-        }
-
-        .cart-icon-float {
-            position: absolute !important;
-            right: 60px !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-            z-index: 1000;
-            background: white;
-            padding: 10px 12px !important;
-            border-radius: 50% !important;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            border: none;
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        /* Hide on desktop */
-        @@media (min-width: 992px) {
-            .cart-icon-float{
-            display: none !important;
-        }
     </style>
 </head>
 <body>
-    <!-- Spinner Start -->
+    <!-- Spinner -->
     <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
     </div>
-    <!-- Spinner End -->
-    <!-- Navbar Start -->
-    <div class="container-fluid sticky-top shadow-sm" style="display: block !important; visibility: visible !important; background: rgba(255, 255, 255, 0.95) !important; backdrop-filter: blur(10px) !important;">
+
+    <!-- Navbar -->
+    <div class="container-fluid sticky-top shadow-sm" style="background: rgba(255, 255, 255, 0.95) !important; backdrop-filter: blur(10px) !important;">
         <div class="container">
-            <nav class="navbar navbar-expand-lg navbar-light py-2" style="display: flex !important; visibility: visible !important; background: transparent !important;">
+            <nav class="navbar navbar-expand-lg navbar-light py-2">
                 <!-- Brand -->
-                <a asp-controller="Home" asp-action="Index" class="navbar-brand" style="display: block !important; padding: 0; margin: 0;">
-                    <img src="~/img/logo.png" alt="TEA House" class="logo" style="height: 65px; width: auto; max-width: 200px;">
+                <a asp-controller="Home" asp-action="Index" class="navbar-brand">
+                    <img src="~/img/logo.jpg" alt="TEA House" class="logo">
                 </a>
-                <button id="cart-icon-float" type="button" class="btn btn-sm p-0 cart-icon position-relative cart-icon-float">
-                    <i class="fa fa-shopping-cart"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count" 
-                    style="display: none; line-height: normal !important;margin-top: 10px; margin-left: -15px;">0</span>
-                </button>
-                <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon" ></span>
-                </button>
+
+                <!-- Right Controls -->
+                <div class="d-flex align-items-center ms-auto order-lg-3">
+                    <a id="cart-icon-float" href="/Cart/Index" class="btn btn-sm p-0 cart-icon position-relative d-lg-none" data-cart-count="0">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="position-absolute badge rounded-pill bg-danger cart-count" style="display: none;">0</span>
+                    </a>
+                    <!-- Desktop cart icon -->
+                    <!-- Mobile cart icon -->
+
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+
+
+
+
+
                 <!-- Navigation Menu -->
-                <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="collapse navbar-collapse order-lg-2" id="navbarCollapse">
                     <ul class="navbar-nav ms-auto align-items-lg-center">
-
-                        <!-- Main Navigation Links -->
                         <li class="nav-item">
-                            <a asp-controller="Home" asp-action="Index"
-                               class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home"
-                                                        && ViewContext.RouteData.Values["Action"]?.ToString() == "Index"
-                                                        ? "active" : "")">
-                                Home
-                            </a>
+                            <a asp-controller="Home" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">Home</a>
                         </li>
-
                         <li class="nav-item">
-                            <a asp-controller="Store" asp-action="Index"
-                               class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Store"
-                                                        && ViewContext.RouteData.Values["Action"]?.ToString() == "Index"
-                                                        ? "active" : "")">
-                                Products
-                            </a>
+                            <a asp-controller="Store" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Store" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">Products</a>
                         </li>
-
                         <li class="nav-item">
-                            <a asp-controller="Home" asp-action="About"
-                               class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home"
-                                                        && ViewContext.RouteData.Values["Action"]?.ToString() == "About"
-                                                        ? "active" : "")">
-                                About Us
-                            </a>
+                            <a asp-controller="About" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "About" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">About Us</a>
                         </li>
-
                         <li class="nav-item">
-                            <a asp-controller="Home" asp-action="Contact"
-                               class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home"
-                                                        && ViewContext.RouteData.Values["Action"]?.ToString() == "Contact"
-                                                        ? "active" : "")">
-                                Contact
-                            </a>
+                            <a asp-controller="Home" asp-action="Contact" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["Action"]?.ToString() == "Contact" ? "active" : "")">Contact Us</a>
                         </li>
-
-
-                        <!-- More Dropdown -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                                <i class="fas fa-ellipsis-h "></i><span>More</span>
+                                <span>More</span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li>
-                                    <a asp-controller="Home" asp-action="Index" asp-fragment="featured-article" class="dropdown-item">
-                                        Featured Article
-                                    </a>
-                                </li>
-                                <li>
-                                    <a asp-controller="Home" asp-action="Blog" class="dropdown-item">
-                                        Blog
-                                    </a>
-                                </li>
-                                <li>
-                                    <a asp-controller="Home" asp-action="Testimonial" class="dropdown-item">
-                                        Testimonials
-                                    </a>
-                                </li>
+                                <li><a asp-controller="Home" asp-action="Index" asp-fragment="featured-article" class="dropdown-item">Featured Article</a></li>
+                                <li><a asp-controller="Home" asp-action="Testimonial" class="dropdown-item">Testimonials</a></li>
                             </ul>
                         </li>
-
-                        <!-- Mobile Cart Button -->
                         <li class="nav-item d-lg-none">
-                            <button type="button" class="btn cart-btn position-relative" onclick="openCartModal()" style="background: white;">
-                                SHOPPING CART
-                                <span id="cart-count-mobile" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count" style="display:none;">0</span>
-                            </button>
-                        </li>
-
-                        <!-- Mobile Track Order Button -->
-                        <li class="nav-item d-lg-none">
-                            <a asp-controller="OrderTracking" asp-action="Track" class="btn" style="background-color: #9abf69; color: white; border-radius: 20px; padding: 8px 15px; border: none;">
-                                <i class="fas fa-shipping-fast me-2"></i>Track Order
+                            <a asp-controller="Cart" asp-action="Index" class="nav-link position-relative">
+                                Shopping Cart
+                                <span id="cart-count-mobile" class="position-absolute badge rounded-pill bg-danger cart-count" style="display: none;">0</span>
                             </a>
                         </li>
-
-                        <!-- Desktop Action Buttons -->
-                        <li class="nav-item ms-lg-3 d-none d-lg-block">
-                            <button type="button" class="btn cart-btn position-relative me-2" onclick="openCartModal()">
-                                <i class="fa fa-shopping-cart text-primary" style="margin-left: -9px;"></i>
-                                <span id="cart-count-desktop" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count"
-                                      style="padding: 4px;z-index: 3;margin-left: -25px;position: relative !important;">0</span>
-                            </button>
+                        <li class="nav-item d-lg-none">
+                            <a asp-controller="OrderTracking" asp-action="Track" class="nav-link">Track Order</a>
                         </li>
-
                         <li class="nav-item d-none d-lg-block">
-                            <a asp-controller="OrderTracking" asp-action="Track" class="btn" style="background-color: #198754; color: white; border-radius: 20px; padding: 8px 15px; border: none;">
-                                <i class="fas fa-shipping-fast me-1"></i>Track Order
-                            </a>
+                            <a asp-controller="OrderTracking" asp-action="Track" class="btn btn-track"><i class="fas fa-shipping-fast me-1"></i>Track Order</a>
                         </li>
-
                     </ul>
                 </div>
             </nav>
         </div>
     </div>
-    <!-- Navbar End -->
+
+    <!-- Main Content -->
     @RenderBody()
-
-
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
-
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/wow/wow.min.js"></script>
-    <script src="~/lib/easing/easing.min.js"></script>
-    <script src="~/lib/waypoints/waypoints.min.js"></script>
-    <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
-
-    <!-- Template Javascript -->
-    <script src="~/js/main.js"></script>
-    
-    <!-- Initialize Bootstrap Toasts -->
-    <script>
-        // Initialize Bootstrap tooltips and popovers
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-        
-        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-            return new bootstrap.Popover(popoverTriggerEl);
-        });
-    </script>
-    
-    <!-- Load cart.js after all dependencies are loaded -->
-    <script src="~/js/cart.js"></script>
-
-    @await RenderSectionAsync("Scripts", required: false)
 
     <!-- Quick Track Modal -->
     <div class="modal fade" id="quickTrackModal" tabindex="-1" aria-labelledby="quickTrackModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="quickTrackModalLabel">
-                        <i class="fa fa-shipping-fast me-2"></i>Quick Order Tracking
-                    </h5>
+                    <h5 class="modal-title" id="quickTrackModalLabel"><i class="fa fa-shipping-fast me-2"></i>Quick Order Tracking</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="quickTrackForm">
                         <div class="mb-3">
                             <label for="quickOrderNumber" class="form-label">Order Number</label>
-                            <input type="text" class="form-control" id="quickOrderNumber"
-                                   placeholder="Enter your order number (e.g., ORD-20240108-001)" required>
+                            <input type="text" class="form-control" id="quickOrderNumber" placeholder="Enter your order number (e.g., ORD-20240108-001)" required>
                             <div class="form-text">You can find your order number in the confirmation email or receipt.</div>
                         </div>
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-search me-2"></i>Track Order
-                            </button>
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-search me-2"></i>Track Order</button>
+                            Sponsorship
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a href="/Order/Track" class="btn btn-outline-primary">
-                        <i class="fa fa-external-link-alt me-2"></i>Full Tracking Page
-                    </a>
+                    <a href="/Order/Track" class="btn btn-outline-primary"><i class="fa fa-external-link-alt me-2"></i>Full Tracking Page</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer Start -->
+    <!-- Footer -->
     <div class="container-fluid bg-dark footer mt-5 py-5 wow fadeIn" data-wow-delay="0.1s" id="mainFooter">
-        <div class="container py-5">
+        <div class="container pt-0 pb-0">
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-primary mb-4">Our Office</h4>
-                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary me-3"></i>123 Street, New York, USA</p>
-                    <p class="mb-2"><i class="fa fa-phone-alt text-primary me-3"></i>+012 345 67890</p>
-                    <p class="mb-2"><i class="fa fa-envelope text-primary me-3"></i>info@example.com</p>
-                    <div class="d-flex pt-3" id="socialLinksContainer">
-                        <!-- Social links will be loaded here dynamically -->
-                    </div>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary me-3"></i>Shah Hamdan Shopping Complex Pampore J&K India</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt text-primary me-3"></i>+919796303791</p>
+                    <p class="mb-2"><i class="fa fa-envelope text-primary me-3"></i>herbalformulator5@gmail.com</p>
+                    <div class="d-flex pt-3" id="socialLinksContainer"></div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-primary mb-4">Quick Links</h4>
-                    <a class="btn btn-link" asp-controller="Home" asp-action="About">About Us</a>
+                    <a class="btn btn-link" asp-controller="About" asp-action="Index">About Us</a>
                     <a class="btn btn-link" asp-controller="Home" asp-action="Contact">Contact Us</a>
-                    <a class="btn btn-link" asp-controller="Home" asp-action="Services">Our Services</a>
-                    <a class="btn btn-link" href="#">Terms & Condition</a>
-                    <a class="btn btn-link" href="#">Support</a>
+                    <a class="btn btn-link" asp-controller="Store" asp-action="Index">Our Products</a>
+                    <a class="btn btn-link" asp-controller="OrderTracking" asp-action="Track">Track Order</a>
+                    <a class="btn btn-link" asp-controller="Home" asp-action="Testimonial">Testimonials</a>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-primary mb-4">Business Hours</h4>
@@ -1070,74 +827,207 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                        &copy; <a href="#">TEA House</a>, All Right Reserved.
+                        &copy; 2025 <a href="#">Herbal Formulator</a>, All Right Reserved.
                     </div>
                     <div class="col-md-6 text-center text-md-end">
-                        Designed By <a href="https://htmlcodex.com">HTML Codex</a>
+                        Designed and Developed By <a href="#">Herbal Formulator</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Footer End -->
+
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
 
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/wow/wow.min.js"></script>
+    <script src="~/lib/easing/easing.min.js"></script>
+    <script src="~/lib/waypoints/waypoints.min.js"></script>
+    <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="~/js/main.js"></script>
+    <script src="~/js/cart.js"></script>
+
+    <!-- Bootstrap Tooltips and Popovers -->
     <script>
-        // Quick Track Form Handler
-        document.getElementById('quickTrackForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const orderNumber = document.getElementById('quickOrderNumber').value.trim();
+                function updateCartCount(count) {
+            const cartElements = document.querySelectorAll('.cart-count');
+            console.log('Updating cart count to:', count, 'Found elements:', cartElements.length);
 
-            if (orderNumber) {
-                // Redirect to tracking page with order number
-                window.location.href = '/Order/Track?orderNumber=' + encodeURIComponent(orderNumber);
-            } else {
-                alert('Please enter an order number.');
-            }
-        });
+            cartElements.forEach(el => {
+                el.textContent = count;
+                // Hide the badge completely when count is 0
+                if (count === 0) {
+                    el.style.display = 'none';
+                } else {
+                    el.style.display = 'flex';
+                }
+            });
 
-        // Auto-focus on order number input when modal opens
-        document.getElementById('quickTrackModal').addEventListener('shown.bs.modal', function () {
-            document.getElementById('quickOrderNumber').focus();
-        });
-
-        // Load Social Links
-        function loadSocialLinks() {
-            fetch('/Home/GetSocialLinks')
-                .then(response => response.json())
-                .then(data => {
-                    const container = document.getElementById('socialLinksContainer');
-                    if (container && data && data.length > 0) {
-                        container.innerHTML = data.map(link =>
-                            `<a class="btn btn-square btn-primary rounded-circle me-2" href="${link.url}" target="_blank" title="${link.displayName}">
-                                <i class="${link.iconClass}"></i>
-                            </a>`
-                        ).join('');
-                    }
-                })
-                .catch(error => {
-                    console.log('Social links not available:', error);
-                    // Fallback to static social links for Instagram, Facebook, and Twitter
-                    const container = document.getElementById('socialLinksContainer');
-                    if (container) {
-                        container.innerHTML = `
-                            <a class="btn btn-square btn-primary rounded-circle me-2" href="https://twitter.com/herbaltea" target="_blank" title="Twitter">
-                                <i class="fab fa-twitter"></i>
-                            </a>
-                            <a class="btn btn-square btn-primary rounded-circle me-2" href="https://facebook.com/herbaltea" target="_blank" title="Facebook">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
-                            <a class="btn btn-square btn-primary rounded-circle me-2" href="https://instagram.com/herbaltea" target="_blank" title="Instagram">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                        `;
+            // Force a re-render by triggering a small delay
+            setTimeout(() => {
+                const cartElements2 = document.querySelectorAll('.cart-count');
+                cartElements2.forEach(el => {
+                    if (count === 0) {
+                        el.style.display = 'none';
+                    } else {
+                        el.style.display = 'flex';
                     }
                 });
+            }, 10);
         }
 
-        // Load social links when page loads
+        // Function to check cart state and update badge
+        function checkCartState() {
+            try {
+                // Get cart from localStorage or use empty array
+                const cartData = localStorage.getItem('cart');
+                const cart = cartData ? JSON.parse(cartData) : [];
+                const count = Array.isArray(cart) ? cart.length : 0;
+
+                console.log('Cart state checked - Count:', count, 'Cart:', cart);
+                updateCartCount(count);
+
+                // Also update the data attribute on cart icon
+                const cartIcon = document.getElementById('cart-icon-float');
+                if (cartIcon) {
+                    cartIcon.setAttribute('data-cart-count', count);
+                }
+            } catch (error) {
+                console.error('Error checking cart state:', error);
+                updateCartCount(0);
+            }
+        }
+
+
+
+        // Example: when adding a product to cart
+        function addToCart(product) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push(product);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount(cart.length);
+        }
+
+        // Function to remove item from cart
+        function removeFromCart(index) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount(cart.length);
+        }
+
+        // Function to clear cart
+        function clearCart() {
+            localStorage.removeItem('cart');
+            updateCartCount(0);
+        }
+
+        // Function to test cart functionality
+        function testCart() {
+            const testProduct = {
+                id: 'test-' + Date.now(),
+                name: 'Test Product',
+                price: 10.99,
+                quantity: 1
+            };
+            addToCart(testProduct);
+            console.log('Test product added to cart');
+        }
+
+        // Function to debug cart state
+        function debugCart() {
+            const cartData = localStorage.getItem('cart');
+            console.log('Current cart data:', cartData);
+            const cart = cartData ? JSON.parse(cartData) : [];
+            console.log('Parsed cart:', cart);
+            console.log('Cart length:', cart.length);
+            console.log('Cart elements found:', document.querySelectorAll('.cart-count').length);
+        }
+
+        // Check cart state immediately when script loads
+        checkCartState();
+
+        // Also check cart state when window loads
+        window.addEventListener('load', function() {
+            setTimeout(checkCartState, 100);
+        });
+
+        // Force check cart state after a short delay to ensure DOM is ready
+        setTimeout(checkCartState, 50);
+
+        // Additional checks to ensure cart state is always correct
+        setTimeout(checkCartState, 200);
+        setTimeout(checkCartState, 500);
+        setTimeout(checkCartState, 1000);
+
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize cart count display
+            checkCartState();
+
+            // Initialize Tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+                new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Initialize Popovers
+            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+            popoverTriggerList.forEach(function (popoverTriggerEl) {
+                new bootstrap.Popover(popoverTriggerEl);
+            });
+
+            // Quick Track Form Handler
+            document.getElementById('quickTrackForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const orderNumber = document.getElementById('quickOrderNumber').value.trim();
+                if (orderNumber) {
+                    window.location.href = '/Order/Track?orderNumber=' + encodeURIComponent(orderNumber);
+                } else {
+                    alert('Please enter an order number.');
+                }
+            });
+
+            // Auto-focus on order number input when modal opens
+            document.getElementById('quickTrackModal').addEventListener('shown.bs.modal', function () {
+                document.getElementById('quickOrderNumber').focus();
+            });
+
+            // Load Social Links
+            function loadSocialLinks() {
+                fetch('/Home/GetSocialLinks')
+                    .then(response => response.json())
+                    .then(data => {
+                        const container = document.getElementById('socialLinksContainer');
+                        if (container && data && data.length > 0) {
+                            container.innerHTML = data.map(link =>
+                                `<a class="btn btn-square btn-primary rounded-circle me-2" href="${link.url}" target="_blank" title="${link.displayName}">
+                                    <i class="${link.iconClass}"></i>
+                                </a>`
+                            ).join('');
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Social links not available:', error);
+                        const container = document.getElementById('socialLinksContainer');
+                        if (container) {
+                            container.innerHTML = `
+                                <a class="btn btn-square btn-primary rounded-circle me-2" href="https://twitter.com/herbaltea" target="_blank" title="Twitter">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a class="btn btn-square btn-primary rounded-circle me-2" href="https://facebook.com/herbaltea" target="_blank" title="Facebook">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a class="btn btn-square btn-primary rounded-circle me-2" href="https://instagram.com/herbaltea" target="_blank" title="Instagram">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            `;
+                        }
+                    });
+            }
+
             loadSocialLinks();
 
             // Fix duplicate footer issue
@@ -1148,7 +1038,60 @@
                     footers[i].remove();
                 }
             }
+
+            // Listen for storage changes (when cart is modified from other pages)
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'cart') {
+                    checkCartState();
+                }
+            });
+
+            // Check cart state periodically to ensure badge is always correct
+            setInterval(checkCartState, 500);
+
+            // Also check cart state when page becomes visible (for better cross-page updates)
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    setTimeout(checkCartState, 100);
+                }
+            });
+
+            // Check cart state on window focus (when user returns to tab)
+            window.addEventListener('focus', function() {
+                setTimeout(checkCartState, 100);
+            });
+
+            // Check cart state when navigating between pages
+            window.addEventListener('pageshow', function() {
+                setTimeout(checkCartState, 200);
+            });
+
+            // Check cart state when page is restored from cache
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted) {
+                    setTimeout(checkCartState, 300);
+                }
+            });
+
+            // Additional event listeners for better cross-page updates
+            window.addEventListener('beforeunload', function() {
+                // Store current cart state before leaving page
+                const cartData = localStorage.getItem('cart');
+                if (cartData) {
+                    sessionStorage.setItem('lastCartState', cartData);
+                }
+            });
+
+            // Check if we have stored cart state from previous page
+            const lastCartState = sessionStorage.getItem('lastCartState');
+            if (lastCartState) {
+                localStorage.setItem('cart', lastCartState);
+                sessionStorage.removeItem('lastCartState');
+                setTimeout(checkCartState, 100);
+            }
         });
     </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
-</html> 
+</html>

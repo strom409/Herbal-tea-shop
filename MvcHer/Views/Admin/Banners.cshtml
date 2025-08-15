@@ -4,6 +4,168 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<style>
+    /* Responsive Banners Styles */
+    @@media (max-width: 991.98px) {
+        .card-header .d-flex {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .btn-primary {
+            width: 100%;
+        }
+    }
+    
+    @@media (max-width: 767.98px) {
+        .h3 {
+            font-size: 1.5rem;
+        }
+        
+        .card-body {
+            padding: 1rem;
+        }
+        
+        .table-responsive {
+            font-size: 0.875rem;
+        }
+        
+        .table th, .table td {
+            padding: 0.5rem 0.25rem;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+        
+        .badge {
+            font-size: 0.7rem;
+            padding: 0.375rem 0.5rem;
+        }
+        
+        .img-thumbnail {
+            width: 60px !important;
+            height: 40px !important;
+        }
+        
+        .bg-light {
+            width: 60px !important;
+            height: 40px !important;
+        }
+    }
+    
+    @@media (max-width: 575.98px) {
+        .card-body {
+            padding: 0.75rem;
+        }
+        
+        .table-responsive {
+            font-size: 0.8rem;
+        }
+        
+        .table th, .table td {
+            padding: 0.375rem 0.125rem;
+        }
+        
+        .btn-sm {
+            padding: 0.2rem 0.4rem;
+            font-size: 0.7rem;
+        }
+        
+        .btn-sm i {
+            font-size: 0.8rem;
+        }
+        
+        .badge {
+            font-size: 0.65rem;
+            padding: 0.25rem 0.375rem;
+        }
+        
+        .img-thumbnail {
+            width: 50px !important;
+            height: 35px !important;
+        }
+        
+        .bg-light {
+            width: 50px !important;
+            height: 35px !important;
+        }
+        
+        .h3 {
+            font-size: 1.25rem;
+        }
+    }
+    
+    /* Banner image responsive */
+    .banner-image {
+        transition: transform 0.2s ease;
+        border-radius: 0.375rem;
+    }
+    
+    .banner-image:hover {
+        transform: scale(1.05);
+    }
+    
+    @@media (max-width: 767.98px) {
+        .banner-image:hover {
+            transform: none;
+        }
+    }
+    
+    /* Table responsive improvements */
+    .table-responsive {
+        border-radius: 0.375rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    
+    /* Action buttons responsive */
+    .btn-group {
+        display: flex;
+        gap: 0.25rem;
+        flex-wrap: wrap;
+    }
+    
+    @@media (max-width: 575.98px) {
+        .btn-group {
+            flex-direction: column;
+            gap: 0.125rem;
+        }
+        
+        .btn-group .btn {
+            width: 100%;
+            margin: 0;
+        }
+    }
+    
+    /* Banner content responsive */
+    .banner-content {
+        max-width: 100%;
+        word-wrap: break-word;
+    }
+    
+    @@media (max-width: 767.98px) {
+        .banner-content {
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+        
+        .banner-subtitle {
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+    
+    @@media (max-width: 575.98px) {
+        .banner-subtitle {
+            max-width: 100px;
+        }
+    }
+</style>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">

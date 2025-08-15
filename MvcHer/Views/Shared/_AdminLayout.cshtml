@@ -16,6 +16,9 @@
 
     <!-- Bootstrap CSS -->
     <link href="~/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Admin Responsive CSS -->
+    <link href="~/css/admin-responsive.css" rel="stylesheet">
 
     <style>
         body {
@@ -34,16 +37,84 @@
             background: linear-gradient(180deg, #7ab142 0%, #5a8a32 100%);
             width: 16.66667%;
             min-width: 200px;
+            /* Add scrolling support */
+            overflow-y: auto;
+            transition: transform 0.3s ease;
         }
+
+        /* Mobile sidebar toggle */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1050;
+            background: #7ab142;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Responsive sidebar */
+        @@media (max-width: 991.98px) {
+            .sidebar {
+                /* Open from right to match right-side hamburger */
+                left: auto;
+                right: 0;
+                transform: translateX(100%);
+                width: 280px;
+                min-width: 280px;
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .content-wrapper {
+                margin-left: 0;
+                padding: 20px 15px;
+                margin-top: 60px;
+            }
+
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1040;
+                display: none;
+            }
+
+            .overlay.show {
+                display: block;
+            }
+        }
+
+        @@media (max-width: 767.98px) {
+            .content-wrapper {
+                padding: 15px 10px;
+            }
+        }
+
 
         .sidebar-sticky {
             position: relative;
             top: 0;
-            height: calc(100vh - 48px);
             padding-top: .5rem;
             overflow-x: hidden;
-            overflow-y: auto;
+            /* Remove fixed height to allow scrolling in parent */
+            height: auto;
         }
+
 
         .sidebar .nav-link {
             font-weight: 500;
@@ -93,11 +164,43 @@
             margin-left: 16.66667%;
             padding: 20px;
             min-margin-left: 200px;
+            transition: margin-left 0.3s ease;
         }
 
         .navbar {
             background: #fff !important;
             box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+        }
+
+        /* Keep admin header dark so the hamburger contrasts well */
+        .navbar.navbar-dark {
+            background: #212529 !important;
+        }
+
+        /* Improve toggler visibility on dark navbar */
+        .navbar.navbar-dark .navbar-toggler {
+            border: 2px solid #88b44e;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.08);
+            padding-right: 10px;
+        }
+
+        .navbar.navbar-dark .navbar-toggler .navbar-toggler-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            background-size: 1.25rem 1.25rem;
+            /* default to white bars for maximum contrast */
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        .navbar.navbar-dark .navbar-toggler:hover {
+            background-color: #88b44e;
+            border-color: #88b44e;
+        }
+
+        .navbar.navbar-dark .navbar-toggler:hover .navbar-toggler-icon {
+            /* white bars remain visible on green */
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
 
         .card {
@@ -118,25 +221,86 @@
         }
 
         .logout-btn {
-            background: rgba(255, 255, 255, 0.1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 0.375rem 0.75rem;
-            border-radius: 0.375rem;
+            color: #88b44e !important;
             transition: all 0.3s ease;
         }
 
+        .logout-btn i {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
         .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            background: #88b44e;
+            border-color: #88b44e;
+            color: #ffffff !important;
         }
 
         @@media (max-width: 767.98px) {
             .sidebar {
-                top: 5rem;
+                top: 0; /* remove gap at top when open */
+                z-index: 1055; /* above content and near navbar */
             }
             .content-wrapper {
                 margin-left: 0;
+            }
+        }
+
+        /* Fix mobile navbar brand/toggler overlap */
+        @@media (max-width: 991.98px) {
+            .navbar.navbar-dark.sticky-top {
+                position: relative;
+                min-height: 56px;
+            }
+
+            .navbar.navbar-dark .navbar-toggler {
+                position: absolute;
+                right: 10px;
+                top: 8px;
+                left: auto;
+                z-index: 1051;
+            }
+
+            .navbar.navbar-dark .navbar-brand {
+                padding-right: 64px; /* space for toggler */
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            /* Keep logout visible and placed just left of the toggler */
+            .navbar.navbar-dark .navbar-nav {
+                position: absolute;
+                right: 64px;
+                top: 8px;
+                padding-right: 0;
+            }
+
+            /* Slightly compact logout button for mobile */
+            .navbar.navbar-dark .logout-btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.9rem;
+                line-height: 1.2;
+            }
+
+            /* Smooth slide-in from right for the sidebar */
+            #sidebarMenu.collapse:not(.show) {
+                display: block;
+                visibility: hidden;
+            }
+            #sidebarMenu.collapse.show {
+                display: block;
+                visibility: visible;
+                transition: transform 0.3s ease;
             }
         }
     </style>
@@ -144,16 +308,16 @@
 <body>
     <!-- Top Navigation -->
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">
-            <i class="fas fa-leaf me-2"></i>TEA House Admin
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/Admin">
+            <i class="fas fa-leaf me-2"></i>Herbal Formulator Admin
         </a>
         <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="navbar-nav">
             <div class="nav-item text-nowrap">
-                <a class="nav-link px-3 logout-btn" asp-controller="Admin" asp-action="Logout">
-                    <i class="fas fa-sign-out-alt me-1"></i>Logout
+                <a class="nav-link logout-btn" asp-controller="Admin" asp-action="Logout" title="Logout" aria-label="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
                 </a>
             </div>
         </div>
@@ -166,7 +330,7 @@
                 <div class="position-sticky pt-3">
                     <div class="user-info text-center mb-4">
                         <div class="mb-2">
-                            <i class="fas fa-user-circle fa-3x"></i>
+                            <i class="fas fa-user-circle fa-3x" href="/Admin"></i>
                         </div>
                         <div>Welcome, <strong>@Context.Session.GetString("AdminUser")</strong></div>
                         <small>Administrator</small>
@@ -213,11 +377,7 @@
                                 <i class="fas fa-share-alt me-2"></i>Social Links
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Users" ? "active" : "")" asp-controller="Admin" asp-action="Users">
-                                <i class="fas fa-users me-2"></i>Customers
-                            </a>
-                        </li>
+                       
                         <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Settings" ? "active" : "")" asp-controller="Admin" asp-action="Settings">
                                 <i class="fas fa-cog me-2"></i>Settings
@@ -225,26 +385,6 @@
                         </li>
                     </ul>
 
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span style="color: rgba(255,255,255,0.6);">Reports</span>
-                    </h6>
-                    <ul class="nav flex-column mb-2">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-chart-line me-2"></i>Sales Report
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-chart-pie me-2"></i>Analytics
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-file-export me-2"></i>Export Data
-                            </a>
-                        </li>
-                    </ul>
 
                     <div class="mt-4 px-3">
                         <a asp-controller="Home" asp-action="Index" class="btn btn-outline-light btn-sm w-100">
@@ -264,6 +404,56 @@
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Mobile sidebar functionality - use Bootstrap collapse API for reliable toggle
+        $(document).ready(function() {
+            var $sidebar = $('#sidebarMenu');
+            var $toggler = $('.navbar-toggler');
+
+            // Ensure clicking the toggler triggers open/close consistently
+            $toggler.on('click', function(e) {
+                e.preventDefault();
+                $sidebar.toggleClass('show');
+                $('body').toggleClass('sidebar-open', $sidebar.hasClass('show'));
+            });
+
+            // Close when clicking outside
+            $(document).on('click', function(e) {
+                if ($(window).width() <= 991.98) {
+                    if (!$(e.target).closest('#sidebarMenu, .navbar-toggler').length) {
+                        $sidebar.removeClass('show');
+                        $('body').removeClass('sidebar-open');
+                    }
+                }
+            });
+
+            // Close on escape
+            $(document).on('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    $sidebar.removeClass('show');
+                    $('body').removeClass('sidebar-open');
+                }
+            });
+
+            // Handle window resize
+            $(window).on('resize', function() {
+                if ($(window).width() > 991.98) {
+                    $sidebar.removeClass('show');
+                    $('body').removeClass('sidebar-open');
+                }
+            });
+
+            // Add active class to current nav item
+            var currentAction = '@ViewContext.RouteData.Values["Action"]';
+            $('.nav-link').each(function() {
+                var linkAction = $(this).attr('asp-action');
+                if (linkAction === currentAction) {
+                    $(this).addClass('active');
+                }
+            });
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Herbal Formulator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom animations */
+        .faq-answer {
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+        }
+
+            .faq-answer.hidden {
+                max-height: 0;
+                opacity: 0;
+                overflow: hidden;
+            }
+
+            .faq-answer.visible {
+                max-height: 500px; /* Adjust based on content */
+                opacity: 1;
+            }
+
+        .faq-question:hover {
+            background-color: #f1f5f9;
+        }
+
+        .rotate-icon {
+            transition: transform 0.3s ease;
+        }
+
+            .rotate-icon.active {
+                transform: rotate(180deg);
+            }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-[#8BC34A] to-[#689F38] text-white py-12">
+            <div class="container mx-auto px-4">
+                <h1 class="text-4xl font-bold text-center">Frequently Asked Questions</h1>
+                <p class="text-center mt-2 text-lg">Find answers to common questions about our premium teas</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-12 flex-grow">
+            <div class="max-w-3xl mx-auto">
+                <!-- FAQ Item -->
+                <div class="faq-item mb-4 bg-white rounded-lg shadow-md">
+                    <div class="faq-question flex justify-between items-center p-4 cursor-pointer" onclick="toggleFAQ(this)">
+                        <h2 class="text-lg font-semibold text-gray-800">What makes Herbal Formulator teas special?</h2>
+                        <svg class="w-6 h-6 rotate-icon text-[#8BC34A]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer hidden px-4 pb-4">
+                        <p class="text-gray-600">Herbal Formulator teas are handcrafted from organic, sustainably sourced herbs and botanicals. Our unique blends are designed to deliver exceptional flavor and wellness benefits, using traditional methods to preserve natural aromas and properties.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item -->
+                <div class="faq-item mb-4 bg-white rounded-lg shadow-md">
+                    <div class="faq-question flex justify-between items-center p-4 cursor-pointer" onclick="toggleFAQ(this)">
+                        <h2 class="text-lg font-semibold text-gray-800">How should I brew your teas?</h2>
+                        <svg class="w-6 h-6 rotate-icon text-[#8BC34A]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer hidden px-4 pb-4">
+                        <p class="text-gray-600">For the best experience, use fresh water heated to 85-95°C (185-203°F) for most teas. Steep 1-2 teaspoons of tea per cup for 3-5 minutes, adjusting to taste. Herbal teas may require longer steeping for full flavor.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item -->
+                <div class="faq-item mb-4 bg-white rounded-lg shadow-md">
+                    <div class="faq-question flex justify-between items-center p-4 cursor-pointer" onclick="toggleFAQ(this)">
+                        <h2 class="text-lg font-semibold text-gray-800">Are your teas organic and safe?</h2>
+                        <svg class="w-6 h-6 rotate-icon text-[#8BC34A]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer hidden px-4 pb-4">
+                        <p class="text-gray-600">Yes, all Herbal Formulator teas are 100% organic, non-GMO, and free from harmful pesticides. We source from trusted farms and test each batch to ensure safety and quality.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item -->
+                <div class="faq-item mb-4 bg-white rounded-lg shadow-md">
+                    <div class="faq-question flex justify-between items-center p-4 cursor-pointer" onclick="toggleFAQ(this)">
+                        <h2 class="text-lg font-semibold text-gray-800">Do you ship internationally?</h2>
+                        <svg class="w-6 h-6 rotate-icon text-[#8BC34A]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer hidden px-4 pb-4">
+                        <p class="text-gray-600">Yes, we ship to many countries worldwide. Shipping costs and times vary by location. Check our <a href="@Url.Action("Index", "Store")" class="text-[#8BC34A] underline hover:text-[#689F38]">store page</a> for details or contact us at herbalformulator5@gmail.com.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item -->
+                <div class="faq-item mb-4 bg-white rounded-lg shadow-md">
+                    <div class="faq-question flex justify-between items-center p-4 cursor-pointer" onclick="toggleFAQ(this)">
+                        <h2 class="text-lg font-semibold text-gray-800">Can I subscribe to regular tea deliveries?</h2>
+                        <svg class="w-6 h-6 rotate-icon text-[#8BC34A]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer hidden px-4 pb-4">
+                        <p class="text-gray-600">Yes, we offer a subscription service for regular tea deliveries. You can choose from monthly or quarterly plans and customize your tea selection. Visit our <a href="@Url.Action("Subscription", "Store")" class="text-[#8BC34A] underline hover:text-[#689F38]">subscription page</a> to learn more.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item -->
+                <div class="faq-item mb-4 bg-white rounded-lg shadow-md">
+                    <div class="faq-question flex justify-between items-center p-4 cursor-pointer" onclick="toggleFAQ(this)">
+                        <h2 class="text-lg font-semibold text-gray-800">Are your teas suitable for specific dietary needs?</h2>
+                        <svg class="w-6 h-6 rotate-icon text-[#8BC34A]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer hidden px-4 pb-4">
+                        <p class="text-gray-600">Our teas are naturally gluten-free, vegan, and free from common allergens like nuts and dairy. However, always check the product description for specific blends, as some may include ingredients like honey or spices that could affect certain diets. Contact us at herbalformulator5@gmail.com for detailed allergen information.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item -->
+                <div class="faq-item mb-4 bg-white rounded-lg shadow-md">
+                    <div class="faq-question flex justify-between items-center p-4 cursor-pointer" onclick="toggleFAQ(this)">
+                        <h2 class="text-lg font-semibold text-gray-800">How do you ensure sustainable sourcing?</h2>
+                        <svg class="w-6 h-6 rotate-icon text-[#8BC34A]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer hidden px-4 pb-4">
+                        <p class="text-gray-600">We partner with ethical farms that prioritize sustainable practices, including fair trade and eco-friendly cultivation methods. Our packaging is also recyclable, and we work to minimize our environmental footprint throughout the supply chain.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item -->
+                <div class="faq-item mb-4 bg-white rounded-lg shadow-md">
+                    <div class="faq-question flex justify-between items-center p-4 cursor-pointer" onclick="toggleFAQ(this)">
+                        <h2 class="text-lg font-semibold text-gray-800">What is your return policy?</h2>
+                        <svg class="w-6 h-6 rotate-icon text-[#8BC34A]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer hidden px-4 pb-4">
+                        <p class="text-gray-600">We offer a 30-day return policy for unopened products. If you're not satisfied, please contact us at herbalformulator5@gmail.com to arrange a return or exchange. Shipping costs for returns are the responsibility of the customer, unless the product is defective.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript for FAQ accordion -->
+    <script>
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('.rotate-icon');
+
+            // Toggle visibility
+            answer.classList.toggle('hidden');
+            answer.classList.toggle('visible');
+            icon.classList.toggle('active');
+
+            // Close other open FAQs
+            document.querySelectorAll('.faq-answer').forEach(item => {
+                if (item !== answer) {
+                    item.classList.add('hidden');
+                    item.classList.remove('visible');
+                }
+            });
+            document.querySelectorAll('.rotate-icon').forEach(item => {
+                if (item !== icon) {
+                    item.classList.remove('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

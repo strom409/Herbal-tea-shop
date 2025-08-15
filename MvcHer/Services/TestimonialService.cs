@@ -20,7 +20,7 @@ namespace MvcHer.Services
             try
             {
                 // Temporarily show all testimonials to debug the issue
-                var testimonials = await _context.Testimonials
+                var testimonials = await _context.Testimonials.Where(t => t.IsActive == true)
                     .OrderByDescending(t => t.CreatedAt)
                     .ToListAsync();
                 

@@ -446,10 +446,10 @@
                 background: #e8f5e9 !important; /* Light green on hover */
             }
 
-    .tea-info-section :hover {
+    .tea-info-section:hover {
                 background: #e8f5e9 !important; /* Light green on hover */
             }
-              .tea-info-section :hover {
+              .tea-info-section:hover {
                 background: #e8f5e9 !important; /* Light green on hover */
             }
 
@@ -529,7 +529,7 @@
     }
 
     .tea-info-section {
-        padding: 25px 20px;
+
         text-align: center;
         background: white;
        /*  background: #d4e5c7; */
@@ -717,6 +717,16 @@
         width: 100%;
     }
 
+    .product-actions-new {
+        padding: 20px 25px;
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 10px;
+        background: #f8f9fa;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
     .btn-more-detail {
         background: #8BC34A;
         color: white;
@@ -937,7 +947,7 @@
 
     .featured-badge {
         position: absolute;
-        top: -10px;
+        top: 2px;
         right: 20px;
         background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
         color: white;
@@ -1232,7 +1242,7 @@
     }
 
     .contact-details p {
-        font-size: 1.3rem;
+        font-size: 1rem;
         color: #555;
         margin: 0;
         line-height: 1.8;
@@ -1536,13 +1546,13 @@
                     }
                     else
                     {
-                        <p class="banner-welcome">Welcome to TEA House</p>
+                        <p class="banner-welcome">Welcome to Herbal Formulator</p>
                     }
                     <h1 class="banner-title">@banner.Title</h1>
                     <h2 class="banner-subtitle">@banner.Subtitle</h2>
                     @if (!string.IsNullOrEmpty(banner.ButtonText))
                     {
-                        <a href="@banner.ButtonUrl" class="banner-btn py-3 px-5" style="font-size: 1rem;">@banner.ButtonText</a>
+                        <a href="/Store" class="banner-btn py-3 px-5" style="font-size: 1rem;">@banner.ButtonText</a>
                     }
                 </div>
             </div>
@@ -1581,7 +1591,7 @@
             </div>
             
             <div class="banner-content">
-                <p class="banner-welcome">Welcome to TEA House</p>
+                <p class="banner-welcome">Welcome to Herbal Formulator</p>
                 <h1 class="banner-title">Organic &</h1>
                 <h2 class="banner-subtitle">Quality Tea Production</h2>
                 <a href="/Home/Products" class="banner-btn">Explore More</a>
@@ -1591,10 +1601,7 @@
 </section>
 
 <!-- Products Start -->
-<div class="container-fluid product 
-
-
-my-5">
+<div class="container-fluid product">
     <div class="container py-5">
         <div class="section-title text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
             <p class="fs-5 text-primary">Our Products</p>
@@ -1635,7 +1642,7 @@ my-5">
                         <div class="product-info">
                             <h4 class="product-title">@product.Name</h4>
                             <p class="product-desc">@(string.IsNullOrEmpty(product.Description) ? "Aliqu diam amet diam et eos. Clita erat ipsum lorem erat ipsum lorem sit sed" : (product.Description.Length > 60 ? product.Description.Substring(0, 60) + "..." : product.Description))</p>
-                            <div class="product-price-tag">$@product.Price.ToString("F2")</div>
+                            <div class="product-price-tag">₹@product.Price.ToString("F2")</div>
                         </div>
                     </div>
                 }
@@ -1759,12 +1766,12 @@ my-5">
 <div class="container-fluid py-5" style="background: linear-gradient(135deg, #f0f4e8 0%, #e8f5e8 50%, #f5f8f0 100%);">
     <div class="container py-5">
         <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
-            <p class="fs-5 fw-medium text-success mb-2">Online Store</p>
+            <p class="fs-5 fw-medium  mb-2" style="color:#689F38!important">Online   Store</p>
             <h1 class="display-6 mb-4">Want to stay healthy?<br>Choose tea taste</h1>
             <div class="d-flex justify-content-center align-items-center mb-5">
-                <div style="height: 2px; width: 100px; background-color: #28a745;"></div>
-                <div style="width: 12px; height: 12px; background-color: #28a745; border-radius: 50%; margin: 0 15px;"></div>
-                <div style="height: 2px; width: 100px; background-color: #28a745;"></div>
+                <div style="height: 2px; width: 100px; background-color: #689F38;"></div>
+                <div style="width: 12px; height: 12px; background-color: #689F38; border-radius: 50%; margin: 0 15px;"></div>
+                <div style="height: 2px; width: 100px; background-color: #689F38;"></div>
             </div>
         </div>
         
@@ -1784,15 +1791,10 @@ my-5">
                             <div class="tea-image-section">
                                 <img src="@(!string.IsNullOrEmpty(product.ImageUrl) ? product.ImageUrl : "/img/product-1.jpg")" 
                                      alt="@product.Name" class="tea-product-image">
-                                <div class="tea-hover-overlay">
-                                    <button class="tea-btn tea-btn-detail" onclick="viewProductDetails(@product.Id)">
-                                        More Detail <i class="fas fa-arrow-right"></i>
-                                    </button>
-                                    <button class="tea-btn tea-btn-cart" onclick="addToCartFromStore(@product.Id, '@product.Name')">
-                                        Add to Cart <i class="fas fa-shopping-cart"></i>
-                                    </button>
-                                </div>
+                               
                             </div>
+                           
+                           
                             <div class="tea-info-section">
                                 <div class="tea-stars">
                                     @for (int star = 1; star <= 5; star++)
@@ -1802,9 +1804,28 @@ my-5">
                                 </div>
                                 <h4 class="tea-title">@product.Name</h4>
                                 <p class="tea-description">@(!string.IsNullOrEmpty(product.Description) ? (product.Description.Length > 70 ? product.Description.Substring(0, 70) + "..." : product.Description) : "Aliqu diam amet diam et eos. Clita erat ipsum lorem erat ipsum lorem sit sed")</p>
-                                <p class="tea-price">$@product.Price.ToString("F2")</p>
+                                <p class="tea-price">₹@product.Price.ToString("F2")</p>
+                            </div>
+                            <div class="product-actions-new">
+                                <button class="btn-more-detail more-detail-btn"
+                                        data-product-id="@product.Id"
+                                        data-product-name="@product.Name"
+                                        data-product-price="@product.Price.ToString("F2")"
+                                        data-product-image="@(string.IsNullOrEmpty(product.ImageUrl) ? "/img/product-1.jpg" : product.ImageUrl)"
+                                        data-product-description="@product.Description"
+                                        data-product-rating="5">
+                                    More Detail <i class="fas fa-arrow-right ms-2"></i>
+                                </button>
+                                <button class="btn-add-cart add-to-cart"
+                                        data-product-id="@product.Id"
+                                        data-product-name="@product.Name"
+                                        data-product-price="@product.Price.ToString("F2")"
+                                        data-product-image="@(string.IsNullOrEmpty(product.ImageUrl) ? "/img/product-1.jpg" : product.ImageUrl)">
+                                    Add to Cart <i class="fas fa-shopping-cart ms-2"></i>
+                                </button>
                             </div>
                         </div>
+                   
                     </div>
                 }
                 
@@ -1870,183 +1891,149 @@ my-5">
         <div class="floating-leaf leaf-5">🍃</div>
         <div class="floating-leaf leaf-6">🍃</div>
     </div>
-    
+
     <div class="container py-5 position-relative">
         <!-- Section Header -->
         <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 700px;">
             <div class="testimonial-badge mb-4">
-                <span class="badge-text"> Customer Stories</span>
+                <span class="badge-text">Customer Stories</span>
             </div>
             <h1 class="testimonial-main-title mb-4">
                 What Our <span class="highlight-text">Tea Lovers</span> Say
             </h1>
             <p class="testimonial-subtitle mb-5">
-                Discover why thousands of customers choose TEA HOUSE for their daily tea ritual
+                Discover why thousands of customers choose Herbal Formulator for their daily tea ritual
             </p>
         </div>
-        
-        <!-- Testimonials Grid -->
-        <div class="row g-4 testimonial-grid wow fadeInUp" data-wow-delay="0.3s">
-            <!-- Testimonial 1 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="testimonial-card-modern">
-                    <div class="card-glow"></div>
-                    <div class="testimonial-header">
-                        <div class="author-avatar">
-                            <img src="~/img/testimonial-1.jpg" alt="Sarah Johnson">
-                            <div class="avatar-ring"></div>
-                        </div>
-                        <div class="author-details">
-                            <h5 class="author-name">Sarah Johnson</h5>
-                            <p class="author-role">Tea Connoisseur</p>
-                            <div class="rating-stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
+
+        @{
+            var testimonials = ViewBag.Testimonials as List<MvcHer.Models.Testimonial> ?? new List<MvcHer.Models.Testimonial>();
+        }
+
+        @if (testimonials.Any())
+        {
+            <!-- Testimonials Grid -->
+            <div class="row g-4 testimonial-grid wow fadeInUp" data-wow-delay="0.3s">
+                @foreach (var testimonial in testimonials.OrderByDescending(t => t.IsFeatured))
+                {
+                    <div class="col-lg-4 col-md-6">
+                        <div class="testimonial-card-modern @(testimonial.IsFeatured ? "featured-card" : "")">
+                            <div class="card-glow"></div>
+                            @if (testimonial.IsFeatured)
+                            {
+                                <div class="featured-badge">
+                                    <i class="fas fa-crown"></i>
+                                    <span>Featured Review</span>
+                                </div>
+                            }
+                            <div class="testimonial-header">
+                                <div class="author-avatar">
+                                    @if (!string.IsNullOrEmpty(testimonial.ClientImageUrl))
+                                    {
+                                        <img src="@testimonial.ClientImageUrl" alt="@testimonial.ClientName" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/img/testimonial-placeholder.jpg" alt="@testimonial.ClientName" />
+                                    }
+                                    <div class="avatar-ring"></div>
+                                </div>
+                                <div class="author-details">
+                                    <h5 class="author-name">@testimonial.ClientName</h5>
+                                    <p class="author-role">@(!string.IsNullOrEmpty(testimonial.ClientProfession) ? testimonial.ClientProfession : "Tea Enthusiast")</p>
+                                    <div class="rating-stars">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= testimonial.Rating)
+                                            {
+                                                <i class="fas fa-star"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="far fa-star"></i>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="testimonial-body">
+                                <div class="quote-icon">
+                                    <i class="fas fa-quote-right"></i>
+                                </div>
+                                <p class="testimonial-message">@testimonial.TestimonialText</p>
+                                <div class="testimonial-footer">
+                                    @if (testimonial.IsApproved)
+                                    {
+                                        <div class="verified-badge">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Verified Purchase</span>
+                                        </div>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="testimonial-body">
-                        <div class="quote-icon">
-                            <i class="fas fa-quote-right"></i>
-                        </div>
-                        <p class="testimonial-message">
-                            "TEA HOUSE has completely transformed my morning routine. The Earl Grey blend is absolutely divine, and the packaging makes every unboxing feel like a luxury experience!"
-                        </p>
-                        <div class="testimonial-footer">
-                            <div class="verified-badge">
-                                <i class="fas fa-check-circle"></i>
-                                <span>Verified Purchase</span>
+                }
+            </div>
+
+            <!-- Trust Indicators -->
+            <div class="trust-indicators text-center mt-5 wow fadeInUp" data-wow-delay="0.5s">
+                <div class="row g-4">
+                    <div class="col-md-3 col-6">
+                        <div class="trust-item">
+                            <div class="trust-icon">
+                                <i class="fas fa-users"></i>
                             </div>
+                            <h4 class="trust-number">@testimonials.Count.ToString("N0")+</h4>
+                            <p class="trust-label">Happy Customers</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="trust-item">
+                            <div class="trust-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <h4 class="trust-number">@(testimonials.Any() ? testimonials.Average(t => t.Rating).ToString("F1") : "4.9")/5</h4>
+                            <p class="trust-label">Average Rating</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="trust-item">
+                            <div class="trust-icon">
+                                <i class="fas fa-shipping-fast"></i>
+                            </div>
+                            <h4 class="trust-number">24h</h4>
+                            <p class="trust-label">Fast Delivery</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="trust-item">
+                            <div class="trust-icon">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <h4 class="trust-number">100%</h4>
+                            <p class="trust-label">Organic</p>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Testimonial 2 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="testimonial-card-modern featured-card">
-                    <div class="card-glow"></div>
-                    <div class="featured-badge">
-                        <i class="fas fa-crown"></i>
-                        <span>Featured Review</span>
-                    </div>
-                    <div class="testimonial-header">
-                        <div class="author-avatar">
-                            <img src="~/img/testimonial-2.jpg" alt="Michael Chen">
-                            <div class="avatar-ring"></div>
-                        </div>
-                        <div class="author-details">
-                            <h5 class="author-name">Michael Chen</h5>
-                            <p class="author-role">Wellness Coach</p>
-                            <div class="rating-stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testimonial-body">
-                        <div class="quote-icon">
-                            <i class="fas fa-quote-right"></i>
-                        </div>
-                        <p class="testimonial-message">
-                            "As a wellness coach, I recommend TEA HOUSE to all my clients. The organic herbal blends are pure perfection - you can taste the quality and care in every sip!"
-                        </p>
-                        <div class="testimonial-footer">
-                            <div class="verified-badge">
-                                <i class="fas fa-check-circle"></i>
-                                <span>Verified Purchase</span>
-                            </div>
-                        </div>
-                    </div>
+        }
+        else
+        {
+            <!-- Empty State -->
+            <div class="text-center py-5 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="alert alert-info" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 15px; padding: 30px;">
+                    <i class="fas fa-info-circle fa-2x mb-3" style="color: #8BC34A;"></i>
+                    <h3 class="mb-3" style="color: white;">No Testimonials Available</h3>
+                    <p style="color: rgba(255, 255, 255, 0.8);">
+                        Be the first to share your experience with our premium herbal teas!
+                    </p>
+                    <a href="@Url.Action("Contact", "Home")" class="btn btn-success rounded-pill px-4 py-2">
+                        <i class="fas fa-envelope me-2"></i>Share Your Feedback
+                    </a>
                 </div>
             </div>
-            
-            <!-- Testimonial 3 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="testimonial-card-modern">
-                    <div class="card-glow"></div>
-                    <div class="testimonial-header">
-                        <div class="author-avatar">
-                            <img src="~/img/testimonial-3.jpg" alt="Emma Davis">
-                            <div class="avatar-ring"></div>
-                        </div>
-                        <div class="author-details">
-                            <h5 class="author-name">Emma Davis</h5>
-                            <p class="author-role">Yoga Instructor</p>
-                            <div class="rating-stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testimonial-body">
-                        <div class="quote-icon">
-                            <i class="fas fa-quote-right"></i>
-                        </div>
-                        <p class="testimonial-message">
-                            "The chamomile blend has become essential for my evening meditation practice. TEA HOUSE delivers not just tea, but a complete mindfulness experience!"
-                        </p>
-                        <div class="testimonial-footer">
-                            <div class="verified-badge">
-                                <i class="fas fa-check-circle"></i>
-                                <span>Verified Purchase</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Trust Indicators -->
-        <div class="trust-indicators text-center mt-5 wow fadeInUp" data-wow-delay="0.5s">
-            <div class="row g-4">
-                <div class="col-md-3 col-6">
-                    <div class="trust-item">
-                        <div class="trust-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <h4 class="trust-number">10,000+</h4>
-                        <p class="trust-label">Happy Customers</p>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="trust-item">
-                        <div class="trust-icon">
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4 class="trust-number">4.9/5</h4>
-                        <p class="trust-label">Average Rating</p>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="trust-item">
-                        <div class="trust-icon">
-                            <i class="fas fa-shipping-fast"></i>
-                        </div>
-                        <h4 class="trust-number">24h</h4>
-                        <p class="trust-label">Fast Delivery</p>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="trust-item">
-                        <div class="trust-icon">
-                            <i class="fas fa-leaf"></i>
-                        </div>
-                        <h4 class="trust-number">100%</h4>
-                        <p class="trust-label">Organic</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        }
     </div>
 </div>
 <!-- Testimonials Section End -->
@@ -2060,7 +2047,7 @@ my-5">
                 <span class="badge-text">📞 Get In Touch</span>
             </div>
             <h1 class="contact-main-title mb-4">
-                Contact <span class="highlight-text-green">TEA HOUSE</span>
+                Contact <span class="highlight-text-green">Herbal Formulator</span>
             </h1>
             <p class="contact-subtitle mb-5">
                 Have questions about our premium teas? We're here to help you find the perfect blend for your taste.
@@ -2074,15 +2061,7 @@ my-5">
                     <h3 class="contact-info-title mb-4">Let's Connect</h3>
                     
                     <!-- Contact Items -->
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h5>Visit Our Store</h5>
-                            <p>123 Tea Garden Street<br>Green Valley, CA 90210</p>
-                        </div>
-                    </div>
+                   
                     
                     <div class="contact-item">
                         <div class="contact-icon">
@@ -2090,7 +2069,7 @@ my-5">
                         </div>
                         <div class="contact-details">
                             <h5>Call Us</h5>
-                            <p>+1 (555) 123-4567<br>Mon-Fri: 9AM-6PM</p>
+                            <p>+91 9796303791<br>Mon-Fri: 9AM-6PM</p>
                         </div>
                     </div>
                     
@@ -2100,19 +2079,11 @@ my-5">
                         </div>
                         <div class="contact-details">
                             <h5>Email Us</h5>
-                            <p>info@teahouse.com<br>support@teahouse.com</p>
+                            <p>herbalformulator5@gmail.com</p>
                         </div>
                     </div>
                     
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h5>Business Hours</h5>
-                            <p>Monday - Friday: 9:00 AM - 6:00 PM<br>Saturday - Sunday: 10:00 AM - 4:00 PM</p>
-                        </div>
-                    </div>
+                   
                 </div>
             </div>
             
@@ -2168,7 +2139,7 @@ my-5">
                         </div>
                         <h5>Shop Now</h5>
                         <p>Browse our premium tea collection</p>
-                        <a href="@Url.Action("Index", "Store")" class="btn btn-outline-success">Explore Teas</a>
+                        <a href="@Url.Action("Index", "Store")" class="btn btn-outline-success" style="color: beige !important;">Explore Teas</a>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -2178,7 +2149,7 @@ my-5">
                         </div>
                         <h5>Track Order</h5>
                         <p>Check your order status</p>
-                        <a href="@Url.Action("Track", "OrderTracking")" class="btn btn-outline-success">Track Now</a>
+                        <a href="@Url.Action("Track", "OrderTracking")" class="btn btn-outline-success" style="color: beige !important;">Track Now</a>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -2188,7 +2159,7 @@ my-5">
                         </div>
                         <h5>FAQ</h5>
                         <p>Find answers to common questions</p>
-                        <a href="#" class="btn btn-outline-success">View FAQ</a>
+                        <a href="@Url.Action("FAQ", "Home")" class="btn btn-outline-success" style="color: beige !important;">View FAQ</a>
                     </div>
                 </div>
             </div>
@@ -2198,6 +2169,8 @@ my-5">
 <!-- Contact Us Section End -->
 
 @section Scripts {
+  
+
 <script>
 $(document).ready(function() {
     // Add to Cart functionality
@@ -2253,7 +2226,7 @@ $(document).ready(function() {
         
         // Populate modal with product details
         $('#product-detail-name').text(productName);
-        $('#product-detail-price').text('$' + productPrice);
+                $('#product-detail-price').text('₹' + productPrice);
         $('#product-detail-image').attr('src', productImage).attr('alt', productName);
         $('#product-detail-description').text(productDescription || 'Premium quality tea with exceptional taste and aroma.');
         
@@ -2377,7 +2350,7 @@ function viewProductDetails(productId) {
     window.location.href = '@Url.Action("Index", "Store")' + '?productId=' + productId;
 }
 
-// Explore Collection Button Function
+// Expllollection Button Function
 function exploreCollection() {
     try {
         window.location.href = '/Store';

@@ -1,17 +1,25 @@
 // Global Shopping Cart Functionality
 
 $(document).ready(function () {
+    CartCountIcon();
+});
+
+function CartCountIcon() {
     // Target the cart count element
     const cartBadge = document.getElementById('cart-count-desktop');
     const cartBadgeMobile = document.getElementById('cart-icon-float');
     const badge = cartBadgeMobile.querySelector('.cart-count');
-  
+
+    if (!cartBadge || !badge) {
+        return; // Stop script
+    }
+
     // Create an observer instance
     const observer = new MutationObserver(function (mutations) {
         mutations.forEach(function (mutation) {
             const count = parseInt(cartBadge.textContent);
             if (count > 0) {
-                badge.textContent = count;    
+                badge.textContent = count;
                 badge.style.display = 'inline-block';
                 $(cartBadge).show();
             } else {
@@ -39,7 +47,7 @@ $(document).ready(function () {
     } else {
         $(cartBadge).hide();
     }
-});
+}
 
 // Global function to update cart count
 function updateCartCount() {
@@ -49,6 +57,7 @@ function updateCartCount() {
             $('#cart-count').text(count);
             
             if (count > 0) {
+                CartCountIcon();
                 $('#cart-count').show();
             } else {
                 $('#cart-count').hide();

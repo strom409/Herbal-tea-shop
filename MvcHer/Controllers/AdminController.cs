@@ -435,7 +435,78 @@ namespace MvcHer.Controllers
             
             return View();
         }
-        
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(string currentPassword, string newPassword, string confirmPassword)
+        {
+            if (HttpContext.Session.GetString("IsAdmin") != "true")
+            {
+                return RedirectToAction("Login");
+            }
+
+            if (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 6)
+            {
+                TempData["Error"] = "New password must be at least 6 characters long.";
+                return RedirectToAction("Settings");
+            }
+
+            if (newPassword != confirmPassword)
+            {
+                TempData["Error"] = "New password and confirm password do not match.";
+                return RedirectToAction("Settings");
+            }
+
+            try
+            {
+                var adminIdStr = HttpContext.Session.GetString("AdminId");
+                if (string.IsNullOrEmpty(adminIdStr) || !int.TryParse(adminIdStr, out var adminId))
+                {
+                    TempData["Error"] = "Unable to identify admin user.";
+                    return RedirectToAction("Settings");
+                }
+
+                var admin = await _context.Admins.FirstOrDefaultAsync(a => a.Id == adminId);
+                if (admin == null)
+                {
+                    TempData["Error"] = "Admin user not found.";
+                    return RedirectToAction("Settings");
+                }
+
+                // Verify current password - support legacy plain-text if present
+                var isValid = false;
+                try
+                {
+                    isValid = BCrypt.Net.BCrypt.Verify(currentPassword ?? string.Empty, admin.PasswordHash);
+                }
+                catch (BCrypt.Net.SaltParseException)
+                {
+                    // Fallback for initial setup where plaintext may be stored
+                    isValid = string.Equals(admin.PasswordHash, currentPassword);
+                }
+
+                if (!isValid)
+                {
+                    TempData["Error"] = "Current password is incorrect.";
+                    return RedirectToAction("Settings");
+                }
+
+                // Update to hashed password
+                admin.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+                admin.UpdatedAt = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+
+                TempData["Success"] = "Password updated successfully.";
+                return RedirectToAction("Settings");
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = "An error occurred while updating the password. Please try again.";
+                return RedirectToAction("Settings");
+            }
+        }
+
+
         public async Task<IActionResult> ContactMessages()
         {
             // Check if user is authenticated
@@ -879,13 +950,18 @@ namespace MvcHer.Controllers
 
             try
             {
-                if (imageFile != null && imageFile.Length > 0)
+                // Validate uploaded file
+                if (imageFile == null || imageFile.Length == 0)
+                {
+                    ModelState.AddModelError("ImageUrl", "Image is required");
+                }
+                else
                 {
                     var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "banners");
                     if (!Directory.Exists(uploadsFolder))
                         Directory.CreateDirectory(uploadsFolder);
 
-                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
                     var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -894,29 +970,44 @@ namespace MvcHer.Controllers
                     }
 
                     banner.ImageUrl = "/images/banners/" + uniqueFileName;
+
+                    // Remove previous ModelState error so it passes validation
+                    ModelState.Remove(nameof(banner.ImageUrl));
                 }
 
-                if (ModelState.IsValid)
+                if (!ModelState.IsValid)
                 {
-                    var success = await _bannerService.CreateBannerAsync(banner);
-                    if (success)
-                    {
-                        TempData["SuccessMessage"] = "Banner created successfully!";
-                        return RedirectToAction("Banners");
-                    }
-                    else
-                    {
-                        TempData["ErrorMessage"] = "Failed to create banner.";
-                    }
+                    var errors = string.Join("; ", ModelState.Values
+                                                .SelectMany(v => v.Errors)
+                                                .Select(e => e.ErrorMessage));
+                    TempData["ErrorMessage"] = "Validation failed: " + errors;
+                    return View(banner);
+                }
+
+                // Call service
+                bool success = await _bannerService.CreateBannerAsync(banner);
+
+                if (success)
+                {
+                    TempData["SuccessMessage"] = "Banner created successfully!";
+                    return RedirectToAction("Banners");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Failed to create banner in database.";
                 }
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error creating banner: {ex.Message}";
+                TempData["ErrorMessage"] = "Error creating banner: " + ex.Message;
             }
 
             return View(banner);
         }
+
+
+
+
 
         [HttpGet]
         public async Task<IActionResult> EditBanner(int id)

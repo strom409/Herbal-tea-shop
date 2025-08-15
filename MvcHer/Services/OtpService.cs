@@ -41,7 +41,7 @@ namespace MvcHer.Services
             }
         }
 
-        public async Task<string> GenerateOtpAsync(string phoneNumber, string email)
+        public async Task<string> GenerateOtpAsync(string phoneNumber)
         {
             // Generate 6-digit OTP
             var random = new Random();
@@ -52,7 +52,7 @@ namespace MvcHer.Services
             {
                 OtpCode = otpCode,
                 PhoneNumber = phoneNumber,
-                Email = email,
+               
                 ExpiryTime = DateTime.Now.AddMinutes(5),
                 IsUsed = false
             };
@@ -64,77 +64,52 @@ namespace MvcHer.Services
             return otpCode;
         }
 
-        public async Task<bool> SendOtpAsync(string phoneNumber, string email, string otpCode, string fullName)
+        public async Task<bool> SendOtpAsync(string phoneNumber, string otpCode)
         {
             try
             {
                 var twilioPhoneNumber = _configuration["Twilio:PhoneNumber"];
-                
-                // Format phone number for international format
-                var formattedPhoneNumber = phoneNumber?.Trim() ?? string.Empty;
-                
-                // Remove any non-digit characters
-                formattedPhoneNumber = new string(formattedPhoneNumber.Where(char.IsDigit).ToArray());
-                
+
+                // Validate phone number
+                if (string.IsNullOrWhiteSpace(phoneNumber))
+                {
+                    _logger.LogWarning("Phone number is empty.");
+                    return false;
+                }
+
+                // Keep only digits
+                var formattedPhoneNumber = new string(phoneNumber.Where(char.IsDigit).ToArray());
+
                 // Add country code if missing
                 if (!formattedPhoneNumber.StartsWith("+"))
                 {
-                    // If it starts with '0', remove it and add +91 (India)
                     if (formattedPhoneNumber.StartsWith("0"))
-                    {
                         formattedPhoneNumber = "+91" + formattedPhoneNumber.TrimStart('0');
-                    }
-                    // If it's 10 digits, assume it's an Indian number
                     else if (formattedPhoneNumber.Length == 10)
-                    {
                         formattedPhoneNumber = "+91" + formattedPhoneNumber;
-                    }
-                    // If it's 12 digits, it might already have 91 prefix
                     else if (formattedPhoneNumber.Length == 12 && formattedPhoneNumber.StartsWith("91"))
-                    {
                         formattedPhoneNumber = "+" + formattedPhoneNumber;
-                    }
                     else
-                    {
-                        // Default to +91 if we're not sure
                         formattedPhoneNumber = "+91" + formattedPhoneNumber;
-                    }
                 }
 
-                // Create SMS message
-                var messageBody = $"Hello {fullName}!\n\nYour TEA House OTP verification code is: {otpCode}\n\nThis code will expire in 5 minutes.\n\nDo not share this code with anyone.\n\n- TEA House Team";
-
-                _logger.LogInformation($"Sending OTP SMS to {formattedPhoneNumber}");
-                
-                // Send SMS via Twilio
+                // Send only the OTP digits
                 var message = await MessageResource.CreateAsync(
-                    body: messageBody,
+                    body: otpCode,
                     from: new Twilio.Types.PhoneNumber(twilioPhoneNumber),
                     to: new Twilio.Types.PhoneNumber(formattedPhoneNumber)
                 );
 
-                _logger.LogInformation($"SMS sent successfully! Message SID: {message.Sid}");
-                _logger.LogInformation($"SMS Status: {message.Status}");
-                
-                // Also log for debugging
-                _logger.LogInformation($"=== OTP SENT VIA TWILIO ===");
-                _logger.LogInformation($"Name: {fullName}");
-                _logger.LogInformation($"Phone: {formattedPhoneNumber}");
-                _logger.LogInformation($"Email: {email}");
-                _logger.LogInformation($"OTP Code: {otpCode}");
-                _logger.LogInformation($"Message SID: {message.Sid}");
-                _logger.LogInformation($"Valid for: 5 minutes");
-                _logger.LogInformation($"==========================");
-
+                _logger.LogInformation($"OTP sent to {formattedPhoneNumber}, SID: {message.Sid}");
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to send OTP via Twilio: {ex.Message}");
-                _logger.LogError($"Exception Details: {ex}");
+                _logger.LogError($"Failed to send OTP: {ex}");
                 return false;
             }
         }
+
 
         public bool ValidateOtp(string phoneNumber, string providedOtp)
         {

@@ -5,6 +5,200 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<style>
+    /* Responsive Social Links Styles */
+    @@media (max-width: 991.98px) {
+        .d-flex.justify-content-between {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .btn-success {
+            width: 100%;
+        }
+        
+        .row.mb-4 .col-md-3 {
+            margin-bottom: 1rem;
+        }
+    }
+    
+    @@media (max-width: 767.98px) {
+        .h2 {
+            font-size: 1.5rem;
+        }
+        
+        .card-body {
+            padding: 1rem;
+        }
+        
+        .fa-2x {
+            font-size: 1.5em;
+        }
+        
+        .h4 {
+            font-size: 1.25rem;
+        }
+        
+        .p {
+            font-size: 0.875rem;
+        }
+        
+        .table-responsive {
+            font-size: 0.875rem;
+        }
+        
+        .table th, .table td {
+            padding: 0.5rem 0.25rem;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+        
+        .badge {
+            font-size: 0.7rem;
+            padding: 0.375rem 0.5rem;
+        }
+    }
+    
+    @@media (max-width: 575.98px) {
+        .card-body {
+            padding: 0.75rem;
+        }
+        
+        .table-responsive {
+            font-size: 0.8rem;
+        }
+        
+        .table th, .table td {
+            padding: 0.375rem 0.125rem;
+        }
+        
+        .btn-sm {
+            padding: 0.2rem 0.4rem;
+            font-size: 0.7rem;
+        }
+        
+        .btn-sm i {
+            font-size: 0.8rem;
+        }
+        
+        .badge {
+            font-size: 0.65rem;
+            padding: 0.25rem 0.375rem;
+        }
+        
+        .h4 {
+            font-size: 1.1rem;
+        }
+        
+        .p {
+            font-size: 0.8rem;
+        }
+        
+        .h2 {
+            font-size: 1.25rem;
+        }
+    }
+    
+    /* Statistics cards responsive */
+    .stats-card {
+        transition: transform 0.2s ease;
+        height: 100%;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-2px);
+    }
+    
+    @@media (max-width: 767.98px) {
+        .stats-card:hover {
+            transform: none;
+        }
+    }
+    
+    /* Table responsive improvements */
+    .table-responsive {
+        border-radius: 0.375rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    
+    /* Action buttons responsive */
+    .action-buttons {
+        display: flex;
+        gap: 0.25rem;
+        flex-wrap: wrap;
+    }
+    
+    @@media (max-width: 575.98px) {
+        .action-buttons {
+            flex-direction: column;
+            gap: 0.125rem;
+        }
+        
+        .action-buttons .btn {
+            width: 100%;
+            margin: 0;
+        }
+    }
+    
+    /* Social link content responsive */
+    .social-link-content {
+        max-width: 100%;
+        word-wrap: break-word;
+    }
+    
+    @@media (max-width: 767.98px) {
+        .social-link-content {
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+        
+        .social-link-url {
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+    
+    @@media (max-width: 575.98px) {
+        .social-link-url {
+            max-width: 120px;
+        }
+    }
+    
+    /* Icon display responsive */
+    .social-icon {
+        font-size: 1.2rem;
+        margin-right: 0.5rem;
+    }
+    
+    @@media (max-width: 767.98px) {
+        .social-icon {
+            font-size: 1rem;
+            margin-right: 0.25rem;
+        }
+    }
+    
+    /* Status indicators responsive */
+    .status-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    @@media (max-width: 575.98px) {
+        .status-indicator {
+            flex-direction: column;
+            gap: 0.125rem;
+            text-align: center;
+        }
+    }
+</style>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">

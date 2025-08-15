@@ -327,43 +327,7 @@
     </section>
 
     <!-- Statistics Section -->
-    <section class="stats-section">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stat-value">@testimonialsList.Count()</div>
-                    <div class="stat-description">Happy Customers</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <div class="stat-value">@(testimonialsList.Any() ? testimonialsList.Average(t => t.Rating).ToString("F1") : "4.9")</div>
-                    <div class="stat-description">Average Rating</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-heart"></i>
-                    </div>
-                    <div class="stat-value">@testimonialsList.Count(t => t.IsFeatured)</div>
-                    <div class="stat-description">Featured Reviews</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-leaf"></i>
-                    </div>
-                    <div class="stat-value">100%</div>
-                    <div class="stat-description">Organic Quality</div>
-                </div>
-            </div>
-        </div>
-    </section>
+   
 
 
 }
@@ -406,7 +370,7 @@ else
     <div class="container">
         <div class="cta-content">
             <h2 class="cta-title">Share Your Tea Experience</h2>
-            <p class="cta-subtitle">Join thousands of satisfied customers and tell us about your favorite herbal tea moments</p>
+            <p class="cta-subtitle">Join thousands of satisfied customers and tell us about your favorite herbal Formulator moments</p>
             <div class="cta-buttons">
                 <a href="@Url.Action("Index", "Store")" class="cta-btn">
                     <i class="fas fa-shopping-cart me-2"></i>Shop Premium Teas

@@ -33,6 +33,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "environmentVariables": {
+      "ASPNETCORE_ENVIRONMENT": "Development"
     }
   }
 }

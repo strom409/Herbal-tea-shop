@@ -1,0 +1,502 @@
+@* @model MvcHer.Models.AboutUs?
+
+@{
+    ViewData["Title"] = "About Us - Herbal Tea";
+    var aboutUs = Model ?? new MvcHer.Models.AboutUs
+    {
+        Title = "Welcome to Herbal Formulator",
+        Subtitle = "Crafting exceptional tea experiences with passion and tradition",
+        Description = "We are passionate about bringing you the finest tea experiences.",
+        FounderName = "Tea Master",
+        FounderTitle = "Founder & CEO",
+        FounderMessage = "Our journey began with a love for exceptional tea.",
+        Mission = "To deliver the world's finest teas with quality and sustainability.",
+        Vision = "To become the global leader in premium tea retail.",
+        Values = "Quality, Authenticity, Sustainability, Customer Focus",
+        YearsOfExperience = 14,
+        HappyCustomers = 25000,
+        TeaVarieties = 150,
+        CountriesServed = 35
+    };
+}
+
+<style>
+    .about-hero {
+        background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
+        color: white;
+        padding: 100px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .about-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1.5" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .floating-tea-leaf {
+        position: absolute;
+        color: rgba(255,255,255,0.1);
+        font-size: 2rem;
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    .floating-tea-leaf:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+    .floating-tea-leaf:nth-child(2) { top: 60%; right: 15%; animation-delay: 2s; }
+    .floating-tea-leaf:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 4s; }
+    
+    @@keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(10deg); }
+    }
+    
+    .stats-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(102, 126, 234, 0.1);
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    
+    .stats-number {
+        font-size: 3rem;
+        font-weight: bold;
+        background: linear-gradient(135deg, #8BC34A, #689F38);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .mission-vision-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        border-left: 5px solid;
+    }
+    
+    .mission-card { border-left-color: #667eea; }
+    .vision-card { border-left-color: #764ba2; }
+    .values-card { border-left-color: #48bb78; }
+    
+    .mission-vision-card:hover {
+        transform: translateX(10px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    }
+    
+    .founder-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .founder-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+            background: linear-gradient(135deg, #8BC34A, #689F38);
+            
+    }
+    
+    .founder-image {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #f8f9fa;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .section-title {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 3rem;
+    }
+
+        .section-title::after {
+            content: none;
+        }
+
+    
+    .icon-box {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        background: linear-gradient(135deg, #8BC34A, #689F38);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        margin: 0 auto 1rem;
+    }
+    
+    .timeline-item {
+        position: relative;
+        padding-left: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+            background: linear-gradient(135deg, #8BC34A, #689F38);
+            .timeline-item::after
+    }
+    
+    .timeline-item::after {
+        content: '';
+        position: absolute;
+        left: 5px;
+        top: 12px;
+        width: 2px;
+        height: calc(100% + 1rem);
+            background: linear-gradient(135deg, #8BC34A, #689F38);
+            
+    }
+    
+    .timeline-item:last-child::after {
+        display: none;
+    }
+    
+    .badge-custom {
+        background: linear-gradient(135deg, #8BC34A, #689F38);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        margin: 0.2rem;
+        display: inline-block;
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="about-hero">
+    <div class="floating-tea-leaf">🍃</div>
+    <div class="floating-tea-leaf">🍃</div>
+    <div class="floating-tea-leaf">🍃</div>
+    
+    <div class="container position-relative">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-4 fw-bold mb-4">@aboutUs.Title</h1>
+                <p class="lead mb-4">@aboutUs.Subtitle</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="#story" class="btn btn-light btn-lg rounded-pill px-4">
+                        <i class="fas fa-book-open me-2"></i>Our Story
+                    </a>
+                    <a href="#founder" class="btn btn-outline-light btn-lg rounded-pill px-4">
+                        <i class="fas fa-user me-2"></i>Meet Founder
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section 
+    
+    style="margin-top: 10px;">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="stats-card">
+                    <div class="icon-box">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="stats-number">@aboutUs.YearsOfExperience+</div>
+                    <h5 class="mb-0">Years Experience</h5>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stats-card">
+                    <div class="icon-box">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stats-number">@(aboutUs.HappyCustomers.ToString("N0"))</div>
+                    <h5 class="mb-0">Happy Customers</h5>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stats-card">
+                    <div class="icon-box">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="stats-number">@aboutUs.TeaVarieties+</div>
+                    <h5 class="mb-0">Tea Varieties</h5>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stats-card">
+                    <div class="icon-box">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="stats-number">@aboutUs.CountriesServed+</div>
+                    <h5 class="mb-0">Countries Served</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Story Section -->
+<section id="story" class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-title">Our Story</h2>
+            </div>
+        </div>
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="pe-lg-4">
+                    <p class="lead text-muted mb-4">@aboutUs.Description</p>
+                    
+                    <div class="timeline-item">
+                        <h5 class="fw-bold">2010 - The Beginning</h5>
+                        <p class="text-muted">Started our journey with a passion for exceptional tea experiences.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h5 class="fw-bold">2015 - Global Expansion</h5>
+                        <p class="text-muted">Expanded to serve customers across multiple countries.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h5 class="fw-bold">2020 - Digital Innovation</h5>
+                        <p class="text-muted">Launched our online platform for seamless tea shopping.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h5 class="fw-bold">2025 - Premium Excellence</h5>
+                        <p class="text-muted">Continuing to set new standards in premium tea retail.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <img src="@Url.Content("~/img/about-1.jpg")" alt="Our Tea Garden" class="img-fluid rounded-4 shadow-lg" style="max-height: 500px; object-fit: cover;">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mission, Vision, Values -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center mb-5">
+                <h2 class="section-title">Our Foundation</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="mission-vision-card mission-card">
+                    <div class="icon-box">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Our Mission</h4>
+                    <p class="text-muted">@aboutUs.Mission</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mission-vision-card vision-card">
+                    <div class="icon-box">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Our Vision</h4>
+                    <p class="text-muted">@aboutUs.Vision</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mission-vision-card values-card">
+                    <div class="icon-box">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Our Values</h4>
+                    <p class="text-muted">@aboutUs.Values</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Founder Section -->
+<section id="founder" class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center mb-5">
+                <h2 class="section-title">Meet Our Founder</h2>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="founder-card">
+                    <div class="row align-items-center">
+                        <div class="col-lg-4 text-center">
+                            <img src="@Url.Content("~/img/team-1.jpg")" alt="@aboutUs.FounderName" class="founder-image mb-3">
+                            <h4 class="fw-bold">@aboutUs.FounderName</h4>
+                            <p class="text-primary fw-semibold">@aboutUs.FounderTitle</p>
+                        </div>
+                        <div class="col-lg-8">
+                            <blockquote class="blockquote">
+                                <p class="mb-3 fst-italic">"@aboutUs.FounderMessage"</p>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Awards & Certifications -->
+@if (!string.IsNullOrEmpty(aboutUs.Awards) || !string.IsNullOrEmpty(aboutUs.Certifications))
+{
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center mb-5">
+                    <h2 class="section-title">Recognition & Certifications</h2>
+                </div>
+            </div>
+            <div class="row">
+                @if (!string.IsNullOrEmpty(aboutUs.Awards))
+                {
+                    <div class="col-lg-6">
+                        <div class="text-center mb-4">
+                            <div class="icon-box">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Awards</h4>
+                            @foreach (var award in aboutUs.Awards.Split(','))
+                            {
+                                <span class="badge-custom">@award.Trim()</span>
+                            }
+                        </div>
+                    </div>
+                }
+                @if (!string.IsNullOrEmpty(aboutUs.Certifications))
+                {
+                    <div class="col-lg-6">
+                        <div class="text-center mb-4">
+                            <div class="icon-box">
+                                <i class="fas fa-certificate"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Certifications</h4>
+                            @foreach (var cert in aboutUs.Certifications.Split(','))
+                            {
+                                <span class="badge-custom">@cert.Trim()</span>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<!-- Call to Action -->
+<section class="py-5" style="background: linear-gradient(135deg, #8BC34A, #689F38);">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center text-white">
+                <h2 class="fw-bold mb-4">Ready to Experience Premium Tea?</h2>
+                <p class="lead mb-4">Join thousands of satisfied customers who trust us for their daily tea needs.</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a asp-controller="Store" asp-action="Index" class="btn btn-light btn-lg rounded-pill px-4">
+                        <i class="fas fa-shopping-bag me-2"></i>Shop Now
+                    </a>
+                    <a asp-controller="Home" asp-action="Contact" class="btn btn-outline-light btn-lg rounded-pill px-4">
+                        <i class="fas fa-envelope me-2"></i>Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Counter animation
+    function animateCounters() {
+        const counters = document.querySelectorAll('.stats-number');
+        
+        counters.forEach(counter => {
+            const target = parseInt(counter.textContent.replace(/[^\d]/g, ''));
+            const increment = target / 100;
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                
+                if (target >= 1000) {
+                    counter.textContent = Math.floor(current).toLocaleString() + '+';
+                } else {
+                    counter.textContent = Math.floor(current) + '+';
+                }
+            }, 20);
+        });
+    }
+
+    // Trigger counter animation when stats section is visible
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounters();
+                observer.unobserve(entry.target);
+            }
+        });
+    });
+
+    const statsSection = document.querySelector('.stats-card');
+    if (statsSection) {
+        observer.observe(statsSection);
+    }
+</script>
+ *@

@@ -1,10 +1,10 @@
-@model MvcHer.Models.AboutUs?
+﻿@model MvcHer.Models.AboutUs?
 
 @{
     ViewData["Title"] = "About Us - Herbal Tea";
     var aboutUs = Model ?? new MvcHer.Models.AboutUs
     {
-        Title = "Welcome to Herbal Tea",
+        Title = "Welcome to Herbal Formulator",
         Subtitle = "Crafting exceptional tea experiences with passion and tradition",
         Description = "We are passionate about bringing you the finest tea experiences.",
         FounderName = "Tea Master",
@@ -28,34 +28,53 @@
         position: relative;
         overflow: hidden;
     }
-    
-    .about-hero::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1.5" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-        opacity: 0.3;
-    }
-    
+
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1.5" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
     .floating-tea-leaf {
         position: absolute;
         color: rgba(255,255,255,0.1);
         font-size: 2rem;
         animation: float 6s ease-in-out infinite;
     }
-    
-    .floating-tea-leaf:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
-    .floating-tea-leaf:nth-child(2) { top: 60%; right: 15%; animation-delay: 2s; }
-    .floating-tea-leaf:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 4s; }
-    
+
+        .floating-tea-leaf:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-tea-leaf:nth-child(2) {
+            top: 60%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .floating-tea-leaf:nth-child(3) {
+            bottom: 30%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
     @@keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(0deg); }
-        50% { transform: translateY(-20px) rotate(10deg); }
+        0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+        }
+
+        50% {
+            transform: translateY(-20px) rotate(10deg);
+        }
     }
-    
+
     .stats-card {
         background: white;
         border-radius: 20px;
@@ -65,12 +84,12 @@
         transition: all 0.3s ease;
         border: 1px solid rgba(102, 126, 234, 0.1);
     }
-    
-    .stats-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-    }
-    
+
+        .stats-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
     .stats-number {
         font-size: 3rem;
         font-weight: bold;
@@ -79,7 +98,7 @@
         -webkit-text-fill-color: transparent;
         background-clip: text;
     }
-    
+
     .mission-vision-card {
         background: white;
         border-radius: 20px;
@@ -89,16 +108,24 @@
         transition: all 0.3s ease;
         border-left: 5px solid;
     }
-    
-    .mission-card { border-left-color: #667eea; }
-    .vision-card { border-left-color: #764ba2; }
-    .values-card { border-left-color: #48bb78; }
-    
+
+    .mission-card {
+        border-left-color: #667eea;
+    }
+
+    .vision-card {
+        border-left-color: #764ba2;
+    }
+
+    .values-card {
+        border-left-color: #48bb78;
+    }
+
     .mission-vision-card:hover {
         transform: translateX(10px);
         box-shadow: 0 15px 35px rgba(0,0,0,0.12);
     }
-    
+
     .founder-card {
         background: white;
         border-radius: 20px;
@@ -107,18 +134,17 @@
         position: relative;
         overflow: hidden;
     }
-    
-    .founder-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 5px;
+
+        .founder-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
             background: linear-gradient(135deg, #8BC34A, #689F38);
-            
-    }
-    
+        }
+
     .founder-image {
         width: 120px;
         height: 120px;
@@ -127,25 +153,18 @@
         border: 5px solid #f8f9fa;
         box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     }
-    
+
     .section-title {
         position: relative;
         display: inline-block;
         margin-bottom: 3rem;
     }
-    
-    .section-title::after {
-        content: '';
-        position: absolute;
-        bottom: -10px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60px;
-        height: 3px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        border-radius: 2px;
-    }
-    
+
+        .section-title::after {
+            content: none;
+        }
+
+
     .icon-box {
         width: 60px;
         height: 60px;
@@ -158,40 +177,39 @@
         font-size: 1.5rem;
         margin: 0 auto 1rem;
     }
-    
+
     .timeline-item {
         position: relative;
         padding-left: 2rem;
         margin-bottom: 2rem;
     }
-    
-    .timeline-item::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
             background: linear-gradient(135deg, #8BC34A, #689F38);
             .timeline-item::after
-    }
-    
-    .timeline-item::after {
-        content: '';
-        position: absolute;
-        left: 5px;
-        top: 12px;
-        width: 2px;
-        height: calc(100% + 1rem);
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 12px;
+            width: 2px;
+            height: calc(100% + 1rem);
             background: linear-gradient(135deg, #8BC34A, #689F38);
-            
-    }
-    
-    .timeline-item:last-child::after {
-        display: none;
-    }
-    
+        }
+
+        .timeline-item:last-child::after {
+            display: none;
+        }
+
     .badge-custom {
         background: linear-gradient(135deg, #8BC34A, #689F38);
         color: white;
@@ -208,7 +226,7 @@
     <div class="floating-tea-leaf">🍃</div>
     <div class="floating-tea-leaf">🍃</div>
     <div class="floating-tea-leaf">🍃</div>
-    
+
     <div class="container position-relative">
         <div class="row align-items-center">
             <div class="col-lg-8 mx-auto text-center">
@@ -228,9 +246,7 @@
 </section>
 
 <!-- Stats Section -->
-<section 
-    
-    style="margin-top: -50px;">
+<section style="margin-top: 10px;">
     <div class="container">
         <div class="row g-4">
             <div class="col-lg-3 col-md-6">
@@ -285,22 +301,22 @@
             <div class="col-lg-6">
                 <div class="pe-lg-4">
                     <p class="lead text-muted mb-4">@aboutUs.Description</p>
-                    
+
                     <div class="timeline-item">
                         <h5 class="fw-bold">2010 - The Beginning</h5>
                         <p class="text-muted">Started our journey with a passion for exceptional tea experiences.</p>
                     </div>
-                    
+
                     <div class="timeline-item">
                         <h5 class="fw-bold">2015 - Global Expansion</h5>
                         <p class="text-muted">Expanded to serve customers across multiple countries.</p>
                     </div>
-                    
+
                     <div class="timeline-item">
                         <h5 class="fw-bold">2020 - Digital Innovation</h5>
                         <p class="text-muted">Launched our online platform for seamless tea shopping.</p>
                     </div>
-                    
+
                     <div class="timeline-item">
                         <h5 class="fw-bold">2025 - Premium Excellence</h5>
                         <p class="text-muted">Continuing to set new standards in premium tea retail.</p>
@@ -469,19 +485,19 @@
     // Counter animation
     function animateCounters() {
         const counters = document.querySelectorAll('.stats-number');
-        
+
         counters.forEach(counter => {
             const target = parseInt(counter.textContent.replace(/[^\d]/g, ''));
             const increment = target / 100;
             let current = 0;
-            
+
             const timer = setInterval(() => {
                 current += increment;
                 if (current >= target) {
                     current = target;
                     clearInterval(timer);
                 }
-                
+
                 if (target >= 1000) {
                     counter.textContent = Math.floor(current).toLocaleString() + '+';
                 } else {

@@ -1,26 +1,67 @@
-@{
+﻿@{
     ViewData["Title"] = "Admin Dashboard";
     Layout = "_AdminLayout";
 }
 
+<style>
+    /* Responsive Dashboard Styles */
+    @@media (max-width: 767.98px) {
+        .card-body {
+            padding: 1rem;
+        }
+        
+        .h5 {
+            font-size: 1.1rem;
+        }
+        
+        .text-xs {
+            font-size: 0.7rem;
+        }
+        
+        .fa-2x {
+            font-size: 1.5em;
+        }
+    }
+    
+    @@media (max-width: 575.98px) {
+        .card-body {
+            padding: 0.75rem;
+        }
+        
+        .h5 {
+            font-size: 1rem;
+        }
+        
+        .text-xs {
+            font-size: 0.65rem;
+        }
+    }
+    
+    /* Table responsiveness */
+    .table-responsive {
+        border-radius: 0.375rem;
+    }
+    
+    @@media (max-width: 767.98px) {
+        .table th, .table td {
+            padding: 0.5rem 0.25rem;
+            font-size: 0.875rem;
+        }
+        
+        .table th {
+            font-size: 0.8rem;
+        }
+    }
+</style>
+
 <!-- Dashboard Header -->
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">
-                <i class="fas fa-download me-1"></i>Export
-            </button>
-        </div>
-        <button type="button" class="btn btn-sm btn-primary">
-            <i class="fas fa-plus me-1"></i>Add Product
-        </button>
-    </div>
 </div>
 
 <!-- Stats Cards -->
 <div class="row mb-4">
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4">
         <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -28,7 +69,7 @@
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                             Total Sales (Monthly)
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">$@ViewBag.TotalSales</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">₹@ViewBag.TotalSales</div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -38,7 +79,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4">
         <div class="card border-left-success shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -56,7 +97,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4">
         <div class="card border-left-info shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -74,7 +115,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4">
         <div class="card border-left-warning shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -94,46 +135,6 @@
 </div>
 
 <!-- Charts Row -->
-<div class="row">
-    <!-- Sales Chart -->
-    <div class="col-xl-8 col-lg-7">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Sales Overview</h6>
-            </div>
-            <div class="card-body">
-                <div class="chart-area">
-                    <canvas id="salesChart" width="400" height="200"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Product Categories -->
-    <div class="col-xl-4 col-lg-5">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Product Categories</h6>
-            </div>
-            <div class="card-body">
-                <div class="chart-pie pt-4 pb-2">
-                    <canvas id="categoryChart"></canvas>
-                </div>
-                <div class="mt-4 text-center small">
-                    <span class="mr-2">
-                        <i class="fas fa-circle text-primary"></i> Green Tea
-                    </span>
-                    <span class="mr-2">
-                        <i class="fas fa-circle text-success"></i> Black Tea
-                    </span>
-                    <span class="mr-2">
-                        <i class="fas fa-circle text-info"></i> Herbal Tea
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Recent Orders -->
 <div class="card shadow mb-4">
@@ -151,7 +152,6 @@
                         <th>Amount</th>
                         <th>Status</th>
                         <th>Date</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -196,10 +196,7 @@
                                     }
                                 </td>
                                 <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary">View</button>
-                                    <button class="btn btn-sm btn-secondary">Edit</button>
-                                </td>
+                               
                             </tr>
                         }
                     }

@@ -4,6 +4,195 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<style>
+    /* Responsive Contact Messages Styles */
+    @@media (max-width: 991.98px) {
+        .container-fluid {
+            padding: 1rem;
+        }
+        
+        .card-header {
+            padding: 1rem;
+        }
+        
+        .h4 {
+            font-size: 1.25rem;
+        }
+        
+        .badge {
+            font-size: 0.75rem;
+        }
+    }
+    
+    @@media (max-width: 767.98px) {
+        .container-fluid {
+            padding: 0.75rem;
+        }
+        
+        .card-body {
+            padding: 1rem;
+        }
+        
+        .table-responsive {
+            font-size: 0.875rem;
+        }
+        
+        .table th, .table td {
+            padding: 0.5rem 0.25rem;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+        
+        .badge {
+            font-size: 0.7rem;
+            padding: 0.375rem 0.5rem;
+        }
+        
+        .small {
+            font-size: 0.8rem;
+        }
+        
+        .h4 {
+            font-size: 1.1rem;
+        }
+    }
+    
+    @@media (max-width: 575.98px) {
+        .container-fluid {
+            padding: 0.5rem;
+        }
+        
+        .card-body {
+            padding: 0.75rem;
+        }
+        
+        .table-responsive {
+            font-size: 0.8rem;
+        }
+        
+        .table th, .table td {
+            padding: 0.375rem 0.125rem;
+        }
+        
+        .btn-sm {
+            padding: 0.2rem 0.4rem;
+            font-size: 0.7rem;
+        }
+        
+        .btn-sm i {
+            font-size: 0.8rem;
+        }
+        
+        .badge {
+            font-size: 0.65rem;
+            padding: 0.25rem 0.375rem;
+        }
+        
+        .small {
+            font-size: 0.75rem;
+        }
+        
+        .h4 {
+            font-size: 1rem;
+        }
+        
+        .card-header {
+            padding: 0.75rem;
+        }
+    }
+    
+    /* Table responsive improvements */
+    .table-responsive {
+        border-radius: 0.375rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    
+    /* Status badges responsive */
+    .status-badge {
+        white-space: nowrap;
+    }
+    
+    @@media (max-width: 767.98px) {
+        .status-badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+        }
+    }
+    
+    /* Action buttons responsive */
+    .action-buttons {
+        display: flex;
+        gap: 0.25rem;
+        flex-wrap: wrap;
+    }
+    
+    @@media (max-width: 575.98px) {
+        .action-buttons {
+            flex-direction: column;
+            gap: 0.125rem;
+        }
+        
+        .action-buttons .btn {
+            width: 100%;
+            margin: 0;
+        }
+    }
+    
+    /* Contact info responsive */
+    .contact-info {
+        max-width: 100%;
+        word-wrap: break-word;
+    }
+    
+    @@media (max-width: 767.98px) {
+        .contact-info {
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+        
+        .contact-info .mb-1 {
+            margin-bottom: 0.25rem !important;
+        }
+    }
+    
+    /* Message content responsive */
+    .message-content {
+        max-width: 100%;
+        word-wrap: break-word;
+    }
+    
+    @@media (max-width: 767.98px) {
+        .message-content {
+            font-size: 0.875rem;
+            line-height: 1.4;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+    
+    @@media (max-width: 575.98px) {
+        .message-content {
+            max-width: 120px;
+        }
+    }
+    
+    /* Unread message highlighting */
+    .table-warning {
+        background-color: rgba(255, 193, 7, 0.1) !important;
+    }
+    
+    @@media (max-width: 767.98px) {
+        .table-warning {
+            background-color: rgba(255, 193, 7, 0.05) !important;
+        }
+    }
+</style>
+
 <!-- Cache Buster: @DateTime.Now.Ticks -->
 
 <div class="container-fluid py-4">

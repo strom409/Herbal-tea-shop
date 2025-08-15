@@ -199,9 +199,9 @@ namespace MvcHer.Controllers
 
             ViewBag.CartItems = cart;
             ViewBag.CartTotal = cart.Sum(c => c.TotalPrice);
-            ViewBag.CustomerName = otpData.FullName;
+           // ViewBag.CustomerName = otpData.FullName;
             ViewBag.CustomerPhone = otpData.PhoneNumber;
-            ViewBag.CustomerEmail = otpData.Email;
+           // ViewBag.CustomerEmail = otpData.Email;
             
             return View();
         }
@@ -229,8 +229,8 @@ namespace MvcHer.Controllers
             try
             {
                 // Generate and send OTP
-                var otpCode = await _otpService.GenerateOtpAsync(model.PhoneNumber, model.Email);
-                var otpSent = await _otpService.SendOtpAsync(model.PhoneNumber, model.Email, otpCode, model.FullName);
+                var otpCode = await _otpService.GenerateOtpAsync(model.PhoneNumber);
+                var otpSent = await _otpService.SendOtpAsync(model.PhoneNumber,otpCode);
 
                 if (!otpSent)
                 {
@@ -241,9 +241,9 @@ namespace MvcHer.Controllers
                 // Store user data in session for OTP validation
                 var otpSession = new OtpSession
                 {
-                    FullName = model.FullName,
+                  //  FullName = model.FullName,
                     PhoneNumber = model.PhoneNumber,
-                    Email = model.Email,
+                 //   Email = model.Email,
                     OtpCode = otpCode,
                     ExpiryTime = DateTime.Now.AddMinutes(5),
                     IsVerified = false
@@ -251,7 +251,7 @@ namespace MvcHer.Controllers
 
                 HttpContext.Session.SetString("OtpSession", JsonSerializer.Serialize(otpSession));
 
-                TempData["Success"] = $"OTP sent to {model.PhoneNumber} and {model.Email}";
+                TempData["Success"] = $"OTP sent to {model.PhoneNumber}";
                 return RedirectToAction("ValidateOtp");
             }
             catch (Exception ex)
@@ -275,9 +275,9 @@ namespace MvcHer.Controllers
             
             var model = new OtpValidationModel
             {
-                FullName = otpSession.FullName,
+               // FullName = otpSession.FullName,
                 PhoneNumber = otpSession.PhoneNumber,
-                Email = otpSession.Email,
+                //Email = otpSession.Email,
                 ExpiryTime = otpSession.ExpiryTime
             };
 

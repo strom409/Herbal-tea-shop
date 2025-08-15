@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>@ViewData["Title"] - Herbal Tea Admin</title>
+    <title>@ViewData["Title"] - Herbal Formulator Admin</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     
     <!-- Google Web Fonts -->
@@ -43,6 +43,86 @@
             overflow: hidden;
             width: 100%;
             max-width: 400px;
+            margin: 1rem;
+        }
+
+        /* Responsive Login Styles */
+        @@media (max-width: 767.98px) {
+            .login-card {
+                max-width: 90%;
+                margin: 1rem;
+                border-radius: 15px;
+            }
+            
+            .login-header {
+                padding: 1.5rem;
+            }
+            
+            .login-body {
+                padding: 1.5rem;
+            }
+            
+            .admin-icon {
+                font-size: 2.5rem;
+            }
+            
+            .login-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .login-header p {
+                font-size: 0.9rem;
+            }
+        }
+        
+        @@media (max-width: 575.98px) {
+            .login-card {
+                max-width: 95%;
+                margin: 0.5rem;
+                border-radius: 12px;
+            }
+            
+            .login-header {
+                padding: 1.25rem;
+            }
+            
+            .login-body {
+                padding: 1.25rem;
+            }
+            
+            .admin-icon {
+                font-size: 2rem;
+            }
+            
+            .login-header h2 {
+                font-size: 1.25rem;
+            }
+            
+            .form-control {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.9rem;
+            }
+            
+            .btn-login {
+                padding: 0.6rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @@media (max-width: 480px) {
+            .login-container {
+                padding: 0.5rem;
+            }
+            
+            .login-card {
+                max-width: 100%;
+                margin: 0;
+                border-radius: 10px;
+            }
+            
+            .floating-shapes .shape {
+                display: none;
+            }
         }
         
         .login-header {
@@ -191,7 +271,7 @@
                     <i class="fas fa-user-shield"></i>
                 </div>
                 <h2>Admin Portal</h2>
-                <p>Herbal Tea Management System</p>
+                <p>Herbal Formulator Management System</p>
             </div>
             
             <div class="login-body">
@@ -225,13 +305,7 @@
                     </a>
                 </div>
                 
-                <div class="mt-3 text-center">
-                    <small class="text-muted">
-                        <strong>Demo Credentials:</strong><br>
-                        Username: <code>admin</code><br>
-                        Password: <code>admin123</code>
-                    </small>
-                </div>
+
             </div>
         </div>
     </div>

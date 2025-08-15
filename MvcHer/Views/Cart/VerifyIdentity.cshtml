@@ -4,7 +4,7 @@
 }
 
 <!-- Hero Section -->
-<div class="container-fluid py-5" style="background: linear-gradient(135deg, #81c784 0%, #4caf50 100%);">
+<div class="container-fluid py-5" style="background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%)">
     <div class="container">
         <div class="text-center text-white">
             <h1 class="display-4 fw-bold mb-3">🔐 Secure Checkout</h1>
@@ -59,13 +59,13 @@
                     </div>
 
                     <form asp-action="VerifyIdentity" method="post" id="verifyForm">
-                        <div class="mb-4">
+                       @*  <div class="mb-4">
                             <label asp-for="FullName" class="form-label fw-bold">
                                 <i class="fas fa-user me-2 text-primary"></i>Full Name
                             </label>
                             <input asp-for="FullName" class="form-control form-control-lg rounded-3" placeholder="Enter your full name">
                             <span asp-validation-for="FullName" class="text-danger small"></span>
-                        </div>
+                        </div> *@
 
                         <div class="mb-4">
                             <label asp-for="PhoneNumber" class="form-label fw-bold">
@@ -78,7 +78,7 @@
                             </div>
                         </div>
 
-                        <div class="mb-4">
+                       @*  <div class="mb-4">
                             <label asp-for="Email" class="form-label fw-bold">
                                 <i class="fas fa-envelope me-2 text-primary"></i>Email Address
                             </label>
@@ -87,7 +87,7 @@
                             <div class="form-text">
                                 <i class="fas fa-info-circle me-1"></i>OTP will also be sent to this email
                             </div>
-                        </div>
+                        </div> *@
 
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg rounded-3" id="sendOtpBtn">

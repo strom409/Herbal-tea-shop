@@ -102,7 +102,7 @@
 .navbar .navbar-nav .nav-link {
     margin-right: 35px;
     padding: 25px 0;
-    color: var(--dark);
+    color: black !important;
     font-weight: 600;
     text-transform: uppercase;
     outline: none;
@@ -134,7 +134,6 @@
     }
 
     .navbar .navbar-nav {
-        margin-top: 75px;
         border-top: 1px solid #EEEEEE;
     }
 }
@@ -215,37 +214,41 @@
 }
 
 
-/*** Section Title ***/
 .section-title {
     position: relative;
-    margin-bottom: 3rem;
-    padding-bottom: 2rem;
+    display: inline-block; /* keeps width limited to text if needed */
+    padding-bottom: 30px; /* add space for the circle below text */
+    text-align: center; /* center text */
 }
 
-.section-title::before {
-    position: absolute;
-    content: "";
-    width: 50%;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background: var(--primary);
-}
+    .section-title::before {
+        position: absolute;
+        content: "";
+        width: 100%; /* line spans full width of text container */
+        height: 2px;
+        bottom: 15px; /* move line above the circle */
+        left: 0;
+        background: var(--primary);
+        z-index: 1;
+    }
 
-.section-title::after {
-    position: absolute;
-    content: "";
-    width: 28px;
-    height: 28px;
-    bottom: -13px;
-    left: calc(25% - 13px);
-    background: var(--dark);
-    border: 10px solid #FFFFFF;
-    border-radius: 28px;
-}
+    .section-title::after {
+        position: absolute;
+        content: "";
+        width: 28px;
+        height: 28px;
+        bottom: 0; /* position at bottom of padding */
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--dark);
+        border: 10px solid #FFFFFF;
+        border-radius: 50%;
+        z-index: 2;
+    }
+
 
 .section-title.text-center::before {
-    left: 25%;
+    left: 0%;
 }
 
 .section-title.text-center::after {

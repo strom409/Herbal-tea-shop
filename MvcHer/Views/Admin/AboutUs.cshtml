@@ -5,6 +5,197 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<style>
+    /* Responsive About Us Styles */
+    @@media (max-width: 991.98px) {
+        .card-header .d-flex {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .btn-primary {
+            width: 100%;
+        }
+        
+        .col-lg-8, .col-lg-4 {
+            margin-bottom: 2rem;
+        }
+    }
+    
+    @@media (max-width: 767.98px) {
+        .h4 {
+            font-size: 1.5rem;
+        }
+        
+        .h3 {
+            font-size: 1.25rem;
+        }
+        
+        .h5 {
+            font-size: 1.1rem;
+        }
+        
+        .h6 {
+            font-size: 1rem;
+        }
+        
+        .card-body {
+            padding: 1rem;
+        }
+        
+        .lead {
+            font-size: 1rem;
+        }
+        
+        .col-md-6 {
+            margin-bottom: 1rem;
+        }
+        
+        .border.rounded.p-3 {
+            padding: 1rem !important;
+        }
+        
+        .h4.text-primary {
+            font-size: 1.5rem;
+        }
+    }
+    
+    @@media (max-width: 575.98px) {
+        .card-body {
+            padding: 0.75rem;
+        }
+        
+        .h4 {
+            font-size: 1.25rem;
+        }
+        
+        .h3 {
+            font-size: 1.1rem;
+        }
+        
+        .h5 {
+            font-size: 1rem;
+        }
+        
+        .h6 {
+            font-size: 0.9rem;
+        }
+        
+        .lead {
+            font-size: 0.9rem;
+        }
+        
+        .border.rounded.p-3 {
+            padding: 0.75rem !important;
+        }
+        
+        .h4.text-primary {
+            font-size: 1.25rem;
+        }
+        
+        .card-header {
+            padding: 0.75rem;
+        }
+        
+        .p-3 {
+            padding: 0.75rem !important;
+        }
+    }
+    
+    /* Content cards responsive */
+    .content-card {
+        transition: transform 0.2s ease;
+        margin-bottom: 1rem;
+    }
+    
+    .content-card:hover {
+        transform: translateY(-2px);
+    }
+    
+    @@media (max-width: 767.98px) {
+        .content-card:hover {
+            transform: none;
+        }
+    }
+    
+    /* Statistics responsive */
+    .stats-item {
+        text-align: center;
+        padding: 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        background: #f8f9fa;
+        transition: all 0.2s ease;
+    }
+    
+    .stats-item:hover {
+        background: #e9ecef;
+        border-color: #adb5bd;
+    }
+    
+    @@media (max-width: 767.98px) {
+        .stats-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stats-item:hover {
+            background: #f8f9fa;
+            border-color: #dee2e6;
+        }
+    }
+    
+    /* Mission and Vision cards responsive */
+    .mission-vision-card {
+        height: 100%;
+        transition: all 0.2s ease;
+    }
+    
+    .mission-vision-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    }
+    
+    @@media (max-width: 767.98px) {
+        .mission-vision-card:hover {
+            transform: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+    }
+    
+    /* Text content responsive */
+    .about-content {
+        line-height: 1.6;
+        text-align: justify;
+    }
+    
+    @@media (max-width: 767.98px) {
+        .about-content {
+            text-align: left;
+            line-height: 1.5;
+        }
+    }
+    
+    /* Founder section responsive */
+    .founder-section {
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        border-radius: 0.5rem;
+        padding: 1rem;
+    }
+    
+    @@media (max-width: 767.98px) {
+        .founder-section {
+            padding: 0.75rem;
+        }
+        
+        .founder-section .fst-italic {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+    }
+</style>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
